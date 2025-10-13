@@ -68,7 +68,7 @@ export const StyliaMagazineSection: React.FC = () => {
   }
 
   return (
-    <section className="relative w-full bg-white overflow-hidden">
+    <section className="relative w-full bg-[#00000012] overflow-hidden">
       <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-20 py-12 sm:py-16">
         {/* Header */}
         <motion.div
@@ -171,7 +171,7 @@ const ScratchRevealCard: React.FC<ScratchRevealCardProps> = ({
 
       // Reset canvas - initially white overlay to hide clear image
       ctx.clearRect(0, 0, rect.width, rect.height)
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.8)'
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.8)'
       ctx.fillRect(0, 0, rect.width, rect.height)
     }
 
@@ -268,7 +268,6 @@ const ScratchRevealCard: React.FC<ScratchRevealCardProps> = ({
     setIsHovering(false)
     // Keep scratched areas visible - don't reset canvas
   }
-
   return (
     <motion.div
       variants={variants}

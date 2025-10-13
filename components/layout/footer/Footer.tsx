@@ -2,9 +2,11 @@
 
 import React, { useState } from 'react'
 import { motion, AnimatePresence, Variants } from 'framer-motion'
-import { ChevronDown, Send, Instagram, Facebook, Twitter } from 'lucide-react'
+import { Send, Instagram, Facebook, Twitter, ArrowDown } from 'lucide-react'
+import Image from 'next/image'
+import { Check } from 'lucide-react'
 
-// Advanced Accordion Component with Next-Level Animation
+// Advanced Accordion Component
 const AccordionSection = ({
   title,
   children,
@@ -14,7 +16,6 @@ const AccordionSection = ({
 }: any) => {
   return (
     <motion.div
-      className="border-b border-black/5 last:border-0"
       initial={{ opacity: 0, x: -20 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true }}
@@ -22,11 +23,10 @@ const AccordionSection = ({
     >
       <motion.button
         onClick={onToggle}
-        className="w-full py-6 flex items-center justify-between group relative overflow-hidden"
+        className="w-[35%] cursor-pointer py-2 flex items-center justify-between group relative overflow-hidden"
         whileHover={{ x: 5 }}
         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
       >
-        {/* Hover background effect */}
         <motion.div
           className="absolute inset-0 bg-black/[0.02] rounded-lg"
           initial={{ scaleX: 0, originX: 0 }}
@@ -44,12 +44,10 @@ const AccordionSection = ({
           className="text-black/60 group-hover:text-black transition-colors relative z-10"
         >
           <motion.div
-            animate={{
-              scale: isOpen ? 1.1 : 1,
-            }}
+            animate={{ scale: isOpen ? 1.1 : 1 }}
             transition={{ duration: 0.3 }}
           >
-            <ChevronDown className="w-5 h-5 lg:w-6 lg:h-6" />
+            <ArrowDown className="w-6 h-6 lg:w-8 lg:h-8" />
           </motion.div>
         </motion.div>
       </motion.button>
@@ -81,7 +79,7 @@ const AccordionSection = ({
               animate={{ y: 0 }}
               exit={{ y: -10 }}
               transition={{ duration: 0.3, delay: 0.1 }}
-              className="pb-6"
+              className="pb-6 pl-4 pt-2"
             >
               {children}
             </motion.div>
@@ -155,51 +153,10 @@ export const Footer = () => {
 
   return (
     <footer className="relative bg-white overflow-hidden">
-      {/* Animated Signature Background */}
-      <div className="absolute inset-0 flex items-end justify-center pointer-events-none overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, y: 100, scale: 0.9, rotate: -5 }}
-          whileInView={{
-            opacity: 0.08,
-            y: 0,
-            scale: 1,
-            rotate: 0,
-          }}
-          transition={{
-            duration: 1.5,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          viewport={{ once: true, margin: '-100px' }}
-          className="relative w-full max-w-7xl"
-          style={{
-            mixBlendMode: 'multiply',
-            transform: 'translateY(20%)',
-          }}
-        >
-          <svg
-            viewBox="0 0 1200 400"
-            className="w-[200%] max-w-none mx-auto"
-            style={{ filter: 'blur(0.3px)' }}
-          >
-            <text
-              x="180"
-              y="280"
-              fontFamily="Brush Script MT, cursive"
-              fontSize="120"
-              fill="currentColor"
-              className="text-black"
-              style={{ fontWeight: 400 }}
-            >
-              Stylia
-            </text>
-          </svg>
-        </motion.div>
-      </div>
-
       {/* Main Footer Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-8 py-16 lg:py-24">
+      <div className="relative z-10 max-w-[1440px] h-[800px] mx-auto px-8 py-16 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-          {/* Left Column - Accordion Links (Desktop & Mobile) */}
+          {/* Left Column - Accordion Links */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -398,7 +355,7 @@ export const Footer = () => {
                 Purchase.
               </motion.p>
 
-              {/* Newsletter Input with Advanced Animation */}
+              {/* Newsletter Input */}
               <motion.div
                 className="relative max-w-lg"
                 initial={{ opacity: 0, scale: 0.95 }}
@@ -407,7 +364,7 @@ export const Footer = () => {
                 transition={{ delay: 0.5, duration: 0.5 }}
               >
                 <motion.div
-                  className="flex rounded-lg overflow-hidden shadow-sm border border-black/10 focus-within:border-black/30 transition-all relative"
+                  className="flex overflow-hidden shadow-sm border border-black/10 focus-within:border-black/30 transition-all relative"
                   whileHover={{ boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
                   transition={{ duration: 0.3 }}
                 >
@@ -422,10 +379,10 @@ export const Footer = () => {
                     onClick={handleEmailSubmit}
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    className="px-8 bg-black text-white flex items-center justify-center hover:bg-black/90 transition-colors relative overflow-hidden group"
+                    className="px-8 bg-black text-white flex items-center justify-center hover:bg-black/90 transition-colors relative overflow-hidden group cursor-pointer"
                   >
                     <motion.div
-                      className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
+                      className="absolute cursor-pointer inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent"
                       initial={{ x: '-100%' }}
                       whileHover={{ x: '100%' }}
                       transition={{ duration: 0.6, ease: 'easeInOut' }}
@@ -442,9 +399,9 @@ export const Footer = () => {
                             stiffness: 300,
                             damping: 20,
                           }}
-                          className="text-2xl relative z-10"
+                          className="text-2xl relative z-10 cursor-pointer"
                         >
-                          ✓
+                          <Check className="text-white" />
                         </motion.div>
                       ) : (
                         <motion.div
@@ -457,9 +414,15 @@ export const Footer = () => {
                             stiffness: 300,
                             damping: 20,
                           }}
-                          className="relative z-10"
+                          className="relative z-10 cursor-pointer"
                         >
-                          <Send className="w-5 h-5" />
+                          <Image
+                            src="/images/svg/send.svg"
+                            alt="Send"
+                            className="text-white"
+                            width={30}
+                            height={30}
+                          />
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -467,127 +430,89 @@ export const Footer = () => {
                 </motion.div>
               </motion.div>
 
-              {/* Payment Methods with Advanced Stagger */}
+              {/* Payment Methods */}
               <div className="mt-10 flex items-center gap-3 flex-wrap">
                 {/* Mastercard */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-                  whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    delay: 0.6,
-                    type: 'spring',
-                    stiffness: 260,
-                    damping: 20,
-                  }}
-                  whileHover={{
-                    scale: 1.1,
-                    y: -3,
-                    boxShadow: '0 8px 20px rgba(0,0,0,0.12)',
-                    transition: { type: 'spring', stiffness: 400, damping: 10 },
-                  }}
-                  className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 relative overflow-hidden cursor-pointer"
-                >
-                  <div className="flex items-center justify-center gap-[-4px]">
-                    <div className="w-5 h-5 rounded-full bg-red-500 opacity-90" />
-                    <div className="w-5 h-5 rounded-full bg-orange-500 opacity-90 -ml-2" />
-                  </div>
-                </motion.div>
+                <div className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer">
+                  <Image
+                    src="/images/svg/mastercard.svg"
+                    alt="Mastercard"
+                    width={56}
+                    height={24}
+                    className="object-contain"
+                  />
+                </div>
 
                 {/* Visa */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-                  whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    delay: 0.7,
-                    type: 'spring',
-                    stiffness: 260,
-                    damping: 20,
-                  }}
-                  whileHover={{
-                    scale: 1.1,
-                    y: -3,
-                    boxShadow: '0 8px 20px rgba(0,0,0,0.12)',
-                    transition: { type: 'spring', stiffness: 400, damping: 10 },
-                  }}
-                  className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer"
-                >
-                  <svg viewBox="0 0 48 16" className="w-8 h-auto" fill="none">
-                    <path d="M18.5 2L15.8 14H13L15.7 2H18.5Z" fill="#1434CB" />
-                    <path
-                      d="M27.7 2.3C27.1 2.1 26.2 1.9 25.1 1.9C22.3 1.9 20.4 3.4 20.4 5.5C20.4 7.1 21.9 8 23.8 8C24.8 8 25.4 7.9 26 7.7V9.8C25.3 10 24.4 10.1 23.3 10.1C19.8 10.1 17.5 8.1 17.5 5.3C17.5 2.1 20.2 0 24.9 0C26.2 0 27.3 0.2 28 0.4L27.7 2.3Z"
-                      fill="#1434CB"
-                    />
-                  </svg>
-                </motion.div>
+                <div className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer">
+                  <Image
+                    src="/images/svg/visa.svg"
+                    alt="Visa"
+                    width={56}
+                    height={24}
+                    className="object-contain"
+                  />
+                </div>
 
                 {/* PayPal */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-                  whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    delay: 0.8,
-                    type: 'spring',
-                    stiffness: 260,
-                    damping: 20,
-                  }}
-                  whileHover={{
-                    scale: 1.1,
-                    y: -3,
-                    boxShadow: '0 8px 20px rgba(0,0,0,0.12)',
-                    transition: { type: 'spring', stiffness: 400, damping: 10 },
-                  }}
-                  className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer"
-                >
-                  <svg viewBox="0 0 24 24" className="w-6 h-auto" fill="none">
-                    <path
-                      d="M8.32 23.5L9.14 18.2H6.42L8.84 3.5H15.5C17.3 3.5 18.7 3.9 19.7 4.8C20.6 5.6 21.1 6.8 21.1 8.3C21.1 10.6 20.4 12.4 19 13.7C17.6 15 15.7 15.7 13.2 15.7H11.4L10.5 20.7H14.2L13.8 23.5H8.32Z"
-                      fill="#003087"
-                    />
-                    <path
-                      d="M13.6 15.7C15.9 15.7 17.7 15 19 13.7C20.3 12.3 21 10.6 21 8.3C21 6.9 20.6 5.8 19.7 5C18.8 4.2 17.5 3.7 15.7 3.7H9.14L6.72 18.4H9.44L10.5 13H13.6V15.7Z"
-                      fill="#0070E0"
-                    />
-                  </svg>
-                </motion.div>
+                <div className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer">
+                  <Image
+                    src="/images/svg/paypal.svg"
+                    alt="Paypal"
+                    width={56}
+                    height={24}
+                    className="object-contain"
+                  />
+                </div>
 
-                {/* Klarna */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.5, rotate: -10 }}
-                  whileInView={{ opacity: 1, scale: 1, rotate: 0 }}
-                  viewport={{ once: true }}
-                  transition={{
-                    delay: 0.9,
-                    type: 'spring',
-                    stiffness: 260,
-                    damping: 20,
-                  }}
-                  whileHover={{
-                    scale: 1.1,
-                    y: -3,
-                    boxShadow: '0 8px 20px rgba(0,0,0,0.12)',
-                    transition: { type: 'spring', stiffness: 400, damping: 10 },
-                  }}
-                  className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer"
-                >
-                  <svg viewBox="0 0 64 24" className="w-9 h-auto" fill="none">
-                    <path d="M8.5 3H5V21H8.5V3Z" fill="#FFB3C7" />
-                    <path
-                      d="M20.5 3C16.9 3 14 5.9 14 9.5V14.5C14 18.1 16.9 21 20.5 21H24V17.5H20.5C19.1 17.5 18 16.4 18 15V9C18 7.6 19.1 6.5 20.5 6.5H24V3H20.5Z"
-                      fill="#FFB3C7"
-                    />
-                    <path
-                      d="M35 3L30 12L35 21H39L34 12L39 3H35Z"
-                      fill="#FFB3C7"
-                    />
-                  </svg>
-                </motion.div>
+                {/* UPI */}
+                <div className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer">
+                  <Image
+                    src="/images/svg/klarna.svg"
+                    alt="Klarna"
+                    width={56}
+                    height={24}
+                    className="object-contain"
+                  />
+                </div>
               </div>
             </div>
           </motion.div>
         </div>
+      </div>
+
+      {/* Animated Signature Background - Full Width Below Content */}
+      <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center pointer-events-none overflow-hidden">
+        <motion.div
+          initial={{ opacity: 0, y: 120, scale: 0.85 }}
+          whileInView={{
+            opacity: 1, // Full black visibility
+            y: 0,
+            scale: 1,
+          }}
+          transition={{
+            duration: 1.8,
+            ease: [0.22, 1, 0.36, 1],
+          }}
+          viewport={{ once: true, margin: '-150px' }}
+          className="relative w-full"
+          style={{
+            height: 'clamp(300px, 50vh, 650px)',
+          }}
+        >
+          <Image
+            src="/images/footer-signature.png"
+            alt="Stylia Signature"
+            fill
+            className="object-contain object-bottom opacity-100 brightness-0"
+            style={{
+              objectPosition: 'bottom center',
+              mixBlendMode: 'normal', // Prevent light blending
+              filter: 'brightness(0) saturate(100%)', // ensures solid black
+            }}
+            priority
+          />
+        </motion.div>
       </div>
     </footer>
   )
