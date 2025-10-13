@@ -1,0 +1,1 @@
+export { StyliaMagazineSection } from './StyliaMagazine'

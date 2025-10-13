@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Stylia E-commerce Platform
 
-## Getting Started
+## Project Structure
 
-First, run the development server:
+This project follows Next.js 15 app router best practices with a focus on scalability, reusability, and clean architecture.
+
+### Key Features
+
+- **Animation Libraries**: Motion.dev, Lottie, GSAP support
+- **Component Architecture**: Modular and reusable components
+- **Type Safety**: Full TypeScript support
+- **Performance**: Optimized for Next.js 15 features
+
+### Folder Structure
+
+```
+stylia/
+├── app/                    # Next.js 15 App Router
+├── components/             # Reusable UI components
+│   ├── ui/                # Base UI components
+│   ├── layout/            # Layout components
+│   ├── forms/             # Form components
+│   ├── product/           # Product components
+│   └── animations/        # Animation wrappers
+├── sections/              # Page sections
+│   ├── home/             # Home page sections
+│   ├── product/          # Product page sections
+│   └── common/           # Shared sections
+├── lib/                  # Core application logic
+│   ├── animations/       # Animation configurations
+│   ├── utils/            # Utility functions
+│   ├── constants/         # App constants
+│   ├── hooks/            # Custom React hooks
+│   ├── services/          # API services
+│   ├── types/             # TypeScript types
+│   └── store/            # State management
+├── assets/               # Static assets
+├── styles/               # Global styles
+└── public/               # Public static files
+```
+
+### Getting Started
+
+1. Install dependencies:
+
+```bash
+npm install
+```
+
+2. Install animation libraries:
+
+```bash
+npm install framer-motion lottie-react gsap
+npm install clsx tailwind-merge
+```
+
+3. Run the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Animation Libraries
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Motion.dev**: For React-based animations
+- **Lottie**: For complex vector animations
+- **GSAP**: For advanced timeline and scroll-triggered animations
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### Development Guidelines
 
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. **Components**: Place reusable components in `components/`
+2. **Sections**: Page-specific sections go in `sections/`
+3. **Animations**: Animation configs are centralized in `lib/animations/`
+4. **Types**: All TypeScript types are defined in `lib/types/`
+5. **Constants**: App-wide constants are in `lib/constants/`
