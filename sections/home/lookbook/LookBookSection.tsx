@@ -3,13 +3,8 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
-import Image from 'next/image'
 import gsap from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-
-if (typeof window !== 'undefined') {
-  gsap.registerPlugin(ScrollTrigger)
-}
+import * as THREE from 'three'
 
 interface LookbookItem {
   id: number
@@ -19,9 +14,19 @@ interface LookbookItem {
   number: string
 }
 
-export const LookbookSection: React.FC = () => {
+export const LookbookSection = () => {
   const [activeIndex, setActiveIndex] = useState(0)
+  const [isTransitioning, setIsTransitioning] = useState(false)
   const sectionRef = useRef<HTMLDivElement>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const sceneRef = useRef<{
+    scene: THREE.Scene
+    camera: THREE.OrthographicCamera
+    renderer: THREE.WebGLRenderer
+    particles: THREE.Points | null
+    material: THREE.ShaderMaterial | null
+    texture: THREE.Texture | null
+  } | null>(null)
 
   const lookbookItems: LookbookItem[] = [
     {
@@ -74,45 +79,330 @@ export const LookbookSection: React.FC = () => {
     },
   ]
 
+  // Particle shader for GPU-accelerated rendering
+  const vertexShader = `
+    uniform float uTime;
+    uniform float uProgress;
+    uniform vec2 uResolution;
+    attribute vec2 uv2;
+    attribute float aRandom;
+    varying vec2 vUv;
+    varying float vAlpha;
+
+    void main() {
+      vUv = uv2;
+      
+      // Explosion phase (0 to 0.5)
+      float explosionPhase = smoothstep(0.0, 0.5, uProgress);
+      
+      // Reassembly phase (0.5 to 1.0)
+      float reassemblyPhase = smoothstep(0.5, 1.0, uProgress);
+      
+      // Calculate displacement
+      vec3 displaced = position;
+      
+      // Explosion - particles scatter outward in 3D
+      if(uProgress < 0.5) {
+        float explosionForce = explosionPhase * 2.0;
+        vec3 direction = normalize(vec3(
+          (uv2.x - 0.5) * 2.0,
+          (uv2.y - 0.5) * 2.0,
+          (aRandom - 0.5) * 2.0
+        ));
+        
+        displaced += direction * explosionForce * 300.0 * (1.0 + aRandom * 0.5);
+        displaced.z += sin(aRandom * 10.0 + uTime * 2.0) * explosionForce * 50.0;
+      }
+      // Reassembly - particles return to original position
+      else {
+        float returnProgress = (uProgress - 0.5) * 2.0;
+        float easeReturn = 1.0 - pow(1.0 - returnProgress, 3.0); // Cubic ease out
+        
+        vec3 direction = normalize(vec3(
+          (uv2.x - 0.5) * 2.0,
+          (uv2.y - 0.5) * 2.0,
+          (aRandom - 0.5) * 2.0
+        ));
+        
+        float maxDisplacement = 300.0 * (1.0 + aRandom * 0.5);
+        displaced += direction * maxDisplacement * (1.0 - easeReturn);
+        displaced.z += sin(aRandom * 10.0 + uTime * 2.0) * 50.0 * (1.0 - easeReturn);
+      }
+      
+      // Fade out after reassembly
+    vAlpha = uProgress < 0.7 ? 1.0 : (1.0 - (uProgress - 0.7) * 1.33);
+      
+      vec4 mvPosition = modelViewMatrix * vec4(displaced, 1.0);
+      gl_Position = projectionMatrix * mvPosition;
+      
+      // Particle size based on distance and progress
+      float particleSize = 3.0;
+      if(uProgress < 0.5) {
+        particleSize = mix(3.0, 2.0, explosionPhase);
+      } else {
+        particleSize = mix(2.0, 3.0, reassemblyPhase);
+      }
+      
+      gl_PointSize = particleSize * (300.0 / -mvPosition.z);
+    }
+  `
+
+  const fragmentShader = `
+    uniform sampler2D uTexture;
+    varying vec2 vUv;
+    varying float vAlpha;
+
+    void main() {
+      vec4 texColor = texture2D(uTexture, vUv);
+      
+      // Circular particle shape
+      vec2 center = gl_PointCoord - vec2(0.5);
+      float dist = length(center);
+      float circle = 1.0 - smoothstep(0.4, 0.5, dist);
+      
+      gl_FragColor = vec4(texColor.rgb, texColor.a * circle * vAlpha);
+    }
+  `
+
+  // Initialize Three.js scene
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      gsap.from('.number-item', {
-        opacity: 0,
-        x: -30,
-        stagger: 0.1,
-        duration: 0.6,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 80%',
-        },
-      })
+    if (!canvasRef.current) return
 
-      gsap.from('.lookbook-title', {
-        opacity: 0,
-        y: 50,
-        duration: 1,
-        ease: 'power3.out',
-        scrollTrigger: {
-          trigger: sectionRef.current,
-          start: 'top 70%',
-        },
-      })
-    }, sectionRef)
+    const canvas = canvasRef.current
+    const width = canvas.offsetWidth
+    const height = canvas.offsetHeight
 
-    return () => ctx.revert()
+    // Scene setup
+    const scene = new THREE.Scene()
+    const camera = new THREE.OrthographicCamera(
+      width / -2,
+      width / 2,
+      height / 2,
+      height / -2,
+      1,
+      1000
+    )
+    camera.position.z = 500
+
+    const renderer = new THREE.WebGLRenderer({
+      canvas,
+      alpha: true,
+      antialias: true,
+    })
+    renderer.setSize(width, height)
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+
+    sceneRef.current = {
+      scene,
+      camera,
+      renderer,
+      particles: null,
+      material: null,
+      texture: null,
+    }
+
+    // Animation loop
+    let animationId: number
+    const animate = () => {
+      animationId = requestAnimationFrame(animate)
+      if (sceneRef.current?.material) {
+        sceneRef.current.material.uniforms.uTime.value = Date.now() * 0.001
+      }
+      renderer.render(scene, camera)
+    }
+    animate()
+
+    // Handle resize
+    const handleResize = () => {
+      const newWidth = canvas.offsetWidth
+      const newHeight = canvas.offsetHeight
+
+      camera.left = newWidth / -2
+      camera.right = newWidth / 2
+      camera.top = newHeight / 2
+      camera.bottom = newHeight / -2
+      camera.updateProjectionMatrix()
+
+      renderer.setSize(newWidth, newHeight)
+    }
+    window.addEventListener('resize', handleResize)
+
+    return () => {
+      cancelAnimationFrame(animationId)
+      window.removeEventListener('resize', handleResize)
+      renderer.dispose()
+      scene.clear()
+    }
   }, [])
 
+  // Create particles from image
+  const createParticlesFromImage = (imageSrc: string): Promise<void> => {
+    return new Promise((resolve) => {
+      if (!sceneRef.current) {
+        resolve()
+        return
+      }
+
+      const { scene, renderer } = sceneRef.current
+
+      // Clean up previous particles
+      if (sceneRef.current.particles) {
+        scene.remove(sceneRef.current.particles)
+        sceneRef.current.particles.geometry.dispose()
+        if (sceneRef.current.material) sceneRef.current.material.dispose()
+        if (sceneRef.current.texture) sceneRef.current.texture.dispose()
+      }
+
+      // Load image texture
+      const textureLoader = new THREE.TextureLoader()
+      textureLoader.load(imageSrc, (texture: any) => {
+        const img = texture.image
+        const canvas = document.createElement('canvas')
+        const ctx = canvas.getContext('2d')!
+
+        // Adjust resolution for performance (lower = faster, higher = more particles)
+        const resolution = 1.5 // Adjust this value (1 = full resolution, 2 = half, etc.)
+        canvas.width = img.width / resolution
+        canvas.height = img.height / resolution
+
+        ctx.drawImage(img, 0, 0, canvas.width, canvas.height)
+        const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+
+        const particles = []
+        const uvs = []
+        const randoms = []
+
+        const width = canvas.width
+        const height = canvas.height
+        const containerWidth = canvasRef.current?.offsetWidth || 800
+        const containerHeight = canvasRef.current?.offsetHeight || 600
+
+        // Sample pixels (skip some for performance)
+        const step = 2 // Sample every 2nd pixel
+        for (let y = 0; y < height; y += step) {
+          for (let x = 0; x < width; x += step) {
+            const index = (y * width + x) * 4
+            const alpha = imageData.data[index + 3]
+
+            // Only create particles for visible pixels
+            if (alpha > 50) {
+              // Position relative to container center
+              const px = (x / width - 0.5) * containerWidth * 0.8
+              const py = -(y / height - 0.5) * containerHeight * 0.8
+
+              particles.push(px, py, 0)
+              uvs.push(x / width, 1 - y / height)
+              randoms.push(Math.random())
+            }
+          }
+        }
+
+        const geometry = new THREE.BufferGeometry()
+        geometry.setAttribute(
+          'position',
+          new THREE.Float32BufferAttribute(particles, 3)
+        )
+        geometry.setAttribute('uv2', new THREE.Float32BufferAttribute(uvs, 2))
+        geometry.setAttribute(
+          'aRandom',
+          new THREE.Float32BufferAttribute(randoms, 1)
+        )
+
+        const material = new THREE.ShaderMaterial({
+          uniforms: {
+            uTexture: { value: texture },
+            uTime: { value: 0 },
+            uProgress: { value: 0 },
+            uResolution: {
+              value: new THREE.Vector2(containerWidth, containerHeight),
+            },
+          },
+          vertexShader,
+          fragmentShader,
+          transparent: true,
+          depthWrite: false,
+          blending: THREE.AdditiveBlending,
+        })
+
+        const points = new THREE.Points(geometry, material)
+        scene.add(points)
+
+        if (sceneRef.current) {
+          sceneRef.current.particles = points
+          sceneRef.current.material = material
+          sceneRef.current.texture = texture
+        }
+
+        resolve()
+      })
+    })
+  }
+
+  // Transition animation
+  const transitionToIndex = async (newIndex: number) => {
+    if (isTransitioning || newIndex === activeIndex) return
+  
+    setIsTransitioning(true)
+  
+    // Phase 1: Explode current image particles
+    await createParticlesFromImage(lookbookItems[activeIndex].image)
+    
+    if (sceneRef.current?.material) {
+      // Explode current image (0 to 0.5)
+      await gsap.to(sceneRef.current.material.uniforms.uProgress, {
+        value: 0.5,
+        duration: 1.2, // SLOW explosion duration
+      ease: 'power1.in', 
+      })
+      
+      // Clean up old particles
+      if (sceneRef.current?.particles && sceneRef.current?.scene) {
+        sceneRef.current.scene.remove(sceneRef.current.particles)
+      }
+    }
+  
+    // Phase 2: Reassemble next image particles
+    await createParticlesFromImage(lookbookItems[newIndex].image)
+    
+    if (sceneRef.current?.material) {
+      // Start at exploded state
+      sceneRef.current.material.uniforms.uProgress.value = 0.5
+      
+      // Reassemble (0.5 to 1.0)
+      await gsap.to(sceneRef.current.material.uniforms.uProgress, {
+        value: 1,
+        duration: 1.5, // Reassembly duration
+      ease: 'back.out(1.4)', // B
+        onUpdate: function() {
+          if (this.progress() > 0.3) {
+            setActiveIndex(newIndex)
+          }
+        },
+        onComplete: () => {
+          setIsTransitioning(false)
+          
+          if (sceneRef.current?.particles && sceneRef.current?.scene) {
+            sceneRef.current.scene.remove(sceneRef.current.particles)
+          }
+        },
+      })
+    }
+  }
+
   const handlePrevious = () => {
-    setActiveIndex((prev) => (prev === 0 ? lookbookItems.length - 1 : prev - 1))
+    const newIndex =
+      activeIndex === 0 ? lookbookItems.length - 1 : activeIndex - 1
+    transitionToIndex(newIndex)
   }
 
   const handleNext = () => {
-    setActiveIndex((prev) => (prev === lookbookItems.length - 1 ? 0 : prev + 1))
+    const newIndex =
+      activeIndex === lookbookItems.length - 1 ? 0 : activeIndex + 1
+    transitionToIndex(newIndex)
   }
 
   const handleNumberClick = (index: number) => {
-    setActiveIndex(index)
+    transitionToIndex(index)
   }
 
   const nextIndex = activeIndex < lookbookItems.length - 1 ? activeIndex + 1 : 0
@@ -120,67 +410,57 @@ export const LookbookSection: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-[993px] bg-[#00000012] overflow-hidden"
+      className="relative w-full h-[993px] bg-gray-100 overflow-hidden"
     >
       <div className="h-full max-w-[1440px] mx-auto">
         <div className="grid grid-cols-12 h-full">
-          {/* Column 1: Number Navigation (1 col) */}
+          {/* Column 1: Number Navigation */}
           <div className="col-span-1 bg-[#E8E8E8] flex flex-col items-center justify-center gap-8 sm:gap-12 py-8">
             {lookbookItems.map((item, index) => (
               <motion.button
                 key={item.id}
                 onClick={() => handleNumberClick(index)}
-                className={`number-item font-kumbh-sans font-bold text-2xl sm:text-3xl lg:text-4xl transition-all duration-500 cursor-pointer ${
+                disabled={isTransitioning}
+                className={`font-bold text-2xl sm:text-3xl lg:text-4xl transition-all duration-500 ${
                   index === activeIndex
                     ? 'text-black scale-125'
-                    : index === activeIndex - 1 || index === activeIndex + 1
-                      ? 'text-black scale-100'
-                      : 'text-black scale-90'
-                }`}
-                whileHover={{ scale: 1.2, color: '#000' }}
+                    : 'text-black/40 scale-90'
+                } ${isTransitioning ? 'pointer-events-none' : 'cursor-pointer'}`}
+                whileHover={{ scale: 1.2 }}
                 whileTap={{ scale: 0.95 }}
-                animate={{
-                  opacity: index === activeIndex ? 1 : 0.4,
-                }}
-                transition={{ duration: 0.3 }}
               >
                 {item.number}
               </motion.button>
             ))}
           </div>
 
-          {/* Column 2-5: Active Image (4 cols) */}
+          {/* Column 2-5: Active Image with Particle Overlay */}
           <div className="col-span-4 relative flex items-center justify-center bg-white">
-            <AnimatePresence mode="wait">
-              <motion.div
-                key={`active-${activeIndex}`}
-                initial={{ x: 100, opacity: 0, scale: 0.95 }}
-                animate={{
-                  x: 0,
-                  opacity: 1,
-                  scale: 1,
-                }}
-                exit={{ x: -100, opacity: 0, scale: 0.95 }}
-                transition={{
-                  duration: 0.7,
-                  ease: [0.43, 0.13, 0.23, 0.96],
-                }}
-                className="relative w-full h-full"
-              >
-                <Image
-                  src={lookbookItems[activeIndex].image}
-                  alt={lookbookItems[activeIndex].title}
-                  fill
-                  className="object-cover"
-                  priority
-                />
-              </motion.div>
-            </AnimatePresence>
+            {/* Base Image */}
+            <motion.div
+              key={`base-${activeIndex}`}
+              initial={{ opacity: 0 }}
+              animate={{ opacity: isTransitioning ? 0 : 1 }}
+              transition={{ duration: 0.3 }}
+              className="absolute inset-0"
+            >
+              <img
+                src={lookbookItems[activeIndex].image}
+                alt={lookbookItems[activeIndex].title}
+                className="w-full h-full object-cover"
+              />
+            </motion.div>
+
+            {/* Three.js Particle Canvas Overlay */}
+            <canvas
+              ref={canvasRef}
+              className="absolute inset-0 w-full h-full pointer-events-none"
+              style={{ opacity: isTransitioning ? 1 : 0 }}
+            />
           </div>
 
-          {/* Column 6-9: Center Content (4 cols) */}
+          {/* Column 6-9: Center Content */}
           <div className="col-span-4 relative flex flex-col items-start justify-center px-6 lg:px-10">
-            {/* Top Description */}
             <AnimatePresence mode="wait">
               <motion.p
                 key={`desc-${activeIndex}`}
@@ -188,111 +468,84 @@ export const LookbookSection: React.FC = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="text-sm xl:text-base 2xl:text-lg text-black mb-8 font-kumbh-sans font-normal text-left max-w-md leading-195% letter-spacing-0% text-transform-capitalize leading-trim-none capitalize"
-                style={{ lineHeight: '162%' }}
+                className="text-sm xl:text-base text-black mb-8 max-w-md"
               >
                 {lookbookItems[activeIndex].description}
               </motion.p>
             </AnimatePresence>
 
-            {/* Main Title */}
-            <motion.h2
-              className="lookbook-title text-5xl xl:text-6xl 2xl:text-80px font-kumbh-sans font-bold text-black mb-10 leading-tight text-left"
-              initial={{ opacity: 1, scale: 1, y: 0 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-            >
+            <h2 className="text-5xl xl:text-6xl 2xl:text-7xl font-bold text-black mb-10 leading-tight">
               Explore
               <br />
-              <span className="font-normal text-5xl xl:text-6xl 2xl:text-80px letter-spacing-0% leading-100% leading-trim-none font-kumbh-sans">
-                Curated
-              </span>
+              <span className="font-normal">Curated</span>
               <br />
-              <span className="font-normal text-5xl xl:text-6xl 2xl:text-80px letter-spacing-0% leading-100% leading-trim-none font-kumbh-sans">
-                Lookbook
-              </span>
-            </motion.h2>
+              <span className="font-normal">Lookbook</span>
+            </h2>
 
-            {/* Navigation Arrows */}
-            <div className="flex items-center justify-start gap-6 mb-10">
+            <div className="flex items-center gap-6 mb-10">
               <motion.button
                 onClick={handlePrevious}
+                disabled={isTransitioning}
                 whileHover={{ scale: 1.1, x: -5 }}
                 whileTap={{ scale: 0.9 }}
-                className="cursor-pointer"
+                className={
+                  isTransitioning
+                    ? 'pointer-events-none opacity-50'
+                    : 'cursor-pointer'
+                }
               >
                 <ChevronLeft className="w-10 h-10 lg:w-12 lg:h-12 text-black" />
               </motion.button>
               <motion.button
                 onClick={handleNext}
+                disabled={isTransitioning}
                 whileHover={{ scale: 1.1, x: 5 }}
                 whileTap={{ scale: 0.9 }}
-                className="cursor-pointer"
+                className={
+                  isTransitioning
+                    ? 'pointer-events-none opacity-50'
+                    : 'cursor-pointer'
+                }
               >
                 <ChevronRight className="w-10 h-10 lg:w-12 lg:h-12 text-black" />
               </motion.button>
             </div>
 
-            {/* Shop Now Button */}
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group inline-flex items-center gap-3 text-black font-kumbh-sans font-semibold text-xl lg:text-2xl cursor-pointer text-left"
+              className="group inline-flex items-center gap-3 text-black font-semibold text-xl lg:text-2xl"
             >
               <span className="relative">
                 Shop Now
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black group-hover:w-full transition-all duration-300" />
               </span>
-              <motion.div
-                whileHover={{ rotate: 45, scale: 1.2 }}
-                transition={{ duration: 0.3 }}
-              >
-                <ArrowUpRight className="w-6 h-6 lg:w-7 lg:h-7" />
-              </motion.div>
+              <ArrowUpRight className="w-6 h-6 lg:w-7 lg:h-7" />
             </motion.button>
           </div>
 
-          {/* Column 10-12: Next Preview Image (3 cols) - Half Height, Centered */}
-          <div className="col-span-3 relative flex items-center justify-center px-4 py-8 mb-20">
+          {/* Column 10-12: Next Preview */}
+          <div className="col-span-3 relative flex items-center justify-center px-4 py-8">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`next-${nextIndex}`}
                 initial={{ x: 100, opacity: 0, scale: 0.9 }}
-                animate={{
-                  x: 0,
-                  opacity: 0.7,
-                  scale: 1,
-                }}
+                animate={{ x: 0, opacity: 0.7, scale: 1 }}
                 exit={{ x: -50, opacity: 0, scale: 0.9 }}
-                transition={{
-                  duration: 0.7,
-                  ease: [0.43, 0.13, 0.23, 0.96],
-                }}
-                className="relative w-full"
-                style={{ height: '50%' }}
+                transition={{ duration: 0.7, ease: [0.43, 0.13, 0.23, 0.96] }}
+                className="relative w-full h-1/2"
               >
-                <div className="relative w-full h-full overflow-hidden">
-                  <Image
-                    src={lookbookItems[nextIndex].image}
-                    alt={lookbookItems[nextIndex].title}
-                    fill
-                    className="object-contain opacity-100"
-                  />
-                </div>
-
-                {/* Description - below image */}
-                <p className="text-black font-kumbh-sans font-normal text-left max-w-lg absolute bottom-[-18px] left-0">
-                  {lookbookItems[nextIndex].description.slice(0, 36)}...
+                <img
+                  src={lookbookItems[nextIndex].image}
+                  alt={lookbookItems[nextIndex].title}
+                  className="w-full h-full object-contain"
+                />
+                <p className="text-black text-sm mt-4 line-clamp-2">
+                  {lookbookItems[nextIndex].description}
                 </p>
-
-                {/* Small number badge */}
-                <motion.div
-                  initial={{ opacity: 0, scale: 0 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  transition={{ delay: 0.3, duration: 0.4 }}
-                  className="absolute -top-3 -left-3 text-black font-kumbh-sans font-bold text-4xl w-12 h-12 flex items-center justify-center z-10"
-                >
+                <div className="absolute -top-3 -left-3 text-black font-bold text-4xl">
                   {lookbookItems[nextIndex].number}
-                </motion.div>
+                </div>
               </motion.div>
             </AnimatePresence>
           </div>
