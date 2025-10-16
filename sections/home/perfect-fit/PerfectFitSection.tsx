@@ -2,7 +2,13 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react'
 import Image from 'next/image'
 import { gsap } from 'gsap'
 
@@ -66,26 +72,28 @@ export const PerfectFitSection: React.FC = () => {
     // Create GSAP timeline for complex animation
     const tl = gsap.timeline()
 
+    // Phase 1: Exit animation - current image moves out
     tl.to(container, {
-      x: isLeftTransition ? '-120vw' : '120vw', // move completely off-screen
+      x: isLeftTransition ? '-50%' : '50%', // exit to left if going left, exit to right if going right
       y: -80, // stronger upward curve
       opacity: 0,
       rotateY: isLeftTransition ? -25 : 25, // deeper 3D spin
       scale: 0.9,
-      duration: 0.8,
+      duration: 0.3,
       ease: 'power3.inOut',
       transformOrigin: 'center center',
     })
 
+    // Phase 2: Reset position for new image - position it on the opposite side
     tl.set(container, {
-      x: isLeftTransition ? '120vw' : '-120vw',
+      x: isLeftTransition ? '50%' : '-50%', // position on opposite side for entry
       y: 80,
       opacity: 0,
       rotateY: isLeftTransition ? 25 : -25,
       scale: 0.9,
     })
 
-    // Phase 3: Enter animation with curved path
+    // Phase 3: Enter animation with curved path - new image comes in
     tl.to(container, {
       x: 0,
       y: 0,
@@ -96,35 +104,39 @@ export const PerfectFitSection: React.FC = () => {
       ease: 'back.out(1.7)', // gives a gentle settle motion
     })
 
-    tl.to(container, {
-      filter: 'blur(10px)',
-      duration: 0.3,
-    }, '<');
+    tl.to(
+      container,
+      {
+        filter: 'blur(10px)',
+        duration: 0.3,
+      },
+      '<'
+    )
 
-    tl.to(container, { filter: 'blur(0px)', duration: 0.6 }, '>-0.3');
+    tl.to(container, { filter: 'blur(0px)', duration: 0.6 }, '>-0.3')
   }
 
   // Handle navigation arrows
   const handlePrevImage = () => {
     setDirection('left')
-    setCurrentImageIndex((prev) => 
+    setCurrentImageIndex((prev) =>
       prev === 0 ? currentImages.length - 1 : prev - 1
     )
-    animateImageTransition('left')
+    animateImageTransition('left') // Going to previous image (left direction)
   }
 
   const handleNextImage = () => {
     setDirection('right')
-    setCurrentImageIndex((prev) => 
+    setCurrentImageIndex((prev) =>
       prev === currentImages.length - 1 ? 0 : prev + 1
     )
-    animateImageTransition('right')
+    animateImageTransition('right') // Going to next image (right direction)
   }
 
   // Handle category change
   const handleCategoryChange = (optionId: string) => {
     if (optionId === activeOption) return
-    
+
     setActiveOption(optionId)
     setCurrentImageIndex(0)
     setDirection('right')
@@ -182,8 +194,8 @@ export const PerfectFitSection: React.FC = () => {
                   whileHover={{ x: 10, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
                   className={`group flex items-center justify-between w-full text-left py-4 cursor-pointer transition-all duration-300 ${
-                    activeOption === option.id 
-                      ? 'text-gray-900 font-semibold' 
+                    activeOption === option.id
+                      ? 'text-gray-900 font-semibold'
                       : `${option.color} ${option.hoverColor}`
                   }`}
                 >
@@ -231,7 +243,7 @@ export const PerfectFitSection: React.FC = () => {
               onClick={handlePrevImage}
               whileHover={{ scale: 1.1, x: -5 }}
               whileTap={{ scale: 0.95 }}
-              className="absolute left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all duration-300 group"
+              className="absolute cursor-pointer left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all duration-300 group"
               aria-label="Previous image"
             >
               <ArrowLeft className="w-6 h-6 text-gray-800 group-hover:text-black transition-colors" />
@@ -242,7 +254,7 @@ export const PerfectFitSection: React.FC = () => {
               onClick={handleNextImage}
               whileHover={{ scale: 1.1, x: 5 }}
               whileTap={{ scale: 0.95 }}
-              className="absolute right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all duration-300 group"
+              className="absolute cursor-pointer right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all duration-300 group"
               aria-label="Next image"
             >
               <ArrowRight className="w-6 h-6 text-gray-800 group-hover:text-black transition-colors" />
@@ -258,15 +270,16 @@ export const PerfectFitSection: React.FC = () => {
                 <motion.button
                   key={idx}
                   onClick={() => {
-                    setDirection(idx > currentImageIndex ? 'right' : 'left')
+                    const direction = idx > currentImageIndex ? 'right' : 'left'
+                    setDirection(direction)
                     setCurrentImageIndex(idx)
-                    animateImageTransition(idx > currentImageIndex ? 'right' : 'left')
+                    animateImageTransition(direction)
                   }}
                   whileHover={{ scale: 1.2 }}
                   whileTap={{ scale: 0.9 }}
                   className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    idx === currentImageIndex 
-                      ? 'bg-white w-8' 
+                    idx === currentImageIndex
+                      ? 'bg-white w-8'
                       : 'bg-white/50 hover:bg-white/75'
                   }`}
                   aria-label={`Go to image ${idx + 1}`}

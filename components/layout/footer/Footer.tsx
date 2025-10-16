@@ -1,10 +1,15 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, Variants } from 'framer-motion'
 import { Send, Instagram, Facebook, Twitter, ArrowDown } from 'lucide-react'
 import Image from 'next/image'
 import { Check } from 'lucide-react'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+// Register ScrollTrigger plugin
+gsap.registerPlugin(ScrollTrigger)
 
 // Advanced Accordion Component
 const AccordionSection = ({
@@ -99,6 +104,74 @@ export const Footer = () => {
   const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
 
+  // Refs for GSAP ScrollTrigger animation
+  const footerRef = useRef<HTMLElement>(null)
+  const signatureRef = useRef<HTMLDivElement>(null)
+
+  // GSAP ScrollTrigger animation for signature
+  useEffect(() => {
+    if (!footerRef.current || !signatureRef.current) return
+
+    const footer = footerRef.current
+    const signature = signatureRef.current
+
+    // Set initial state - signature positioned below viewport
+    gsap.set(signature, {
+      y: '100%',
+      opacity: 0,
+    })
+
+    // Create ScrollTrigger animation
+    const scrollTrigger = ScrollTrigger.create({
+      trigger: footer,
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: 1, // Smooth scrubbing with 1 second lag
+      markers: process.env.NODE_ENV === 'development', // Show markers in development
+      onEnter: () => {
+        // Animation when scrolling down (entering footer)
+        gsap.to(signature, {
+          y: '0%',
+          opacity: 1,
+          duration: 1.2,
+          ease: 'back.out(1.7)', // Elastic bounce effect
+        })
+      },
+      onLeave: () => {
+        // Animation when scrolling up (leaving footer)
+        gsap.to(signature, {
+          y: '100%',
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power2.inOut', // Smooth exit
+        })
+      },
+      onEnterBack: () => {
+        // Animation when scrolling back down into footer
+        gsap.to(signature, {
+          y: '0%',
+          opacity: 1,
+          duration: 1.2,
+          ease: 'back.out(1.7)',
+        })
+      },
+      onLeaveBack: () => {
+        // Animation when scrolling back up out of footer
+        gsap.to(signature, {
+          y: '100%',
+          opacity: 0,
+          duration: 0.8,
+          ease: 'power2.inOut',
+        })
+      },
+    })
+
+    // Cleanup function
+    return () => {
+      scrollTrigger.kill()
+    }
+  }, [])
+
   const toggleSection = (section: string) => {
     setOpenSections((prev) => ({
       ...prev,
@@ -152,7 +225,7 @@ export const Footer = () => {
   }
 
   return (
-    <footer className="relative bg-white overflow-hidden">
+    <footer ref={footerRef} className="relative bg-white overflow-hidden">
       {/* Main Footer Content */}
       <div className="relative z-10 max-w-[1440px] h-[800px] mx-auto px-8 py-16 lg:py-24">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
@@ -482,19 +555,11 @@ export const Footer = () => {
       </div>
 
       {/* Animated Signature Background - Full Width Below Content */}
-      <div className="absolute bottom-0 left-0 right-0 flex items-end justify-center pointer-events-none overflow-hidden">
-        <motion.div
-          initial={{ opacity: 0, y: 120, scale: 0.85 }}
-          whileInView={{
-            opacity: 1, // Full black visibility
-            y: 0,
-            scale: 1,
-          }}
-          transition={{
-            duration: 1.8,
-            ease: [0.22, 1, 0.36, 1],
-          }}
-          viewport={{ once: true, margin: '-150px' }}
+      <div
+        ref={signatureRef}
+        className="absolute bottom-0 left-0 right-0 flex items-end justify-center pointer-events-none overflow-hidden"
+      >
+        <div
           className="relative w-full"
           style={{
             height: 'clamp(300px, 50vh, 650px)',
@@ -512,7 +577,7 @@ export const Footer = () => {
             }}
             priority
           />
-        </motion.div>
+        </div>
       </div>
     </footer>
   )
