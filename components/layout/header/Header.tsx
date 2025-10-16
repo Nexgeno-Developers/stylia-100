@@ -69,19 +69,13 @@ export const Header: React.FC = () => {
 
           {/* Actions */}
           <div className="flex items-center space-x-2 sm:space-x-4">
-            <button
-              className="hover:bg-white/10 hover:text-white rounded-2xl hover:scale-105 transition-all duration-300 p-2 cursor-pointer"
-            >
+            <button className="hover:bg-white/10 hover:text-white rounded-2xl hover:scale-105 transition-all duration-300 p-2 cursor-pointer">
               <UserIcon className="h-6 w-6 text-white hover:scale-105 transition-all duration-300" />
             </button>
-            <button
-              className="hover:bg-white/10 hover:text-white hover:scale-105 rounded-2xl transition-all duration-300 p-2 cursor-pointer"
-            >
+            <button className="hover:bg-white/10 hover:text-white hover:scale-105 rounded-2xl transition-all duration-300 p-2 cursor-pointer">
               <SearchIcon className="h-6 w-6 text-white hover:scale-105  transition-all duration-300" />
             </button>
-            <button
-              className="hover:bg-white/10 hover:text-white rounded-2xl hover:scale-105 transition-all duration-300 p-2 cursor-pointer"
-            >
+            <button className="hover:bg-white/10 hover:text-white rounded-2xl hover:scale-105 transition-all duration-300 p-2 cursor-pointer">
               <HeartIcon className="h-6 w-6 text-white hover:scale-105  transition-all duration-300" />
             </button>
           </div>
