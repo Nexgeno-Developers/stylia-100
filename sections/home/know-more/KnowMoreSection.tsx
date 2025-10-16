@@ -193,14 +193,14 @@ export const KnowMoreSection: React.FC = () => {
   }
 
   return (
-    <section className="relative w-full overflow-hidden bg-white">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
+    <section className="relative w-full overflow-hidden bg-white py-16 lg:pt-0 lg:pb-24">
+      <div className="container mx-auto">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="relative h-[647px] w-full max-w-[1260px] mx-auto overflow-hidden rounded-2xl shadow-2xl"
+          className="relative h-[647px] overflow-hidden shadow-2xl"
           ref={containerRef}
           onMouseEnter={() => {
             setIsScratching(true)
@@ -306,13 +306,13 @@ export const KnowMoreSection: React.FC = () => {
               viewport={{ once: true }}
               whileHover={{ scale: 1.08 }}
               whileTap={{ scale: 0.98 }}
-              className="group/btn flex items-center gap-3 text-white font-semibold text-xl lg:text-2xl drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)] pointer-events-auto"
+              className="group/btn cursor-pointer flex items-center gap-3 text-white font-semibold text-xl lg:text-2xl xl:text-3xl drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)] pointer-events-auto"
             >
               <span className="relative">
                 Know More
                 <span className="absolute -bottom-1 left-0 w-0 h-0.5 bg-white group-hover/btn:w-full transition-all duration-300 ease-out" />
               </span>
-              <ArrowUpRight className="w-6 h-6 lg:w-7 lg:h-7 group-hover/btn:rotate-45 group-hover/btn:scale-110 transition-all duration-300 ease-out" />
+              <ArrowUpRight className="w-6 h-6 lg:w-8 lg:h-8 group-hover/btn:rotate-45 group-hover/btn:scale-110 transition-all duration-300 ease-out" />
             </motion.button>
           </div>
         </motion.div>

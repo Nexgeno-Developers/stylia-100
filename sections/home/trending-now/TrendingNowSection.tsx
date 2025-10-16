@@ -47,7 +47,7 @@ export const TrendingNowSection: React.FC = () => {
 
   return (
     <section className="relative w-full bg-white py-16 sm:py-20 lg:py-24">
-      <div className="max-w-[1440px] mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto">
         {/* Header Section */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 lg:mb-16 gap-6">
           {/* Left: Title */}

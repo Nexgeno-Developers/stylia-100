@@ -9,7 +9,7 @@ import Image from 'next/image'
 export const Header: React.FC = () => {
   return (
     <header className="absolute top-0 left-0 right-0 z-50 bg-transparent">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto">
         <div className="flex justify-between items-center h-24 sm:h-28 lg:h-32">
           {/* Logo */}
           <div className="flex-shrink-0">
@@ -69,27 +69,21 @@ export const Header: React.FC = () => {
 
           {/* Actions */}
           <div className="flex items-center space-x-2 sm:space-x-4">
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hover:bg-white/10 hover:text-white transition-all duration-300 p-2"
+            <button
+              className="hover:bg-white/10 hover:text-white rounded-2xl hover:scale-105 transition-all duration-300 p-2 cursor-pointer"
             >
-              <UserIcon className="h-5 w-5 text-white hover:scale-110 transition-all duration-300" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hover:bg-white/10 hover:text-white transition-all duration-300 p-2"
+              <UserIcon className="h-6 w-6 text-white hover:scale-105 transition-all duration-300" />
+            </button>
+            <button
+              className="hover:bg-white/10 hover:text-white hover:scale-105 rounded-2xl transition-all duration-300 p-2 cursor-pointer"
             >
-              <SearchIcon className="h-5 w-5 text-white hover:scale-110 transition-all duration-300" />
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              className="hover:bg-white/10 hover:text-white transition-all duration-300 p-2"
+              <SearchIcon className="h-6 w-6 text-white hover:scale-105  transition-all duration-300" />
+            </button>
+            <button
+              className="hover:bg-white/10 hover:text-white rounded-2xl hover:scale-105 transition-all duration-300 p-2 cursor-pointer"
             >
-              <HeartIcon className="h-5 w-5 text-white hover:scale-110 transition-all duration-300" />
-            </Button>
+              <HeartIcon className="h-6 w-6 text-white hover:scale-105  transition-all duration-300" />
+            </button>
           </div>
 
           {/* Mobile menu button */}

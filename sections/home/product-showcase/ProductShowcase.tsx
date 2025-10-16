@@ -648,7 +648,7 @@ export const ProductShowcase: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-screen lg:h-[1100px] 2xl:h-[1267px] overflow-hidden"
+      className="relative w-full h-screen xl:h-[1100px] 2xl:h-[1267px] overflow-hidden"
     >
       {/* Circular White Smoke Effect - Middle Only */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -665,7 +665,7 @@ export const ProductShowcase: React.FC = () => {
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 1, delay: 0.6 }}
-          className="relative w-[60%] h-[60%]"
+          className="relative w-[60%] h-[60%] pt-20"
         >
           <Image
             src={productData[currentProduct].signature}
@@ -678,7 +678,7 @@ export const ProductShowcase: React.FC = () => {
       </div>
 
       <div
-        className="relative h-full max-w-[1440px] mx-auto"
+        className="relative h-full container mx-auto"
         style={{ zIndex: 2 }}
       >
         <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
@@ -687,7 +687,7 @@ export const ProductShowcase: React.FC = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-3 flex flex-col justify-between h-full px-4 sm:px-6 lg:px-8 py-12 lg:py-20 pb-12 lg:pb-20"
+            className="lg:col-span-3 flex flex-col justify-between h-full py-12 lg:py-20 pb-12 lg:pb-20"
           >
             {/* Title Block - Stays at Top */}
             <div className="space-y-4">
@@ -784,7 +784,7 @@ export const ProductShowcase: React.FC = () => {
               className="absolute w-full h-full flex items-end justify-center"
               style={{ zIndex: isTransitioning ? 1 : 2 }}
             >
-              <div className="relative w-full max-w-md lg:max-w-lg h-full">
+              <div className="relative w-full max-w-md lg:max-w-lg xl:h-[999px]">
                 <Image
                   src={getCurrentImage()}
                   alt={productData[currentProduct].title}
@@ -820,7 +820,7 @@ export const ProductShowcase: React.FC = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="lg:col-span-4 flex flex-col justify-between h-full px-4 sm:px-6 lg:px-8 py-12 lg:py-20 pb-12 lg:pb-20"
+            className="lg:col-span-4 flex flex-col justify-between h-full py-12 lg:py-20 pb-12 lg:pb-20"
           >
             {/* Price - Fixed at Top Right */}
             <div className="flex items-center justify-start gap-4 pt-20">
@@ -842,7 +842,7 @@ export const ProductShowcase: React.FC = () => {
             <div className="space-y-8">
               {/* Available Colors */}
               <div>
-                <h3 className="text-white text-lg font-medium font-kumbh-sans leading-tight capitalize leading-195% letter-spacing-0% leading-trim-none mb-4">
+                <h3 className="text-white text-[23px] font-medium font-kumbh-sans leading-tight capitalize leading-195% letter-spacing-0% leading-trim-none mb-4">
                   Available Color
                 </h3>
                 <div className="flex items-center gap-3">

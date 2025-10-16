@@ -443,8 +443,8 @@ export const StyliaMagazineSection: React.FC = () => {
   }
 
   return (
-    <section className="relative w-full bg-[#00000012] overflow-hidden">
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-10 lg:px-20 py-12 sm:py-16">
+    <section className="relative w-full bg-[#00000012] overflow-hidden py-16 sm:py-24">
+      <div className="container mx-auto">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}

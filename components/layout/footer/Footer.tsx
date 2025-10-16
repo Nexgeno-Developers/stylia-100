@@ -225,9 +225,9 @@ export const Footer = () => {
   }
 
   return (
-    <footer ref={footerRef} className="relative bg-white overflow-hidden">
+    <footer ref={footerRef} className="relative bg-white overflow-hidden py-16 lg:py-24">
       {/* Main Footer Content */}
-      <div className="relative z-10 max-w-[1440px] h-[800px] mx-auto px-8 py-16 lg:py-24">
+      <div className="relative z-10 h-[800px] container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
           {/* Left Column - Accordion Links */}
           <motion.div
@@ -562,7 +562,7 @@ export const Footer = () => {
         <div
           className="relative w-full"
           style={{
-            height: 'clamp(300px, 50vh, 650px)',
+            height: 'clamp(300px, 60vh, 650px)',
           }}
         >
           <Image

@@ -3,7 +3,7 @@
 import type React from 'react'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowUpRight } from 'lucide-react'
+import { ArrowUpRight, HeartIcon } from 'lucide-react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -244,11 +244,11 @@ export const StyliaDiscoverSection: React.FC = () => {
     // Optimized position calculations
     const leftX = isForward
       ? isPositive
-        ? -45 + p * 20
-        : -45 - absP * 25
+        ? -40 + p * 20
+        : -40 - absP * 25
       : isPositive
-        ? -45 + p * 20
-        : -45 - absP * 25
+        ? -40 + p * 20
+        : -40 - absP * 25
 
     const midX = isForward
       ? isPositive
@@ -736,9 +736,15 @@ export const StyliaDiscoverSection: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-[1170px] overflow-hidden bg-[#00000012]"
+      className="relative h-[1170px] overflow-hidden bg-white"
     >
-      <div className="h-full container mx-auto">
+      {/* Background layer: fills full width on small, left 9/12 on lg+; right stays white */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute top-0 left-0 h-full w-full lg:w-[70%] bg-[#00000012]"
+      />
+
+      <div className="h-full container mx-auto relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
           {/* Left: Draggable Area */}
           <div
@@ -758,12 +764,14 @@ export const StyliaDiscoverSection: React.FC = () => {
             </div>
 
             {/* Headline */}
-            <div className="relative z-20 max-w-lg p-8">
+            <div className="relative z-20 max-w-lg">
               <motion.h2
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="text-4xl lg:text-5xl font-bold text-black mb-4 leading-tight"
+                className="text-3xl lg:text-[35px] text-black mb-4 pt-8 font-semibold leading-[1.142]"
+
+                // 142%
               >
                 Where Style Meets Identity
               </motion.h2>
@@ -771,7 +779,7 @@ export const StyliaDiscoverSection: React.FC = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.1 }}
-                className="text-lg text-black/70 leading-relaxed"
+                className="text-lg text-black font-normal leading-[1.8]"
               >
                 Stylia is more than fashion—it's a lifestyle. We create
                 timeless, bold, and elegant designs.
@@ -794,7 +802,7 @@ export const StyliaDiscoverSection: React.FC = () => {
                       className="absolute top-1/2 left-1/2 pointer-events-none"
                       style={{
                         width: '45vw',
-                        maxWidth: '550px',
+                        maxWidth: '450px',
                         aspectRatio: '3/4',
                       }}
                     >
@@ -811,7 +819,7 @@ export const StyliaDiscoverSection: React.FC = () => {
                       className="absolute top-1/2 left-1/2 pointer-events-none"
                       style={{
                         width: '50vw',
-                        maxWidth: '650px',
+                        maxWidth: '550px',
                         aspectRatio: '3/4',
                       }}
                     >
@@ -828,7 +836,7 @@ export const StyliaDiscoverSection: React.FC = () => {
                       className="absolute top-1/2 left-1/2 pointer-events-none"
                       style={{
                         width: '55vw',
-                        maxWidth: '750px',
+                        maxWidth: '650px',
                         aspectRatio: '3/4',
                       }}
                     >
@@ -844,7 +852,7 @@ export const StyliaDiscoverSection: React.FC = () => {
             </div>
 
             {/* Progress Pills */}
-            <div className="absolute bottom-8 left-8 z-20 flex gap-2">
+            {/* <div className="absolute bottom-8 left-8 z-20 flex gap-2">
               {products.map((_, i) => (
                 <motion.button
                   key={i}
@@ -872,7 +880,7 @@ export const StyliaDiscoverSection: React.FC = () => {
                   transition={{ duration: 0.3 }}
                 />
               ))}
-            </div>
+            </div> */}
 
             {/* CTA Button */}
             <motion.button
@@ -880,20 +888,20 @@ export const StyliaDiscoverSection: React.FC = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
               whileHover={{ scale: 1.05 }}
-              className="group absolute bottom-20 left-8 z-20 flex items-center gap-2 text-black font-semibold text-lg"
+              className="cursor-pointer group absolute bottom-8 left-0 z-20 flex items-center gap-2 text-black font-semibold text-lg lg:text-[35px]"
             >
               <span className="relative">
                 Discover Stylia
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black group-hover:w-full transition-all duration-300" />
               </span>
-              <ArrowUpRight className="w-5 h-5 group-hover:rotate-45 transition-transform" />
+              <ArrowUpRight className="w-10 h-10 group-hover:rotate-45 transition-transform" />
             </motion.button>
           </div>
 
           {/* Right: Sidebar */}
           <div
             ref={rightScrollRef}
-            className="col-span-3 bg-gray-50 overflow-y-auto h-full"
+            className="col-span-3 overflow-y-auto h-full"
           >
             {(() => {
               const { left, mid, right } = getSlotIndices(activeIndex)
@@ -912,7 +920,7 @@ export const StyliaDiscoverSection: React.FC = () => {
                     <div
                       key={`sidebar-${idx}`}
                       style={{ minHeight: `${100 / products.length}vh` }}
-                      className="flex items-center px-4 py-6"
+                      className="flex items-center px-4 py-8"
                     >
                       <motion.div
                         animate={{
@@ -926,41 +934,41 @@ export const StyliaDiscoverSection: React.FC = () => {
                         transition={{ duration: 0.3 }}
                         className="w-full"
                       >
-                        <div className="relative h-80 rounded-xl overflow-hidden bg-white shadow-lg">
+                        <div className="relative h-110 rounded-xl overflow-hidden">
                           <img
                             src={p.image}
                             alt={p.name}
-                            className="w-full h-full object-contain p-4"
+                            className="w-full h-full object-contain"
                           />
                           {isFeatured && (
                             <motion.div
                               initial={{ scale: 0.8, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
-                              className="absolute top-3 left-3 bg-black text-white text-xs px-3 py-1 rounded-full font-medium"
+                              className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full"
                             >
-                              Featured
+                              <HeartIcon className="w-10 h-10 text-black"></HeartIcon>
                             </motion.div>
                           )}
                           {isNext && (
                             <motion.div
                               initial={{ scale: 0.8, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
-                              className="absolute top-3 left-3 bg-gray-700 text-white text-xs px-3 py-1 rounded-full font-medium"
+                              className="absolute top-3 left-3  text-xs px-3 py-1 rounded-full font-medium"
                             >
-                              Next
+                              <HeartIcon className="w-10 h-10 text-black"></HeartIcon>
                             </motion.div>
                           )}
                           {isUpcoming && (
                             <motion.div
                               initial={{ scale: 0.8, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
-                              className="absolute top-3 left-3 bg-gray-500 text-white text-xs px-3 py-1 rounded-full font-medium"
+                              className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full font-medium"
                             >
-                              Upcoming
+                              <HeartIcon className="w-10 h-10 text-black"></HeartIcon>
                             </motion.div>
                           )}
                         </div>
-                        <div className="mt-4">
+                        <div className="pl-6">
                           <h3
                             className={`text-xl font-semibold ${isFeatured ? 'text-black' : 'text-gray-700'}`}
                           >

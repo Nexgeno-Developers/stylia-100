@@ -144,11 +144,11 @@ export const PerfectFitSection: React.FC = () => {
   }
 
   return (
-    <section className="relative bg-white overflow-hidden py-16 lg:py-20">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+    <section className="relative bg-white overflow-hidden py-16 lg:py-24">
+      <div className="container mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[600px] lg:min-h-[900px] gap-8">
           {/* Left Content Side */}
-          <div className="flex flex-col justify-between py-20">
+          <div className="flex flex-col justify-between py-14">
             {/* Top Content */}
             <div>
               <motion.h2
@@ -156,11 +156,11 @@ export const PerfectFitSection: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
                 viewport={{ once: true }}
-                className="text-5xl sm:text-6xl lg:text-7xl 2xl:text-8xl font-semibold text-black mb-6 leading-tight uppercase font-kumbh-sans"
+                className="text-5xl sm:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-black mb-6 leading-tight font-kumbh-sans"
               >
                 Find Your
                 <br />
-                <span className="font-semibold">Perfect Fit</span>
+                <span className='font-normal'>Perfect Fit</span>
               </motion.h2>
 
               <motion.p
@@ -168,7 +168,7 @@ export const PerfectFitSection: React.FC = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
                 viewport={{ once: true }}
-                className="sm:text-lg lg:text-xl text-black font-kumbh-sans font-normal text-lg leading-[180%] capitalize"
+                className="sm:text-lg lg:text-xl text-black font-kumbh-sans font-normal text-lg leading-[180%] max-w-full lg:max-w-[90%]"
               >
                 Explore Styles Curated To Complement Your Body Type, Skin Tone,
                 And Height — So You Look And Feel Your Best Every Day.
@@ -181,7 +181,7 @@ export const PerfectFitSection: React.FC = () => {
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.4 }}
               viewport={{ once: true }}
-              className="space-y-6 mt-12 lg:mt-0"
+              className="mt-12 lg:mt-0"
             >
               {shopOptions.map((option, index) => (
                 <motion.button
@@ -193,7 +193,7 @@ export const PerfectFitSection: React.FC = () => {
                   viewport={{ once: true }}
                   whileHover={{ x: 10, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`group flex items-center justify-between w-full text-left py-4 cursor-pointer transition-all duration-300 ${
+                  className={`group flex items-center justify-between w-full sm:w-[90%] text-left py-4 cursor-pointer transition-all duration-300 ${
                     activeOption === option.id
                       ? 'text-gray-900 font-semibold'
                       : `${option.color} ${option.hoverColor}`
@@ -215,7 +215,7 @@ export const PerfectFitSection: React.FC = () => {
           </div>
 
           {/* Right Image Side with Navigation */}
-          <div className="relative m-10" ref={imageContainerRef}>
+          <div className="relative" ref={imageContainerRef}>
             {/* Image Container with GSAP Animation */}
             <motion.div
               ref={imageRef}
@@ -243,10 +243,10 @@ export const PerfectFitSection: React.FC = () => {
               onClick={handlePrevImage}
               whileHover={{ scale: 1.1, x: -5 }}
               whileTap={{ scale: 0.95 }}
-              className="absolute cursor-pointer left-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all duration-300 group"
+              className="absolute cursor-pointer left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full  hover:bg-white transition-all duration-300 group"
               aria-label="Previous image"
             >
-              <ArrowLeft className="w-6 h-6 text-gray-800 group-hover:text-black transition-colors" />
+              <ArrowLeft className="w-10 h-10 text-white group-hover:text-black transition-colors" />
             </motion.button>
 
             {/* Right Navigation Arrow */}
@@ -254,14 +254,14 @@ export const PerfectFitSection: React.FC = () => {
               onClick={handleNextImage}
               whileHover={{ scale: 1.1, x: 5 }}
               whileTap={{ scale: 0.95 }}
-              className="absolute cursor-pointer right-4 top-1/2 -translate-y-1/2 z-10 bg-white/90 backdrop-blur-sm p-3 rounded-full shadow-lg hover:bg-white transition-all duration-300 group"
+              className="absolute cursor-pointer right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full  hover:bg-white transition-all duration-300 group"
               aria-label="Next image"
             >
-              <ArrowRight className="w-6 h-6 text-gray-800 group-hover:text-black transition-colors" />
+              <ArrowRight className="w-10 h-10 text-white group-hover:text-black transition-colors" />
             </motion.button>
 
             {/* Image Counter Indicator */}
-            <motion.div
+            {/* <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2"
@@ -285,7 +285,7 @@ export const PerfectFitSection: React.FC = () => {
                   aria-label={`Go to image ${idx + 1}`}
                 />
               ))}
-            </motion.div>
+            </motion.div> */}
           </div>
         </div>
       </div>

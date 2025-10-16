@@ -2,7 +2,7 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
 import gsap from 'gsap'
 import * as THREE from 'three'
 
@@ -410,21 +410,21 @@ export const LookbookSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-[993px] bg-gray-100 overflow-hidden"
+      className="relative w-full h-[993px] bg-[#00000012] overflow-hidden"
     >
-      <div className="h-full max-w-[1440px] mx-auto">
+      <div className="h-full container mx-auto">
         <div className="grid grid-cols-12 h-full">
           {/* Column 1: Number Navigation */}
-          <div className="col-span-1 bg-[#E8E8E8] flex flex-col items-center justify-center gap-8 sm:gap-12 py-8">
+          <div className="col-span-1 flex flex-col items-center justify-center gap-8 sm:gap-12 py-8">
             {lookbookItems.map((item, index) => (
               <motion.button
                 key={item.id}
                 onClick={() => handleNumberClick(index)}
                 disabled={isTransitioning}
-                className={`font-bold text-2xl sm:text-3xl lg:text-4xl transition-all duration-500 ${
+                className={`font-bold text-2xl sm:text-3xl lg:text-4xl transition-all duration-300 ${
                   index === activeIndex
-                    ? 'text-black scale-125'
-                    : 'text-black/40 scale-90'
+                    ? 'text-black scale-150'
+                    : 'text-[#0000004D] scale-90'
                 } ${isTransitioning ? 'pointer-events-none' : 'cursor-pointer'}`}
                 whileHover={{ scale: 1.2 }}
                 whileTap={{ scale: 0.95 }}
@@ -468,13 +468,13 @@ export const LookbookSection = () => {
                 animate={{ opacity: 1, y: 0 }}
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ duration: 0.5 }}
-                className="text-sm xl:text-base text-black mb-8 max-w-md"
+                className="text-sm xl:text-lg text-black leading-[195%] mb-4 max-w-md"
               >
                 {lookbookItems[activeIndex].description}
               </motion.p>
             </AnimatePresence>
 
-            <h2 className="text-5xl xl:text-6xl 2xl:text-7xl font-bold text-black mb-10 leading-tight">
+            <h2 className="text-5xl lg:text-6xl xl:text-[80px] font-semibold text-black mb-10 leading-tight">
               Explore
               <br />
               <span className="font-normal">Curated</span>
@@ -494,7 +494,7 @@ export const LookbookSection = () => {
                     : 'cursor-pointer'
                 }
               >
-                <ChevronLeft className="w-10 h-10 lg:w-12 lg:h-12 text-black" />
+                <ArrowLeft className="w-10 h-10 lg:w-12 lg:h-12 text-black" />
               </motion.button>
               <motion.button
                 onClick={handleNext}
@@ -507,20 +507,20 @@ export const LookbookSection = () => {
                     : 'cursor-pointer'
                 }
               >
-                <ChevronRight className="w-10 h-10 lg:w-12 lg:h-12 text-black" />
+                <ArrowRight className="w-10 h-10 lg:w-12 lg:h-12 text-black" />
               </motion.button>
             </div>
 
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group inline-flex items-center gap-3 text-black font-semibold text-xl lg:text-2xl"
+              className="group inline-flex items-center gap-3 text-black font-medium cursor-pointer text-xl lg:text-3xl"
             >
               <span className="relative">
                 Shop Now
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black group-hover:w-full transition-all duration-300" />
               </span>
-              <ArrowUpRight className="w-6 h-6 lg:w-7 lg:h-7" />
+              <ArrowUpRight className="w-6 h-6 lg:w-8 lg:h-8" />
             </motion.button>
           </div>
 
@@ -530,7 +530,7 @@ export const LookbookSection = () => {
               <motion.div
                 key={`next-${nextIndex}`}
                 initial={{ x: 100, opacity: 0, scale: 0.9 }}
-                animate={{ x: 0, opacity: 0.7, scale: 1 }}
+                animate={{ x: 0, opacity: 1, scale: 1 }}
                 exit={{ x: -50, opacity: 0, scale: 0.9 }}
                 transition={{ duration: 0.7, ease: [0.43, 0.13, 0.23, 0.96] }}
                 className="relative w-full h-1/2"
@@ -540,10 +540,10 @@ export const LookbookSection = () => {
                   alt={lookbookItems[nextIndex].title}
                   className="w-full h-full object-contain"
                 />
-                <p className="text-black text-sm mt-4 line-clamp-2">
+                <p className="text-black text-sm mt-0 leading-[195%]">
                   {lookbookItems[nextIndex].description}
                 </p>
-                <div className="absolute -top-3 -left-3 text-black font-bold text-4xl">
+                <div className="absolute -top-3 -left-3 text-black font-bold text-5xl">
                   {lookbookItems[nextIndex].number}
                 </div>
               </motion.div>

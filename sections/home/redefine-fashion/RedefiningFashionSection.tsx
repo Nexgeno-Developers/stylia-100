@@ -13,21 +13,18 @@ export const RedefiningFashionSection: React.FC = () => {
     // opacity: 1;
     // top: 4173px;
 
-    <section className="relative w-full mx-auto h-[1140px] 2xl:h-[1292px] overflow-hidden ">
-      {/* Background Image */}
-      <div className="absolute inset-0">
-        <Image
-          src="/images/redefining-fashion-bg.png"
-          alt="Modern Fashion"
-          fill
-          className="object-cover object-top"
-          priority
-        />
-      </div>
-
-      {/* Content Container */}
-      <div className="relative h-full w-full mx-auto px-4 sm:px-6 lg:px-8 xl:px-10">
-        <div className="h-full flex flex-col justify-center max-w-2xl">
+    <section
+      className="relative h-[1140px] 2xl:h-[1292px] overflow-hidden "
+      style={{
+        backgroundImage: "url('/images/redefining-fashion-bg.png')",
+        backgroundSize: 'cover',
+        backgroundPosition: 'top',
+        backgroundRepeat: 'no-repeat',
+      }}
+    >
+      <div className="container mx-auto">
+        {/* Content Container - left side at ~40% height */}
+        <div className="absolute text-left top-[40%] -translate-y-1/2 ">
           {/* Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
