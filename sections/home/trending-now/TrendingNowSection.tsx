@@ -46,7 +46,7 @@ export const TrendingNowSection: React.FC = () => {
   ]
 
   return (
-    <section className="relative w-full bg-white py-16 sm:py-20 lg:py-24">
+    <section className="relative w-full bg-white py-16 sm:py-16 lg:py-24">
       <div className="container mx-auto">
         {/* Header Section */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 lg:mb-16 gap-6">
@@ -123,6 +123,20 @@ export const TrendingNowSection: React.FC = () => {
                   {/* Overlay on Hover */}
                   <div className="absolute inset-0 bg-black/0 group-hover:bg-black/10 transition-all duration-500" />
 
+                  {/* Hover Effect – Quick View */}
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    whileHover={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
+                    className="absolute inset-0 flex items-center justify-center z-10"
+                  >
+                    <div className="bg-white px-6 py-3 rounded-full shadow-lg text-center pointer-events-none">
+                      <p className="font-kumbh-sans font-bold text-lg text-black">
+                        Quick View
+                      </p>
+                    </div>
+                  </motion.div>
+
                   {/* Heart Icon - Top Right */}
                   <motion.button
                     whileHover={{ scale: 1.2 }}
@@ -174,17 +188,6 @@ text-transform: capitalize;
                   </p>
                 </motion.div>
               </div>
-
-              {/* Hover Effect - Quick View */}
-              <motion.div
-                initial={{ opacity: 0 }}
-                whileHover={{ opacity: 1 }}
-                className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none rounded-lg"
-              >
-                <div className="bg-white text-black px-6 py-3 rounded-full font-kumbh-sans font-semibold text-sm shadow-2xl pointer-events-auto cursor-pointer">
-                  Quick View
-                </div>
-              </motion.div>
             </motion.div>
           ))}
         </div>

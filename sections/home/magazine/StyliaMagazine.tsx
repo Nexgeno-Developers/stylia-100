@@ -612,7 +612,7 @@ const HoverRevealCard: React.FC<HoverRevealCardProps> = ({
   return (
     <motion.div
       variants={variants}
-      className="group relative overflow-hidden bg-neutral-100 cursor-pointer rounded-2xl"
+      className="group relative overflow-hidden bg-neutral-100 cursor-pointer"
       onMouseEnter={() => setActiveCard(card.id)}
       onMouseLeave={() => setActiveCard(null)}
     >

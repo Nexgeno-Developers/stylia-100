@@ -12,6 +12,7 @@ import {
 } from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import Image from 'next/image'
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger)
@@ -33,7 +34,7 @@ const AccordionSection = ({
     >
       <motion.button
         onClick={onToggle}
-        className="w-[35%] cursor-pointer py-2 flex items-center justify-between group relative overflow-hidden"
+        className="w-[40%] cursor-pointer py-2 flex items-center justify-between group relative overflow-hidden"
         whileHover={{ x: 5 }}
         transition={{ type: 'spring', stiffness: 400, damping: 25 }}
       >
@@ -44,7 +45,7 @@ const AccordionSection = ({
           transition={{ duration: 0.3 }}
         />
 
-        <h3 className="text-2xl lg:text-3xl font-bold tracking-tight relative z-10">
+        <h3 className="text-2xl lg:text-3xl xl:text-[35px] font-semibold tracking-tight relative z-10">
           {title}
         </h3>
 
@@ -288,7 +289,7 @@ export default function Footer() {
                   >
                     <motion.a
                       href={link.href}
-                      className="text-black/70 hover:text-black text-base inline-block relative group"
+                      className="text-black hover:text-black text-base inline-block relative group"
                       whileHover={{ x: 5 }}
                       transition={{
                         type: 'spring',
@@ -329,7 +330,7 @@ export default function Footer() {
                   >
                     <motion.a
                       href={link.href}
-                      className="text-black/70 hover:text-black text-base inline-block relative group"
+                      className="text-black hover:text-black text-base inline-block relative group"
                       whileHover={{ x: 5 }}
                       transition={{
                         type: 'spring',
@@ -395,7 +396,7 @@ export default function Footer() {
                       },
                     }}
                     whileTap={{ scale: 0.9 }}
-                    className="w-11 h-11 flex items-center justify-center bg-black text-white rounded-full hover:bg-black/80 transition-colors shadow-md relative overflow-hidden group"
+                    className="w-11 h-11 flex items-center justify-center bg-black text-white rounded-full hover:bg-black/80 transition-colors shadow-md relative overflow-hidden group text-[35px] font-semibold"
                     aria-label={social.label}
                   >
                     <motion.div
@@ -418,7 +419,7 @@ export default function Footer() {
               viewport={{ once: true }}
               transition={{ delay: 0.4, duration: 0.5 }}
             >
-              <p className="text-sm text-black/60">
+              <p className="text-sm xl:text-[20px] leading-[1.4] text-black font-normal font-kumbh-sans">
                 Copyright © Stylia | Designed By{' '}
                 <motion.span
                   className="font-semibold text-black/80 inline-block"
@@ -437,11 +438,11 @@ export default function Footer() {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.2 }}
             viewport={{ once: true }}
-            className="space-y-8"
+            className="space-y-8 flex justify-end items-start"
           >
             <div>
               <motion.h2
-                className="text-4xl lg:text-5xl font-bold mb-6 tracking-tight leading-tight"
+                className="text-4xl lg:text-5xl xl:text-[75px] font-semibold mb-2 leading-[1.42]"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -451,7 +452,7 @@ export default function Footer() {
               </motion.h2>
 
               <motion.p
-                className="text-base text-black/70 mb-8 max-w-md leading-relaxed"
+                className="text-[20px] text-black mb-8 leading-relaxed"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
@@ -463,14 +464,14 @@ export default function Footer() {
 
               {/* Newsletter Input */}
               <motion.div
-                className="relative max-w-lg"
+                className="relative"
                 initial={{ opacity: 0, scale: 0.95 }}
                 whileInView={{ opacity: 1, scale: 1 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.5, duration: 0.5 }}
               >
                 <motion.div
-                  className="flex overflow-hidden shadow-sm border border-black/10 focus-within:border-black/30 transition-all relative"
+                  className="flex overflow-hidden  w-full shadow-sm border border-black/10 focus-within:border-black/30 transition-all relative"
                   whileHover={{ boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}
                   transition={{ duration: 0.3 }}
                 >
@@ -479,7 +480,7 @@ export default function Footer() {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder="Enter Your Email"
-                    className="flex-1 px-6 py-4 bg-gray-50 text-black placeholder:text-black/40 text-sm focus:outline-none focus:bg-white transition-colors"
+                    className="flex-1 px-6 py-4 bg-[#EDEDED] text-black placeholder:text-black/40 text-sm focus:outline-none focus:bg-white transition-colors"
                   />
                   <motion.button
                     onClick={handleEmailSubmit}
@@ -520,9 +521,16 @@ export default function Footer() {
                             stiffness: 300,
                             damping: 20,
                           }}
+                          whileHover={{ scale: 1.1, rotate: -5 }}
                           className="relative z-10 cursor-pointer"
                         >
-                          <Send className="w-5 h-5" />
+                          <Image
+                            src="/images/svg/envelope.svg"
+                            alt="Send Message"
+                            width={27}
+                            height={27}
+                            className="object-contain"
+                          />
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -532,23 +540,34 @@ export default function Footer() {
 
               {/* Payment Methods */}
               <motion.div
-                className="mt-10 mb-10 flex items-center gap-3 flex-wrap"
+                className="mt-10 mb-10 flex justify-end gap-3 flex-wrap"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.6, duration: 0.5 }}
               >
-                {['MC', 'VISA', 'PP', 'UPI'].map((payment, idx) => (
+                {[
+                  { name: 'Mastercard', src: '/images/svg/mastercard.svg' },
+                  { name: 'Visa', src: '/images/svg/visa.svg' },
+                  { name: 'Klarna', src: '/images/svg/klarna.svg' },
+                  { name: 'Paypal', src: '/images/svg/paypal.svg' },
+                ].map((payment, idx) => (
                   <motion.div
-                    key={payment}
+                    key={payment.name}
                     initial={{ opacity: 0, scale: 0.8 }}
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ delay: 0.7 + idx * 0.1, duration: 0.3 }}
                     whileHover={{ scale: 1.1, y: -5 }}
-                    className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer text-xs font-bold text-black/70"
+                    className="w-16 h-10 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer"
                   >
-                    {payment}
+                    <Image
+                      src={payment.src}
+                      alt={payment.name}
+                      width={40}
+                      height={20}
+                      className="object-contain"
+                    />
                   </motion.div>
                 ))}
               </motion.div>
@@ -577,10 +596,10 @@ export default function Footer() {
 
             // Gradient (lighter charcoal)
             const gradient =
-              'linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 35%, #4a4a4a 65%, #6b6b6b 100%)'
+              'linear-gradient(to right, #1a1a1a 0%, #2c2c2c 30%, #4a4a4a 65%, #6f6f6f 100%)'
 
             const transition =
-              'color 0.9s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s ease-out, text-shadow 0.6s ease-out, background-position 1s ease-in-out'
+              'opacity 0.5s ease-out, text-shadow 0.6s ease-out, background-position 1s ease-in-out'
 
             // Determine visual intensity
             const intensity = isHovered
@@ -600,14 +619,14 @@ export default function Footer() {
               willChange: 'transform, color, text-shadow',
               transition,
               // Base appearance
-              color: intensity > 0 ? 'transparent' : baseColor,
               // Gradient text when active
-              backgroundImage: intensity > 0 ? gradient : 'none',
-              backgroundSize: intensity > 0 ? '200% 200%' : undefined,
-              backgroundPosition: intensity > 0 ? '50% 50%' : undefined,
-              WebkitBackgroundClip: intensity > 0 ? 'text' : undefined,
-              backgroundClip: intensity > 0 ? 'text' : undefined,
-              WebkitTextFillColor: intensity > 0 ? 'transparent' : undefined,
+              // Keep gradient layer even when not active, just fade opacity instead
+              backgroundImage: gradient,
+              WebkitBackgroundClip: 'text',
+              backgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              opacity: intensity > 0 ? 1 : 0.65, // fade instead of remove gradient
+              color: 'transparent', // always use gradient text mode
               textShadow:
                 intensity > 0
                   ? `0 4px 20px rgba(0,0,0,${0.15 * intensity})`
