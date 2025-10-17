@@ -361,9 +361,10 @@
 'use client'
 
 import React, { useEffect, useRef, useState } from 'react'
-import { motion } from 'framer-motion'
+import { motion, useInView } from 'framer-motion'
 import Image from 'next/image'
 import gsap from 'gsap'
+import AnimatedText from '@/components/ui/AnimatedText'
 
 interface MagazineCard {
   id: number
@@ -376,6 +377,9 @@ interface MagazineCard {
 
 export const StyliaMagazineSection: React.FC = () => {
   const [activeCard, setActiveCard] = useState<number | null>(null) // shared hover tracking
+
+  const headingRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(headingRef, { once: true, amount: 0.5 })
 
   const magazineCards: MagazineCard[] = [
     {
@@ -452,8 +456,12 @@ export const StyliaMagazineSection: React.FC = () => {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 sm:mb-12 gap-4"
         >
-          <h2 className="text-4xl sm:text-5xl lg:text-6xl font-normal text-black leading-tight font-kumbh-sans capitalize">
-            Stylia <span className="font-bold">Magazine</span>
+          <h2 ref={headingRef} className="text-4xl sm:text-5xl lg:text-6xl font-normal text-black leading-tight font-kumbh-sans">
+            <AnimatedText text="Stylia" isVisible={isInView} />
+            <span className="font-bold">
+              {' '}
+              <AnimatedText text="Magazine" isVisible={isInView} />
+            </span>
           </h2>
 
           <p className="text-xs sm:text-sm text-neutral-500 font-medium tracking-wide font-kumbh-sans capitalize">

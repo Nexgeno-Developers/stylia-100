@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence, Variants } from 'framer-motion'
+import { motion, AnimatePresence, Variants, useInView } from 'framer-motion'
 import {
   Send,
   Instagram,
@@ -14,6 +14,7 @@ import {
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import Image from 'next/image'
+import AnimatedText from '@/components/ui/AnimatedText'
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger)
@@ -114,6 +115,9 @@ export default function Footer() {
   const [leavingIndex, setLeavingIndex] = useState<number | null>(null)
   const leavingTimerRef = useRef<NodeJS.Timeout | null>(null)
 
+  const headingRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(headingRef, { once: true, amount: 0.5 })
+
   // Refs for GSAP ScrollTrigger animation
   const footerRef = useRef<HTMLElement>(null)
   const styliaTextRef = useRef<HTMLDivElement>(null)
@@ -121,9 +125,9 @@ export default function Footer() {
 
   // GSAP ScrollTrigger animation for STYLIA text
   useEffect(() => {
-    if (!footerRef.current || !styliaTextRef.current) return
+    if (!styliaTextRef.current) return
 
-    const footer = footerRef.current
+    const styliaText = styliaTextRef.current
     const letters = lettersRef.current.filter(Boolean)
 
     if (letters.length === 0) return
@@ -138,7 +142,7 @@ export default function Footer() {
 
     // Create ScrollTrigger animation
     const scrollTrigger = ScrollTrigger.create({
-      trigger: footer,
+      trigger: styliaText,
       start: 'top 80%',
       end: 'top 20%',
       onEnter: () => {
@@ -263,8 +267,8 @@ export default function Footer() {
       className="relative bg-gradient-to-b from-white via-gray-50 to-gray-100 overflow-hidden py-16 lg:py-24"
     >
       {/* Main Footer Content */}
-      <div className="relative z-10 container mx-auto mb-48">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
+      <div className="relative z-10 container mx-auto">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 mb-[200px] 2xl:mb-[250px]">
           {/* Left Column - Accordion Links */}
           <motion.div
             initial={{ opacity: 0, y: 30 }}
@@ -438,13 +442,14 @@ export default function Footer() {
           >
             <div>
               <motion.h2
+                ref={headingRef}
                 className="text-4xl lg:text-5xl xl:text-[75px] font-semibold mb-2 leading-[1.42]"
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.3, duration: 0.5 }}
               >
-                Stay Connected
+                <AnimatedText text="Stay Connected" isVisible={isInView} />
               </motion.h2>
 
               <motion.p
@@ -577,11 +582,11 @@ export default function Footer() {
         ref={styliaTextRef}
         className="absolute bottom-0 left-0 right-0 flex items-end justify-center overflow-hidden pointer-events-auto"
         style={{
-          height: 'clamp(200px, 50vh, 500px)',
+          height: 'clamp(200px, 50vh, 350px)',
           perspective: '1000px',
         }}
       >
-        <div className="flex items-center justify-center w-full h-full">
+        <div className="flex items-end justify-center w-full h-full">
           {styliaLetters.map((letter, index) => {
             const isHovered = hoveredIndex === index
             const isNeighbor =
@@ -607,9 +612,9 @@ export default function Footer() {
                   : 0
 
             const style: React.CSSProperties = {
-              fontSize: 'clamp(120px, 20vw, 280px)',
+              fontSize: 'clamp(120px, 20vw, 360px)',
               lineHeight: 0.9,
-              letterSpacing: '0.01em',
+              letterSpacing: '0.03em',
               fontWeight: 900,
               transformStyle: 'preserve-3d',
               willChange: 'transform, color, text-shadow',

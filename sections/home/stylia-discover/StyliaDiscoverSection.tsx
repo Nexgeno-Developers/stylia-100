@@ -6,6 +6,8 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowUpRight, HeartIcon } from 'lucide-react'
 import { gsap } from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import AnimatedText from '@/components/ui/AnimatedText'
+import { useInView } from 'framer-motion'
 
 // Register ScrollTrigger plugin
 gsap.registerPlugin(ScrollTrigger)
@@ -17,51 +19,6 @@ interface Product {
   image: string
   bannerImage: string
   liked: boolean
-}
-
-interface AnimatedTextProps {
-  text: string
-  delay?: number
-  className?: string
-  isVisible: boolean
-}
-
-// Animated text component that splits text into characters
-const AnimatedText: React.FC<AnimatedTextProps> = ({ 
-  text, 
-  delay = 0, 
-  className = '', 
-  isVisible 
-}) => {
-  const words = text.split(' ')
-  let charIndex = 0
-  
-  return (
-    <span className={className}>
-      {words.map((word, wordIndex) => (
-        <span key={wordIndex} className="inline-block">
-          {word.split('').map((char, idx) => {
-            const currentCharIndex = charIndex++
-            return (
-              <span
-                key={idx}
-                className="inline-block"
-                style={{
-                  transform: isVisible ? 'translateY(0)' : 'translateY(120%)',
-                  opacity: isVisible ? 1 : 0,
-                  transition: `all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)`,
-                  transitionDelay: `${delay + currentCharIndex * 30}ms`,
-                }}
-              >
-                {char}
-              </span>
-            )
-          })}
-          {wordIndex < words.length - 1 && <span className="inline-block">&nbsp;</span>}
-        </span>
-      ))}
-    </span>
-  )
 }
 
 const LOOP_SETS = 3 // Number of virtual copies for infinite scroll
@@ -83,6 +40,11 @@ export const StyliaDiscoverSection: React.FC = () => {
   const lastDirectionRef = useRef(1) // Track last direction: 1 for forward, -1 for backward
   const cooldownRef = useRef(false) // Prevent rapid transitions
   const scrollDebounceRef = useRef<NodeJS.Timeout | null>(null)
+
+  const [isHeadingVisible, setIsHeadingVisible] = useState(false)
+
+  const headingRef = useRef(null)
+  const isInView = useInView(headingRef, { once: true, amount: 0.5 })
 
   // Velocity tracking refs
   const velocityRef = useRef(0) // Current velocity
@@ -165,7 +127,6 @@ export const StyliaDiscoverSection: React.FC = () => {
     ],
     []
   )
-  
 
   // Wrap index for circular navigation
   const wrapIndex = (i: number) => {
@@ -941,20 +902,29 @@ export const StyliaDiscoverSection: React.FC = () => {
             </div>
 
             {/* Headline */}
-            <div className="relative z-20 max-w-lg">
+            <div
+              ref={headingRef}
+              className="relative z-20 max-w-lg overflow-visible"
+            >
               <motion.h2
                 initial={{ opacity: 0, y: 30 }}
-                animate={{ opacity: 1, y: 0 }}
+                animate={
+                  isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
+                }
                 transition={{ duration: 0.6 }}
                 className="text-3xl lg:text-[35px] text-black mb-4 font-semibold leading-[1.142]"
-
-                // 142%
               >
-                Where Style Meets Identity
+                <AnimatedText
+                  text="Where Style Meets Identity"
+                  isVisible={isInView}
+                />
               </motion.h2>
+
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
+                animate={
+                  isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+                }
                 transition={{ duration: 0.6, delay: 0.1 }}
                 className="text-lg text-black font-normal leading-[1.8]"
               >

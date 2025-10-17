@@ -1,10 +1,17 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowLeft, ArrowRight, ArrowUpRight, ChevronLeft, ChevronRight } from 'lucide-react'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
+import {
+  ArrowLeft,
+  ArrowRight,
+  ArrowUpRight,
+  ChevronLeft,
+  ChevronRight,
+} from 'lucide-react'
 import gsap from 'gsap'
 import * as THREE from 'three'
+import AnimatedText from '@/components/ui/AnimatedText'
 
 interface LookbookItem {
   id: number
@@ -27,6 +34,9 @@ export const LookbookSection = () => {
     material: THREE.ShaderMaterial | null
     texture: THREE.Texture | null
   } | null>(null)
+
+  const headingRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(headingRef, { once: true, amount: 0.5 })
 
   const lookbookItems: LookbookItem[] = [
     {
@@ -341,46 +351,46 @@ export const LookbookSection = () => {
   // Transition animation
   const transitionToIndex = async (newIndex: number) => {
     if (isTransitioning || newIndex === activeIndex) return
-  
+
     setIsTransitioning(true)
-  
+
     // Phase 1: Explode current image particles
     await createParticlesFromImage(lookbookItems[activeIndex].image)
-    
+
     if (sceneRef.current?.material) {
       // Explode current image (0 to 0.5)
       await gsap.to(sceneRef.current.material.uniforms.uProgress, {
         value: 0.5,
         duration: 1.2, // SLOW explosion duration
-      ease: 'power1.in', 
+        ease: 'power1.in',
       })
-      
+
       // Clean up old particles
       if (sceneRef.current?.particles && sceneRef.current?.scene) {
         sceneRef.current.scene.remove(sceneRef.current.particles)
       }
     }
-  
+
     // Phase 2: Reassemble next image particles
     await createParticlesFromImage(lookbookItems[newIndex].image)
-    
+
     if (sceneRef.current?.material) {
       // Start at exploded state
       sceneRef.current.material.uniforms.uProgress.value = 0.5
-      
+
       // Reassemble (0.5 to 1.0)
       await gsap.to(sceneRef.current.material.uniforms.uProgress, {
         value: 1,
         duration: 1.5, // Reassembly duration
-      ease: 'back.out(1.4)', // B
-        onUpdate: function() {
+        ease: 'back.out(1.4)', // B
+        onUpdate: function () {
           if (this.progress() > 0.3) {
             setActiveIndex(newIndex)
           }
         },
         onComplete: () => {
           setIsTransitioning(false)
-          
+
           if (sceneRef.current?.particles && sceneRef.current?.scene) {
             sceneRef.current.scene.remove(sceneRef.current.particles)
           }
@@ -461,30 +471,28 @@ export const LookbookSection = () => {
 
           {/* Column 6-9: Center Content */}
           <div className="col-span-5 relative  pl-6 lg:pl-10 py-16 sm:py-24">
-            <div className='flex flex-col items-start justify-between h-[60%]'>
+            <div className="flex flex-col items-start justify-between h-[60%]">
+              <AnimatePresence mode="wait">
+                <motion.p
+                  key={`desc-${activeIndex}`}
+                  initial={{ opacity: 0, y: 20 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, y: -20 }}
+                  transition={{ duration: 0.5 }}
+                  className="text-sm xl:text-lg text-black leading-[195%] mb-4 max-w-md"
+                >
+                  {lookbookItems[activeIndex].description}
+                </motion.p>
+              </AnimatePresence>
 
-            
-            <AnimatePresence mode="wait">
-              <motion.p
-                key={`desc-${activeIndex}`}
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.5 }}
-                className="text-sm xl:text-lg text-black leading-[195%] mb-4 max-w-md"
-              >
-                {lookbookItems[activeIndex].description}
-              </motion.p>
-            </AnimatePresence>
-
-            <h2 className="text-5xl lg:text-6xl xl:text-[80px] font-semibold text-black leading-tight">
-              Explore
-              <br />
-              <span className="font-normal">Curated</span>
-              <br />
-              <span className="font-normal">Lookbook</span>
-            </h2>
-
+              <h2 ref={headingRef} className="text-5xl lg:text-6xl xl:text-[80px] font-semibold text-black leading-tight">
+                <AnimatedText text='Explore' isVisible={isInView}  />
+                <span className="font-normal">
+                   <AnimatedText text='Curated' isVisible={isInView}  />
+                </span>
+                <br />
+                <span className="font-normal"> <AnimatedText text='Lookbook' isVisible={isInView}  /></span>
+              </h2>
             </div>
 
             <div className="flex items-center gap-6 my-10">

@@ -1,9 +1,10 @@
 'use client'
 
-import React from 'react'
-import { motion } from 'framer-motion'
+import React, { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 import { Heart } from 'lucide-react'
 import Image from 'next/image'
+import AnimatedText from '@/components/ui/AnimatedText'
 
 interface TrendingProduct {
   id: number
@@ -14,6 +15,9 @@ interface TrendingProduct {
 }
 
 export const TrendingNowSection: React.FC = () => {
+  const headingRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(headingRef, { once: true, amount: 0.5 })
+
   const trendingProducts: TrendingProduct[] = [
     {
       id: 1,
@@ -57,7 +61,7 @@ export const TrendingNowSection: React.FC = () => {
             transition={{ duration: 0.8 }}
             viewport={{ once: true }}
           >
-            <h2 className="font-kumbh-sans text-black">
+            <h2 ref={headingRef} className="font-kumbh-sans text-black">
               <span
                 className="font-normal"
                 style={{
@@ -66,7 +70,7 @@ export const TrendingNowSection: React.FC = () => {
                   letterSpacing: '0%',
                 }}
               >
-                Trending {''}
+                <AnimatedText text="Trending" isVisible={isInView} />
               </span>
               <span
                 className="font-semibold"
@@ -76,7 +80,8 @@ export const TrendingNowSection: React.FC = () => {
                   letterSpacing: '0%',
                 }}
               >
-                Now
+                {' '}
+                <AnimatedText text="Now" isVisible={isInView} />
               </span>
             </h2>
           </motion.div>

@@ -1,11 +1,15 @@
 'use client'
 
-import React from 'react'
-import { motion } from 'framer-motion'
+import React, { useRef } from 'react'
+import { motion, useInView } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
+import AnimatedText from '@/components/ui/AnimatedText'
 
 export const RedefiningFashionSection: React.FC = () => {
+  const headingRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(headingRef, { once: true, amount: 0.5 })
+
   return (
     // width: 1440;
     // height: 1292;
@@ -28,19 +32,23 @@ export const RedefiningFashionSection: React.FC = () => {
           {/* Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
+            ref={headingRef}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
             viewport={{ once: true }}
-            className="text-black mb-6 sm:mb-8 font-kumbh-sans font-normal capitalize"
+            className="text-black mb-6 sm:mb-8 font-kumbh-sans font-normal"
             style={{
               fontSize: 'clamp(2rem, 5vw, 63.73px)',
               lineHeight: '105%',
               letterSpacing: '0%',
             }}
           >
-            Redefining
-            <br />
-            Modern Fashion
+            <span className="block">
+              <AnimatedText text="Redefining" isVisible={isInView} />
+            </span>
+            <span className="block">
+              <AnimatedText text="Modern Fashion" isVisible={isInView} />
+            </span>
           </motion.h1>
 
           {/* Description */}

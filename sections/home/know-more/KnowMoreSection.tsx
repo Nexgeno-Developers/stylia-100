@@ -4,6 +4,8 @@ import React, { useRef, useEffect, useState, useCallback } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowUpRight } from 'lucide-react'
 import Image from 'next/image'
+import AnimatedText from '@/components/ui/AnimatedText'
+import { useInView } from 'framer-motion'
 
 export const KnowMoreSection: React.FC = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -15,6 +17,9 @@ export const KnowMoreSection: React.FC = () => {
   const lastPosRef = useRef<{ x: number; y: number } | null>(null)
   const pointsQueueRef = useRef<Array<{ x: number; y: number }>>([])
   const isDrawingRef = useRef(false)
+
+  const headingRef = useRef(null)
+  const isInView = useInView(headingRef, { once: true, amount: 0.5 })
 
   // Initialize canvas
   useEffect(() => {
@@ -292,10 +297,14 @@ export const KnowMoreSection: React.FC = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
+              ref={headingRef}
               viewport={{ once: true }}
               className="text-5xl sm:text-6xl lg:text-7xl xl:text-[80px] font-bold text-white leading-none drop-shadow-[0_4px_20px_rgba(0,0,0,0.8)]"
             >
-              Style <span className="font-light">Pro</span>
+              <AnimatedText text="Style" isVisible={isInView} />{' '}
+              <span className="font-light">
+                <AnimatedText text="Pro" isVisible={isInView} />
+              </span>
             </motion.h2>
 
             {/* Button */}

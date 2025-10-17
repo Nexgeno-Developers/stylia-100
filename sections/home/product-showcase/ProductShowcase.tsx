@@ -1,7 +1,7 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { motion, AnimatePresence } from 'framer-motion'
+import { motion, AnimatePresence, useInView } from 'framer-motion'
 import {
   ChevronLeft,
   ChevronRight,
@@ -14,6 +14,7 @@ import {
 } from 'lucide-react'
 import Image from 'next/image'
 import gsap from 'gsap'
+import AnimatedText from '@/components/ui/AnimatedText'
 
 interface ProductColor {
   id: string
@@ -60,6 +61,9 @@ export const ProductShowcase: React.FC = () => {
   // New refs for transition images
   const currentImageRef = useRef<HTMLDivElement>(null)
   const nextImageRef = useRef<HTMLDivElement>(null)
+
+  const headingRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(headingRef, { once: true, amount: 0.5 })
 
   const productData: ProductData[] = [
     {
@@ -677,10 +681,7 @@ export const ProductShowcase: React.FC = () => {
         </motion.div>
       </div>
 
-      <div
-        className="relative h-full container mx-auto"
-        style={{ zIndex: 2 }}
-      >
+      <div className="relative h-full container mx-auto" style={{ zIndex: 2 }}>
         <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
           {/* Left Section - Product Info */}
           <motion.div
@@ -691,8 +692,8 @@ export const ProductShowcase: React.FC = () => {
           >
             {/* Title Block - Stays at Top */}
             <div className="space-y-4">
-              <h1 className="text-3xl sm:text-4xl lg:text-[43px] text-white font-kumbh-sans leading-tight font-semibold capitalize leading-142% letter-spacing-0% leading-trim-none">
-                {productData[currentProduct].title}
+              <h1 ref={headingRef} className="text-3xl sm:text-4xl lg:text-[43px] text-white font-kumbh-sans leading-tight font-semibold leading-142% letter-spacing-0% leading-trim-none">
+                <AnimatedText text={productData[currentProduct].title} isVisible={isInView} />
               </h1>
               <p className="text-base sm:text-lg overflow-x-auto text-white font-kumbh-sans leading-tight font-normal capitalize leading-195% letter-spacing-0% leading-trim-none">
                 {productData[currentProduct].subtitle}

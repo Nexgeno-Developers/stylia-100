@@ -1,7 +1,9 @@
-"use client"
+'use client'
 
 import React, { useEffect, useState, useRef } from 'react'
 import { ArrowUpRight } from 'lucide-react'
+import AnimatedText from '@/components/ui/AnimatedText'
+import { useInView } from 'motion/react'
 
 interface MotionWrapperProps {
   children: React.ReactNode
@@ -9,93 +11,69 @@ interface MotionWrapperProps {
 }
 
 // Motion wrapper component (simplified version)
-const MotionWrapper: React.FC<MotionWrapperProps> = ({ children, className }) => {
+const MotionWrapper: React.FC<MotionWrapperProps> = ({
+  children,
+  className,
+}) => {
   return <div className={className}>{children}</div>
 }
 
-interface AnimatedTextProps {
-  text: string
-  delay?: number
-  className?: string
-  isVisible: boolean
-}
+// interface AnimatedTextProps {
+//   text: string
+//   delay?: number
+//   className?: string
+//   isVisible: boolean
+// }
 
-// Animated text component that splits text into characters
-const AnimatedText: React.FC<AnimatedTextProps> = ({ 
-  text, 
-  delay = 0, 
-  className = '', 
-  isVisible 
-}) => {
-  // Split text into words and characters, preserving spaces
-  const words = text.split(' ')
-  let charIndex = 0
-  
-  return (
-    <span className={className}>
-      {words.map((word, wordIndex) => (
-        <span key={wordIndex} className="inline-block">
-          {word.split('').map((char, idx) => {
-            const currentCharIndex = charIndex++
-            return (
-              <span
-                key={idx}
-                className="inline-block"
-                style={{
-                  transform: isVisible ? 'translateY(0)' : 'translateY(120%)',
-                  opacity: isVisible ? 1 : 0,
-                  transition: `all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)`,
-                  transitionDelay: `${delay + currentCharIndex * 30}ms`,
-                }}
-              >
-                {char}
-              </span>
-            )
-          })}
-          {wordIndex < words.length - 1 && <span className="inline-block">&nbsp;</span>}
-        </span>
-      ))}
-    </span>
-  )
-}
+// // Animated text component that splits text into characters
+// const AnimatedText: React.FC<AnimatedTextProps> = ({
+//   text,
+//   delay = 0,
+//   className = '',
+//   isVisible
+// }) => {
+//   // Split text into words and characters, preserving spaces
+//   const words = text.split(' ')
+//   let charIndex = 0
+
+//   return (
+//     <span className={className}>
+//       {words.map((word, wordIndex) => (
+//         <span key={wordIndex} className="inline-block">
+//           {word.split('').map((char, idx) => {
+//             const currentCharIndex = charIndex++
+//             return (
+//               <span
+//                 key={idx}
+//                 className="inline-block"
+//                 style={{
+//                   transform: isVisible ? 'translateY(0)' : 'translateY(120%)',
+//                   opacity: isVisible ? 1 : 0,
+//                   transition: `all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)`,
+//                   transitionDelay: `${delay + currentCharIndex * 30}ms`,
+//                 }}
+//               >
+//                 {char}
+//               </span>
+//             )
+//           })}
+//           {wordIndex < words.length - 1 && <span className="inline-block">&nbsp;</span>}
+//         </span>
+//       ))}
+//     </span>
+//   )
+// }
 
 export const HeroSection: React.FC = () => {
   const [isVisible, setIsVisible] = useState<boolean>(false)
-  const [buttonVisible, setButtonVisible] = useState<boolean>(false)
-  const sectionRef = useRef<HTMLDivElement>(null)
-  
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setIsVisible(true)
-            // Show button after text animation completes
-            setTimeout(() => setButtonVisible(true), 2000)
-          }
-        })
-      },
-      {
-        threshold: 0.2, // Trigger when 20% of the section is visible
-        rootMargin: '0px',
-      }
-    )
-    
-    if (sectionRef.current) {
-      observer.observe(sectionRef.current)
-    }
-    
-    return () => {
-      if (sectionRef.current) {
-        observer.unobserve(sectionRef.current)
-      }
-    }
-  }, [])
-  
+  const buttonRef = useRef<HTMLDivElement>(null)
+  const headingRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(headingRef, { once: true, amount: 0.5 })
+  const isButtonInView = useInView(buttonRef, { once: true, amount: 0.5 })
+
   return (
     <MotionWrapper className="hero-section">
       <div
-        ref={sectionRef}
         className="relative flex items-center justify-center overflow-hidden"
         style={{
           height: '1141px',
@@ -124,30 +102,30 @@ export const HeroSection: React.FC = () => {
           >
             <div className="flex flex-col items-center justify-end">
               {/* Main Heading with Letter Animation */}
-              <h1 className="text-white mb-8 sm:mb-10 lg:mb-12 font-sans leading-tight overflow-hidden">
+              <h1
+                ref={headingRef}
+                className="text-white mb-8 sm:mb-10 lg:mb-12 font-sans leading-tight overflow-hidden"
+              >
                 <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[100px] font-normal mb-2">
-                  <AnimatedText 
-                    text="Discover the" 
-                    className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[100px] font-normal"
-                    isVisible={isVisible}
-                    delay={0}
-                  />
-                  {' '}
-                  <AnimatedText 
-                    text="Art of Fashion" 
+                  <AnimatedText text="Discover the" isVisible={isInView} />{' '}
+                  <AnimatedText
+                    text="Art of Fashion"
                     className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[100px] font-semibold"
-                    isVisible={isVisible}
+                    isVisible={isInView}
                     delay={400}
                   />
                 </span>
               </h1>
 
               {/* Animated Circle Expand CTA Button */}
-              <div 
+              <div
                 className="flex gap-4 justify-center items-center group"
+                ref={buttonRef}
                 style={{
-                  opacity: buttonVisible ? 1 : 0,
-                  transform: buttonVisible ? 'translateY(0)' : 'translateY(20px)',
+                  opacity: isButtonInView ? 1 : 0,
+                  transform: isButtonInView
+                    ? 'translateY(0)'
+                    : 'translateY(20px)',
                   transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
                 }}
               >
