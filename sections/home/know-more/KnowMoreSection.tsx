@@ -87,7 +87,7 @@ export const KnowMoreSection: React.FC = () => {
     ctx.globalCompositeOperation = 'destination-out'
     ctx.fillStyle = 'rgba(0, 0, 0, 1)'
     ctx.strokeStyle = 'rgba(0, 0, 0, 1)'
-    ctx.lineWidth = 70
+    ctx.lineWidth = 90
     ctx.lineCap = 'round'
     ctx.lineJoin = 'round'
 

@@ -51,93 +51,6 @@ export const StyliaDiscoverSection: React.FC = () => {
   const [activeIndex, setActiveIndex] = useState(0)
   const [isDragging, setIsDragging] = useState(false)
 
-  // Products
-  // const products: Product[] = useMemo(
-  //   () => [
-  //     {
-  //       id: 1,
-  //       name: 'Floral Elegance Co-Ord Set',
-  //       price: 33000,
-  //       image:
-  //         'https://plus.unsplash.com/premium_photo-1759354756760-b4416a802588?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=928',
-  //       bannerImage:
-  //         'https://plus.unsplash.com/premium_photo-1759354756760-b4416a802588?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=928',
-  //       liked: false,
-  //     },
-  //     {
-  //       id: 2,
-  //       name: 'Chic Floral Co-Ord',
-  //       price: 25500,
-  //       image:
-  //         'https://images.unsplash.com/photo-1760276888172-f123e959d4f2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740',
-  //       bannerImage:
-  //         'https://images.unsplash.com/photo-1760276888172-f123e959d4f2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740',
-  //       liked: false,
-  //     },
-  //     {
-  //       id: 3,
-  //       name: 'Elegant Summer Set',
-  //       price: 28000,
-  //       image:
-  //         'https://images.unsplash.com/photo-1760276888172-f123e959d4f2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740',
-  //       bannerImage:
-  //         'https://images.unsplash.com/photo-1760276888172-f123e959d4f2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740',
-  //       liked: false,
-  //     },
-  //     {
-  //       id: 4,
-  //       name: 'Modern Classic Outfit',
-  //       price: 31000,
-  //       image:
-  //         'https://plus.unsplash.com/premium_photo-1759432614274-d92ea9d4d465?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1822',
-  //       bannerImage:
-  //         'https://plus.unsplash.com/premium_photo-1759432614274-d92ea9d4d465?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1822',
-  //       liked: false,
-  //     },
-  //     {
-  //       id: 5,
-  //       name: 'Summer Breeze Outfit',
-  //       price: 33000,
-  //       image:
-  //         'https://plus.unsplash.com/premium_photo-1760346161631-6b50290d631f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8&auto=format&fit=crop&q=60&w=900',
-  //       bannerImage:
-  //         'https://plus.unsplash.com/premium_photo-1760346161631-6b50290d631f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8&auto=format&fit=crop&q=60&w=900',
-  //       liked: false,
-  //     },
-  //     {
-  //       id: 6,
-  //       name: 'Urban Chic Set',
-  //       price: 25500,
-  //       image:
-  //         'https://plus.unsplash.com/premium_photo-1760269682838-4f7a3d586ad3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxM3x8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=900',
-  //       bannerImage:
-  //         'https://plus.unsplash.com/premium_photo-1760269682838-4f7a3d586ad3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxM3x8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=900',
-  //       liked: false,
-  //     },
-  //     {
-  //       id: 7,
-  //       name: 'Classic Elegance',
-  //       price: 28000,
-  //       image:
-  //         'https://images.unsplash.com/photo-1759845565036-cbecbcfcb8e2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=900',
-  //       bannerImage:
-  //         'https://images.unsplash.com/photo-1759845565036-cbecbcfcb8e2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=900',
-  //       liked: false,
-  //     },
-  //     {
-  //       id: 8,
-  //       name: 'Contemporary Style',
-  //       price: 31000,
-  //       image:
-  //         'https://images.unsplash.com/photo-1760235674447-fe0cc115b697?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=900',
-  //       bannerImage:
-  //         'https://images.unsplash.com/photo-1760235674447-fe0cc115b697?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=900',
-  //       liked: false,
-  //     },
-  //   ],
-  //   []
-  // )
-
   const products: Product[] = useMemo(
     () => [
       {
@@ -215,18 +128,43 @@ export const StyliaDiscoverSection: React.FC = () => {
   }
 
   // Get indices for 3 visible slots with consistent mapping
+  // MATCH SIDEBAR ORDER: Right = Featured, Center = Next, Left = Upcoming
   // Right slot = Featured (current active)
   // Center slot = Next (one position after featured)
-  // Left slot = Third (two positions after featured)
+  // Left slot = Upcoming (two positions after featured)
   const getSlotIndices = (idx: number) => {
     return {
-      left: wrapIndex(idx + 2), // two AFTER active (third position)
-      mid: wrapIndex(idx + 1), // one AFTER active (next position)
-      right: wrapIndex(idx), // active product (featured)
+      right: wrapIndex(idx), // active product (featured) - RIGHTMOST
+      mid: wrapIndex(idx + 1), // one AFTER active (next) - CENTER
+      left: wrapIndex(idx + 2), // two AFTER active (upcoming) - LEFTMOST
     }
   }
 
-  // Optimized GSAP transforms with reduced calculations and better performance
+  // Get slot indices for transition state to prevent double appearance
+  // MATCH SIDEBAR ORDER: Right = Featured, Center = Next, Left = Upcoming
+  const getTransitionSlotIndices = (
+    currentIdx: number,
+    nextIdx: number,
+    direction: number
+  ) => {
+    if (direction === 1) {
+      // Moving forward: next becomes featured (right), next+1 becomes next (center), current becomes upcoming (left)
+      return {
+        right: wrapIndex(nextIdx), // next becomes featured (rightmost)
+        mid: wrapIndex(nextIdx + 1), // next+1 becomes next (center)
+        left: wrapIndex(currentIdx), // current becomes upcoming (leftmost)
+      }
+    } else {
+      // Moving backward: next becomes featured (right), current becomes next (center), next-1 becomes upcoming (left)
+      return {
+        right: wrapIndex(nextIdx), // next becomes featured (rightmost)
+        mid: wrapIndex(currentIdx), // current becomes next (center)
+        left: wrapIndex(nextIdx - 1), // next-1 becomes upcoming (leftmost)
+      }
+    }
+  }
+
+  // Optimized GSAP transforms with responsive calculations and better performance
   const applySlotTransforms = (progress = 0) => {
     const leftEl = slotLeftRef.current
     const midEl = slotMidRef.current
@@ -236,35 +174,177 @@ export const StyliaDiscoverSection: React.FC = () => {
     const p = Math.max(-1, Math.min(1, progress))
     const direction = lastDirectionRef.current
 
+    // Get viewport width for responsive calculations
+    const viewportWidth = window.innerWidth
+    const isSmallScreen = viewportWidth < 640 // sm breakpoint
+    const isMediumScreen = viewportWidth < 1024 // lg breakpoint
+    const isLargeScreen = viewportWidth < 1536 // 2xl breakpoint
+    const isUltraWideScreen = viewportWidth >= 1920 // Ultra-wide displays
+
     // Pre-calculate common values for better performance
     const isForward = direction === 1
     const isPositive = p >= 0
     const absP = Math.abs(p)
 
-    // Optimized position calculations
-    const leftX = isForward
-      ? isPositive
-        ? -40 + p * 20
-        : -40 - absP * 25
-      : isPositive
-        ? -40 + p * 20
-        : -40 - absP * 25
+    // ========================================
+    // RESPONSIVE POSITION CALCULATIONS
+    // ========================================
+    // ADJUSTMENT GUIDE:
+    // - First number: Base position when not dragging (e.g., -30 = 30vw left of center)
+    // - Second number: Movement multiplier during drag (e.g., p * 15 = moves 15vw per drag unit)
+    // - Third number: Movement when dragging opposite direction (e.g., absP * 20 = moves 20vw)
+    //
+    // TO ADJUST IMAGE POSITIONS:
+    // - Increase first number to move images more to the LEFT
+    // - Decrease first number to move images more to the RIGHT
+    // - Increase second number to make images move MORE during drag
+    // - Decrease second number to make images move LESS during drag
+    // - Increase third number to make images move MORE when dragging opposite direction
+    // ========================================
 
-    const midX = isForward
-      ? isPositive
-        ? -25 + p * 20
-        : -25 - absP * 20
-      : isPositive
-        ? -25 + p * 20
-        : -25 - absP * 20
+    let leftX, midX, rightX
 
-    const rightX = isForward
-      ? isPositive
-        ? -5 + p * 75
-        : -5 - absP * 20
-      : isPositive
-        ? -5 + p * 75
-        : -5 - absP * 20
+    if (isSmallScreen) {
+      // 📱 SMALL SCREENS (mobile < 640px)
+      // Left image: Base -30vw, moves 15vw per drag unit
+      leftX = isForward
+        ? isPositive
+          ? -30 + p * 15 // ← ADJUST: -30 (base pos), 15 (drag multiplier)
+          : -30 - absP * 20 // ← ADJUST: 20 (opposite drag)
+        : isPositive
+          ? -30 + p * 15
+          : -30 - absP * 20
+
+      // Middle image: Base -15vw, moves 15vw per drag unit
+      midX = isForward
+        ? isPositive
+          ? -15 + p * 15 // ← ADJUST: -15 (base pos), 15 (drag multiplier)
+          : -15 - absP * 15 // ← ADJUST: 15 (opposite drag)
+        : isPositive
+          ? -15 + p * 15
+          : -15 - absP * 15
+
+      // Right image: Base 0vw, moves 50vw per drag unit
+      rightX = isForward
+        ? isPositive
+          ? 0 + p * 50 // ← ADJUST: 0 (base pos), 50 (drag multiplier)
+          : 0 - absP * 15 // ← ADJUST: 15 (opposite drag)
+        : isPositive
+          ? 0 + p * 50
+          : 0 - absP * 15
+    } else if (isMediumScreen) {
+      // 📱 MEDIUM SCREENS (tablet 640px-1023px)
+      // Left image: Base -35vw, moves 18vw per drag unit
+      leftX = isForward
+        ? isPositive
+          ? -35 + p * 18 // ← ADJUST: -35 (base pos), 18 (drag multiplier)
+          : -35 - absP * 22 // ← ADJUST: 22 (opposite drag)
+        : isPositive
+          ? -35 + p * 18
+          : -35 - absP * 22
+
+      // Middle image: Base -20vw, moves 18vw per drag unit
+      midX = isForward
+        ? isPositive
+          ? -20 + p * 18 // ← ADJUST: -20 (base pos), 18 (drag multiplier)
+          : -20 - absP * 18 // ← ADJUST: 18 (opposite drag)
+        : isPositive
+          ? -20 + p * 18
+          : -20 - absP * 18
+
+      // Right image: Base -3vw, moves 60vw per drag unit
+      rightX = isForward
+        ? isPositive
+          ? -3 + p * 60 // ← ADJUST: -3 (base pos), 60 (drag multiplier)
+          : -3 - absP * 18 // ← ADJUST: 18 (opposite drag)
+        : isPositive
+          ? -3 + p * 60
+          : -3 - absP * 18
+    } else if (isLargeScreen) {
+      // 💻 LARGE SCREENS (desktop 1024px-1535px)
+      // Left image: Base -40vw, moves 20vw per drag unit
+      leftX = isForward
+        ? isPositive
+          ? -40 + p * 20 // ← ADJUST: -40 (base pos), 20 (drag multiplier)
+          : -40 - absP * 25 // ← ADJUST: 25 (opposite drag)
+        : isPositive
+          ? -40 + p * 20
+          : -40 - absP * 25
+
+      // Middle image: Base -25vw, moves 20vw per drag unit
+      midX = isForward
+        ? isPositive
+          ? -25 + p * 20 // ← ADJUST: -25 (base pos), 20 (drag multiplier)
+          : -25 - absP * 20 // ← ADJUST: 20 (opposite drag)
+        : isPositive
+          ? -25 + p * 20
+          : -25 - absP * 20
+
+      // Right image: Base -5vw, moves 75vw per drag unit
+      rightX = isForward
+        ? isPositive
+          ? -5 + p * 75 // ← ADJUST: -5 (base pos), 75 (drag multiplier)
+          : -5 - absP * 20 // ← ADJUST: 20 (opposite drag)
+        : isPositive
+          ? -5 + p * 75
+          : -5 - absP * 20
+    } else if (isUltraWideScreen) {
+      // 🖥️ ULTRA-WIDE SCREENS (1920px+)
+      // Left image: Base -45vw, moves 25vw per drag unit
+      leftX = isForward
+        ? isPositive
+          ? -45 + p * 25 // ← ADJUST: -45 (base pos), 25 (drag multiplier)
+          : -45 - absP * 30 // ← ADJUST: 30 (opposite drag)
+        : isPositive
+          ? -45 + p * 25
+          : -45 - absP * 30
+
+      // Middle image: Base -30vw, moves 25vw per drag unit
+      midX = isForward
+        ? isPositive
+          ? -30 + p * 25 // ← ADJUST: -30 (base pos), 25 (drag multiplier)
+          : -30 - absP * 25 // ← ADJUST: 25 (opposite drag)
+        : isPositive
+          ? -30 + p * 25
+          : -30 - absP * 25
+
+      // Right image: Base -8vw, moves 85vw per drag unit
+      rightX = isForward
+        ? isPositive
+          ? -8 + p * 85 // ← ADJUST: -8 (base pos), 85 (drag multiplier)
+          : -8 - absP * 25 // ← ADJUST: 25 (opposite drag)
+        : isPositive
+          ? -8 + p * 85
+          : -8 - absP * 25
+    } else {
+      // 🖥️ 2XL SCREENS (1536px-1919px) - CURRENTLY ACTIVE FOR YOUR SCREEN
+      // Left image: Base -30vw, moves 22vw per drag unit
+      leftX = isForward
+        ? isPositive
+          ? -30 + p * 22 // ← ADJUST: -30 (base pos), 22 (drag multiplier)
+          : -30 - absP * 27 // ← ADJUST: 27 (opposite drag)
+        : isPositive
+          ? -30 + p * 22
+          : -30 - absP * 27
+
+      // Middle image: Base -27vw, moves 22vw per drag unit
+      midX = isForward
+        ? isPositive
+          ? -27 + p * 22 // ← ADJUST: -27 (base pos), 22 (drag multiplier)
+          : -27 - absP * 22 // ← ADJUST: 22 (opposite drag)
+        : isPositive
+          ? -27 + p * 22
+          : -27 - absP * 22
+
+      // Right image: Base -20vw, moves 80vw per drag unit
+      rightX = isForward
+        ? isPositive
+          ? -20 + p * 80 // ← ADJUST: -20 (base pos), 80 (drag multiplier)
+          : -30 - absP * 22 // ← ADJUST: 22 (opposite drag)
+        : isPositive
+          ? -30 + p * 80
+          : -30 - absP * 22
+    }
 
     // Batch GSAP updates for better performance
     gsap.set([leftEl, midEl, rightEl], {
@@ -273,11 +353,37 @@ export const StyliaDiscoverSection: React.FC = () => {
       transformOrigin: 'center center',
     })
 
+    // Responsive scale and opacity calculations
+    let leftScale, midScale, rightScale
+
+    if (isSmallScreen) {
+      leftScale = isPositive ? 0.8 + p * 0.1 : 0.8 - absP * 0.15
+      midScale = isPositive ? 0.9 + p * 0.2 : 0.9 - absP * 0.1
+      rightScale = isPositive ? 1.0 - p * 0.05 : 1.0 - absP * 0.2
+    } else if (isMediumScreen) {
+      leftScale = isPositive ? 0.75 + p * 0.12 : 0.75 - absP * 0.18
+      midScale = isPositive ? 0.88 + p * 0.22 : 0.88 - absP * 0.12
+      rightScale = isPositive ? 1.05 - p * 0.08 : 1.05 - absP * 0.22
+    } else if (isLargeScreen) {
+      leftScale = isPositive ? 0.7 + p * 0.15 : 0.7 - absP * 0.2
+      midScale = isPositive ? 0.85 + p * 0.25 : 0.85 - absP * 0.15
+      rightScale = isPositive ? 1.1 - p * 0.1 : 1.1 - absP * 0.25
+    } else if (isUltraWideScreen) {
+      leftScale = isPositive ? 0.65 + p * 0.18 : 0.65 - absP * 0.22
+      midScale = isPositive ? 0.82 + p * 0.28 : 0.82 - absP * 0.18
+      rightScale = isPositive ? 1.15 - p * 0.12 : 1.15 - absP * 0.28
+    } else {
+      // 2xl screens (1536px-1919px)
+      leftScale = isPositive ? 0.68 + p * 0.16 : 0.68 - absP * 0.21
+      midScale = isPositive ? 0.84 + p * 0.26 : 0.84 - absP * 0.16
+      rightScale = isPositive ? 1.12 - p * 0.11 : 1.12 - absP * 0.26
+    }
+
     // Left slot - optimized calculations
     gsap.set(leftEl, {
       x: `${leftX}vw`,
       y: '-50%',
-      scale: isPositive ? 0.7 + p * 0.15 : 0.7 - absP * 0.2,
+      scale: leftScale,
       opacity: isPositive ? 0.6 + p * 0.4 : 0.6 - absP * 0.6,
       filter: `blur(${isPositive ? 4 - p * 2 : 4 + absP * 4}px)`,
       rotationY: isPositive ? -8 + p * 8 : -8 - absP * 8,
@@ -288,7 +394,7 @@ export const StyliaDiscoverSection: React.FC = () => {
     gsap.set(midEl, {
       x: `${midX}vw`,
       y: '-50%',
-      scale: isPositive ? 0.85 + p * 0.25 : 0.85 - absP * 0.15,
+      scale: midScale,
       opacity: isPositive ? 1 : 1 - absP * 0.4,
       filter: `blur(${isPositive ? 2 - p * 2 : 2 + absP * 2}px)`,
       rotationY: isPositive ? p * 4 : -absP * 8,
@@ -299,7 +405,7 @@ export const StyliaDiscoverSection: React.FC = () => {
     gsap.set(rightEl, {
       x: `${rightX}vw`,
       y: '-50%',
-      scale: isPositive ? 1.1 - p * 0.1 : 1.1 - absP * 0.25,
+      scale: rightScale,
       opacity: isPositive ? 1 - p : 1,
       filter: `blur(${isPositive ? p * 6 : absP * 2}px)`,
       rotationY: isPositive ? 4 + p * 8 : 4 - absP * 4,
@@ -341,18 +447,40 @@ export const StyliaDiscoverSection: React.FC = () => {
     // Calculate dynamic duration based on velocity
     // Higher velocity = shorter duration (faster animation)
     // Lower velocity = longer duration (slower animation)
-    const baseDuration = 0.8 // 500ms base duration
-    const speedFactor = 0.3 // How much velocity affects duration
-    const minDuration = 0.2 // 200ms minimum (very fast)
-    const maxDuration = 0.8 // 800ms maximum (very slow)
+    const baseDuration = 0.5 // Further reduced for smoother transitions
+    const speedFactor = 0.15 // Reduced speed factor
+    const minDuration = 0.2 // Reduced minimum duration
+    const maxDuration = 0.6 // Reduced maximum duration
 
     const dynamicDuration = Math.max(
       minDuration,
       Math.min(maxDuration, baseDuration - velocity * speedFactor)
     )
 
+    // Get transition slot indices to prevent double appearance
+    const transitionIndices = getTransitionSlotIndices(
+      activeIndex,
+      nextIndex,
+      direction
+    )
+
     // Create a timeline for smooth animation
     const tl = gsap.timeline({
+      onStart: () => {
+        // Update images immediately for manual drag to prevent double appearance
+        // But only for manual drag, not sidebar scroll
+        if (!fromSidebar) {
+          const leftImg = leftEl.querySelector('img')
+          const midImg = midEl.querySelector('img')
+          const rightImg = rightEl.querySelector('img')
+
+          if (leftImg)
+            leftImg.src = products[transitionIndices.left].bannerImage
+          if (midImg) midImg.src = products[transitionIndices.mid].bannerImage
+          if (rightImg)
+            rightImg.src = products[transitionIndices.right].bannerImage
+        }
+      },
       onComplete: () => {
         animatingRef.current = false
         setActiveIndex(nextIndex)
@@ -369,8 +497,8 @@ export const StyliaDiscoverSection: React.FC = () => {
           () => {
             cooldownRef.current = false
           },
-          Math.max(100, dynamicDuration * 200)
-        ) // Dynamic cooldown based on duration
+          Math.max(50, dynamicDuration * 100) // Further reduced cooldown
+        )
       },
     })
 
@@ -382,10 +510,10 @@ export const StyliaDiscoverSection: React.FC = () => {
     const isForward = direction === 1
     const targetProgress = direction
 
-    // Use GSAP's efficient animation methods
+    // Use GSAP's efficient animation methods with smoother easing
     tl.to([leftEl, midEl, rightEl], {
       duration: dynamicDuration,
-      ease: 'power2.out',
+      ease: 'power1.out', // Smoother easing
       force3D: true,
       onUpdate: function () {
         const progress = this.progress() * targetProgress
@@ -453,16 +581,17 @@ export const StyliaDiscoverSection: React.FC = () => {
     }
   }, [])
 
-  // Cursor morph
+  // Cursor morph - keep circular only
   const cursorToRect = () => {
     const cursor = cursorRef.current
     const text = cursorTextRef.current
     if (!cursor || !text) return
 
-    cursor.style.width = '120px'
-    cursor.style.height = '56px'
-    cursor.style.borderRadius = '12px'
-    text.style.opacity = '1'
+    // Keep circular but slightly larger when dragging
+    cursor.style.width = '50px'
+    cursor.style.height = '50px'
+    cursor.style.borderRadius = '9999px'
+    text.style.opacity = '0' // Keep text hidden
   }
 
   const cursorToCircle = () => {
@@ -539,17 +668,9 @@ export const StyliaDiscoverSection: React.FC = () => {
       const cappedProgress = Math.max(-1, Math.min(1, p))
       dragProgressRef.current = cappedProgress
 
-      // Only trigger transition if drag exceeds threshold AND we're not in cooldown
-      if (Math.abs(cappedProgress) > 0.8 && !cooldownRef.current) {
-        const direction = cappedProgress > 0 ? 1 : -1
-        lastDirectionRef.current = direction
-        const nextIndex = wrapIndex(activeIndex + direction)
-        transitionToIndex(nextIndex, direction, false, velocityRef.current)
-        startX = e.clientX
-        currentX = 0
-        dragProgressRef.current = 0
-        return
-      }
+      // DISABLE mid-drag transitions - only allow transitions on mouse up
+      // This prevents double appearance during drag, matching sidebar behavior
+      // Just apply visual transforms without changing images
 
       applySlotTransforms(cappedProgress)
     }
@@ -565,23 +686,21 @@ export const StyliaDiscoverSection: React.FC = () => {
       const p = dragProgressRef.current
 
       // Only allow single image transition per drag gesture
-      if (p > 0.35) {
+      // Use higher threshold to match sidebar behavior - only transition on significant drag
+      if (p > 0.5) {
         lastDirectionRef.current = 1
-        transitionToIndex(
-          wrapIndex(activeIndex + 1),
-          1,
-          false,
-          velocityRef.current
-        )
-      } else if (p < -0.35) {
+        const nextIndex = wrapIndex(activeIndex + 1)
+
+        // Use same transition logic as sidebar scroll for consistency
+        transitionToIndex(nextIndex, 1, false, 0) // No velocity for manual drag
+      } else if (p < -0.5) {
         lastDirectionRef.current = -1
-        transitionToIndex(
-          wrapIndex(activeIndex - 1),
-          -1,
-          false,
-          velocityRef.current
-        )
+        const nextIndex = wrapIndex(activeIndex - 1)
+
+        // Use same transition logic as sidebar scroll for consistency
+        transitionToIndex(nextIndex, -1, false, 0) // No velocity for manual drag
       } else {
+        // Snap back to original position if drag wasn't significant enough
         applySlotTransforms(0)
         dragProgressRef.current = 0
       }
@@ -673,7 +792,7 @@ export const StyliaDiscoverSection: React.FC = () => {
         const timeDelta = currentTime - lastScrollTimeRef.current
 
         // Only calculate velocity every 16ms (60fps) for better performance
-        if (timeDelta >= 16 && scrollDelta > 0) {
+        if (timeDelta >= 32 && scrollDelta > 0) {
           const scrollVelocity = scrollDelta / timeDelta
 
           // Update tracking refs
@@ -720,6 +839,18 @@ export const StyliaDiscoverSection: React.FC = () => {
       }
     }
   }, [activeIndex, products.length])
+
+  // Handle window resize to recalculate transforms
+  useEffect(() => {
+    const handleResize = () => {
+      // Reapply transforms with current progress when window resizes
+      applySlotTransforms(0)
+    }
+
+    window.addEventListener('resize', handleResize)
+    return () => window.removeEventListener('resize', handleResize)
+  }, [])
+
   // Initialize sidebar position
   useLayoutEffect(() => {
     const scroller = rightScrollRef.current
@@ -741,15 +872,15 @@ export const StyliaDiscoverSection: React.FC = () => {
       {/* Background layer: fills full width on small, left 9/12 on lg+; right stays white */}
       <div
         aria-hidden
-        className="pointer-events-none absolute top-0 left-0 h-full w-full lg:w-[70%] bg-[#00000012]"
+        className="pointer-events-none absolute top-0 left-0 h-full w-full lg:w-[72%] 2xl:w-[65%] bg-[#00000012]"
       />
 
       <div className="h-full container mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
+        <div className="grid grid-cols-1 lg:grid-cols-12 h-full py-16 sm:py-24">
           {/* Left: Draggable Area */}
           <div
             ref={leftAreaRef}
-            className="relative col-span-9 overflow-hidden"
+            className="relative col-span-9 2xl:col-span-8 overflow-hidden hidden sm:block"
             style={{ cursor: 'none' }}
           >
             {/* Custom Cursor */}
@@ -769,7 +900,7 @@ export const StyliaDiscoverSection: React.FC = () => {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6 }}
-                className="text-3xl lg:text-[35px] text-black mb-4 pt-8 font-semibold leading-[1.142]"
+                className="text-3xl lg:text-[35px] text-black mb-4 font-semibold leading-[1.142]"
 
                 // 142%
               >
@@ -789,14 +920,14 @@ export const StyliaDiscoverSection: React.FC = () => {
             {/* Image Track */}
             <div
               ref={trackRef}
-              className="absolute inset-0 z-10"
+              className="absolute inset-0 z-10 bg-transparent"
               style={{ transformStyle: 'preserve-3d' }}
             >
               {(() => {
                 const { left, mid, right } = getSlotIndices(activeIndex)
                 return (
                   <>
-                    {/* Left Slot */}
+                    {/* Left Slot - Upcoming (matches sidebar upcoming) */}
                     <div
                       ref={slotLeftRef}
                       className="absolute top-1/2 left-1/2 pointer-events-none"
@@ -813,7 +944,7 @@ export const StyliaDiscoverSection: React.FC = () => {
                       />
                     </div>
 
-                    {/* Middle Slot */}
+                    {/* Middle Slot - Next (matches sidebar next) */}
                     <div
                       ref={slotMidRef}
                       className="absolute top-1/2 left-1/2 pointer-events-none"
@@ -830,7 +961,7 @@ export const StyliaDiscoverSection: React.FC = () => {
                       />
                     </div>
 
-                    {/* Right Slot */}
+                    {/* Right Slot - Featured (matches sidebar featured) */}
                     <div
                       ref={slotRightRef}
                       className="absolute top-1/2 left-1/2 pointer-events-none"
@@ -887,7 +1018,6 @@ export const StyliaDiscoverSection: React.FC = () => {
               initial={{ opacity: 0, y: 16 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}
-              whileHover={{ scale: 1.05 }}
               className="cursor-pointer group absolute bottom-8 left-0 z-20 flex items-center gap-2 text-black font-semibold text-lg lg:text-[35px]"
             >
               <span className="relative">
@@ -901,7 +1031,7 @@ export const StyliaDiscoverSection: React.FC = () => {
           {/* Right: Sidebar */}
           <div
             ref={rightScrollRef}
-            className="col-span-3 overflow-y-auto h-full"
+            className="col-span-3 2xl:col-span-4 overflow-y-auto h-full"
           >
             {(() => {
               const { left, mid, right } = getSlotIndices(activeIndex)
@@ -920,21 +1050,10 @@ export const StyliaDiscoverSection: React.FC = () => {
                     <div
                       key={`sidebar-${idx}`}
                       style={{ minHeight: `${100 / products.length}vh` }}
-                      className="flex items-center px-4 py-8"
+                      className="flex items-center"
                     >
-                      <motion.div
-                        animate={{
-                          scale: isFeatured
-                            ? 1
-                            : isNext || isUpcoming
-                              ? 0.98
-                              : 0.95,
-                          opacity: isFeatured || isNext || isUpcoming ? 1 : 0.7,
-                        }}
-                        transition={{ duration: 0.3 }}
-                        className="w-full"
-                      >
-                        <div className="relative h-110 rounded-xl overflow-hidden">
+                      <motion.div className="w-full">
+                        <div className="relative h-105 rounded-xl overflow-hidden">
                           <img
                             src={p.image}
                             alt={p.name}
@@ -944,6 +1063,10 @@ export const StyliaDiscoverSection: React.FC = () => {
                             <motion.div
                               initial={{ scale: 0.8, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
+                              transition={{
+                                duration: 0.15,
+                                ease: 'easeOut',
+                              }}
                               className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full"
                             >
                               <HeartIcon className="w-10 h-10 text-black"></HeartIcon>
@@ -953,6 +1076,10 @@ export const StyliaDiscoverSection: React.FC = () => {
                             <motion.div
                               initial={{ scale: 0.8, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
+                              transition={{
+                                duration: 0.15,
+                                ease: 'easeOut',
+                              }}
                               className="absolute top-3 left-3  text-xs px-3 py-1 rounded-full font-medium"
                             >
                               <HeartIcon className="w-10 h-10 text-black"></HeartIcon>
@@ -962,6 +1089,10 @@ export const StyliaDiscoverSection: React.FC = () => {
                             <motion.div
                               initial={{ scale: 0.8, opacity: 0 }}
                               animate={{ scale: 1, opacity: 1 }}
+                              transition={{
+                                duration: 0.15,
+                                ease: 'easeOut',
+                              }}
                               className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full font-medium"
                             >
                               <HeartIcon className="w-10 h-10 text-black"></HeartIcon>
@@ -994,3 +1125,90 @@ export const StyliaDiscoverSection: React.FC = () => {
 }
 
 export default StyliaDiscoverSection
+
+// Products
+// const products: Product[] = useMemo(
+//   () => [
+//     {
+//       id: 1,
+//       name: 'Floral Elegance Co-Ord Set',
+//       price: 33000,
+//       image:
+//         'https://plus.unsplash.com/premium_photo-1759354756760-b4416a802588?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=928',
+//       bannerImage:
+//         'https://plus.unsplash.com/premium_photo-1759354756760-b4416a802588?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=928',
+//       liked: false,
+//     },
+//     {
+//       id: 2,
+//       name: 'Chic Floral Co-Ord',
+//       price: 25500,
+//       image:
+//         'https://images.unsplash.com/photo-1760276888172-f123e959d4f2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740',
+//       bannerImage:
+//         'https://images.unsplash.com/photo-1760276888172-f123e959d4f2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740',
+//       liked: false,
+//     },
+//     {
+//       id: 3,
+//       name: 'Elegant Summer Set',
+//       price: 28000,
+//       image:
+//         'https://images.unsplash.com/photo-1760276888172-f123e959d4f2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740',
+//       bannerImage:
+//         'https://images.unsplash.com/photo-1760276888172-f123e959d4f2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1740',
+//       liked: false,
+//     },
+//     {
+//       id: 4,
+//       name: 'Modern Classic Outfit',
+//       price: 31000,
+//       image:
+//         'https://plus.unsplash.com/premium_photo-1759432614274-d92ea9d4d465?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1822',
+//       bannerImage:
+//         'https://plus.unsplash.com/premium_photo-1759432614274-d92ea9d4d465?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=80&w=1822',
+//       liked: false,
+//     },
+//     {
+//       id: 5,
+//       name: 'Summer Breeze Outfit',
+//       price: 33000,
+//       image:
+//         'https://plus.unsplash.com/premium_photo-1760346161631-6b50290d631f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8&auto=format&fit=crop&q=60&w=900',
+//       bannerImage:
+//         'https://plus.unsplash.com/premium_photo-1760346161631-6b50290d631f?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHw5fHx8ZW58MHx8fHx8&auto=format&fit=crop&q=60&w=900',
+//       liked: false,
+//     },
+//     {
+//       id: 6,
+//       name: 'Urban Chic Set',
+//       price: 25500,
+//       image:
+//         'https://plus.unsplash.com/premium_photo-1760269682838-4f7a3d586ad3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxM3x8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=900',
+//       bannerImage:
+//         'https://plus.unsplash.com/premium_photo-1760269682838-4f7a3d586ad3?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxM3x8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=900',
+//       liked: false,
+//     },
+//     {
+//       id: 7,
+//       name: 'Classic Elegance',
+//       price: 28000,
+//       image:
+//         'https://images.unsplash.com/photo-1759845565036-cbecbcfcb8e2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=900',
+//       bannerImage:
+//         'https://images.unsplash.com/photo-1759845565036-cbecbcfcb8e2?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxNnx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=900',
+//       liked: false,
+//     },
+//     {
+//       id: 8,
+//       name: 'Contemporary Style',
+//       price: 31000,
+//       image:
+//         'https://images.unsplash.com/photo-1760235674447-fe0cc115b697?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=900',
+//       bannerImage:
+//         'https://images.unsplash.com/photo-1760235674447-fe0cc115b697?ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxmZWF0dXJlZC1waG90b3MtZmVlZHwxOXx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&q=60&w=900',
+//       liked: false,
+//     },
+//   ],
+//   []
+// )

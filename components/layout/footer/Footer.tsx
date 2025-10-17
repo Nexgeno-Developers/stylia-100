@@ -2,9 +2,14 @@
 
 import React, { useState, useRef, useEffect } from 'react'
 import { motion, AnimatePresence, Variants } from 'framer-motion'
-import { Send, Instagram, Facebook, Twitter, ArrowDown } from 'lucide-react'
-import Image from 'next/image'
-import { Check } from 'lucide-react'
+import {
+  Send,
+  Instagram,
+  Facebook,
+  Twitter,
+  ArrowDown,
+  Check,
+} from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
@@ -95,7 +100,7 @@ const AccordionSection = ({
   )
 }
 
-export const Footer = () => {
+export default function Footer() {
   const [openSections, setOpenSections] = useState<{ [key: string]: boolean }>({
     quick: false,
     info: false,
@@ -103,67 +108,90 @@ export const Footer = () => {
   })
   const [email, setEmail] = useState('')
   const [isSubmitted, setIsSubmitted] = useState(false)
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null)
+  const [leavingIndex, setLeavingIndex] = useState<number | null>(null)
+  const leavingTimerRef = useRef<NodeJS.Timeout | null>(null)
 
   // Refs for GSAP ScrollTrigger animation
   const footerRef = useRef<HTMLElement>(null)
-  const signatureRef = useRef<HTMLDivElement>(null)
+  const styliaTextRef = useRef<HTMLDivElement>(null)
+  const lettersRef = useRef<(HTMLSpanElement | null)[]>([])
 
-  // GSAP ScrollTrigger animation for signature
+  // GSAP ScrollTrigger animation for STYLIA text
   useEffect(() => {
-    if (!footerRef.current || !signatureRef.current) return
+    if (!footerRef.current || !styliaTextRef.current) return
 
     const footer = footerRef.current
-    const signature = signatureRef.current
+    const letters = lettersRef.current.filter(Boolean)
 
-    // Set initial state - signature positioned below viewport
-    gsap.set(signature, {
-      y: '100%',
+    if (letters.length === 0) return
+
+    // Set initial state - all letters positioned below viewport
+    gsap.set(letters, {
+      y: 500,
       opacity: 0,
+      rotationX: 90,
+      scale: 0.8,
     })
 
     // Create ScrollTrigger animation
     const scrollTrigger = ScrollTrigger.create({
       trigger: footer,
-      start: 'top bottom',
-      end: 'bottom top',
-      scrub: 1, // Smooth scrubbing with 1 second lag
-      markers: process.env.NODE_ENV === 'development', // Show markers in development
+      start: 'top 80%',
+      end: 'top 20%',
       onEnter: () => {
-        // Animation when scrolling down (entering footer)
-        gsap.to(signature, {
-          y: '0%',
+        // Staggered letter animation
+        gsap.to(letters, {
+          y: 0,
           opacity: 1,
-          duration: 1.2,
-          ease: 'back.out(1.7)', // Elastic bounce effect
-        })
-      },
-      onLeave: () => {
-        // Animation when scrolling up (leaving footer)
-        gsap.to(signature, {
-          y: '100%',
-          opacity: 0,
+          rotationX: 0,
+          scale: 1,
           duration: 0.8,
-          ease: 'power2.inOut', // Smooth exit
-        })
-      },
-      onEnterBack: () => {
-        // Animation when scrolling back down into footer
-        gsap.to(signature, {
-          y: '0%',
-          opacity: 1,
-          duration: 1.2,
           ease: 'back.out(1.7)',
+          stagger: {
+            each: 0.1,
+            from: 'start',
+          },
         })
       },
       onLeaveBack: () => {
-        // Animation when scrolling back up out of footer
-        gsap.to(signature, {
-          y: '100%',
+        // Reset animation when scrolling back up
+        gsap.to(letters, {
+          y: 500,
           opacity: 0,
-          duration: 0.8,
+          rotationX: 90,
+          scale: 0.8,
+          duration: 0.6,
           ease: 'power2.inOut',
+          stagger: {
+            each: 0.05,
+            from: 'end',
+          },
         })
       },
+    })
+
+    // Add hover effect to individual letters
+    letters.forEach((letter, index) => {
+      if (!letter) return
+
+      letter.addEventListener('mouseenter', () => {
+        gsap.to(letter, {
+          y: -15,
+          scale: 1.1,
+          duration: 0.3,
+          ease: 'back.out(2)',
+        })
+      })
+
+      letter.addEventListener('mouseleave', () => {
+        gsap.to(letter, {
+          y: 0,
+          scale: 1,
+          duration: 0.3,
+          ease: 'power2.out',
+        })
+      })
     })
 
     // Cleanup function
@@ -224,13 +252,15 @@ export const Footer = () => {
     }),
   }
 
+  const styliaLetters = ['S', 'T', 'Y', 'L', 'I', 'A']
+
   return (
     <footer
       ref={footerRef}
-      className="relative bg-white overflow-hidden py-16 lg:py-24"
+      className="relative bg-gradient-to-b from-white via-gray-50 to-gray-100 overflow-hidden py-16 lg:py-24"
     >
       {/* Main Footer Content */}
-      <div className="relative z-10 h-[800px] container mx-auto">
+      <div className="relative z-10 container mx-auto mb-48">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
           {/* Left Column - Accordion Links */}
           <motion.div
@@ -475,9 +505,9 @@ export const Footer = () => {
                             stiffness: 300,
                             damping: 20,
                           }}
-                          className="text-2xl relative z-10 cursor-pointer"
+                          className="relative z-10 cursor-pointer"
                         >
-                          <Check className="text-white" />
+                          <Check className="w-6 h-6" />
                         </motion.div>
                       ) : (
                         <motion.div
@@ -492,13 +522,7 @@ export const Footer = () => {
                           }}
                           className="relative z-10 cursor-pointer"
                         >
-                          <Image
-                            src="/images/svg/send.svg"
-                            alt="Send"
-                            className="text-white"
-                            width={30}
-                            height={30}
-                          />
+                          <Send className="w-5 h-5" />
                         </motion.div>
                       )}
                     </AnimatePresence>
@@ -507,83 +531,134 @@ export const Footer = () => {
               </motion.div>
 
               {/* Payment Methods */}
-              <div className="mt-10 flex items-center gap-3 flex-wrap">
-                {/* Mastercard */}
-                <div className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer">
-                  <Image
-                    src="/images/svg/mastercard.svg"
-                    alt="Mastercard"
-                    width={56}
-                    height={24}
-                    className="object-contain"
-                  />
-                </div>
-
-                {/* Visa */}
-                <div className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer">
-                  <Image
-                    src="/images/svg/visa.svg"
-                    alt="Visa"
-                    width={56}
-                    height={24}
-                    className="object-contain"
-                  />
-                </div>
-
-                {/* PayPal */}
-                <div className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer">
-                  <Image
-                    src="/images/svg/paypal.svg"
-                    alt="Paypal"
-                    width={56}
-                    height={24}
-                    className="object-contain"
-                  />
-                </div>
-
-                {/* UPI */}
-                <div className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer">
-                  <Image
-                    src="/images/svg/klarna.svg"
-                    alt="Klarna"
-                    width={56}
-                    height={24}
-                    className="object-contain"
-                  />
-                </div>
-              </div>
+              <motion.div
+                className="mt-10 mb-10 flex items-center gap-3 flex-wrap"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6, duration: 0.5 }}
+              >
+                {['MC', 'VISA', 'PP', 'UPI'].map((payment, idx) => (
+                  <motion.div
+                    key={payment}
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.7 + idx * 0.1, duration: 0.3 }}
+                    whileHover={{ scale: 1.1, y: -5 }}
+                    className="w-14 h-9 bg-white rounded-md flex items-center justify-center shadow-sm border border-black/5 cursor-pointer text-xs font-bold text-black/70"
+                  >
+                    {payment}
+                  </motion.div>
+                ))}
+              </motion.div>
             </div>
           </motion.div>
         </div>
       </div>
 
-      {/* Animated Signature Background - Full Width Below Content */}
+      {/* Animated STYLIA Text Background - Full Width Below Content */}
       <div
-        ref={signatureRef}
-        className="absolute bottom-0 left-0 right-0 flex items-end justify-center pointer-events-none overflow-hidden"
+        ref={styliaTextRef}
+        className="absolute bottom-0 left-0 right-0 flex items-end justify-center overflow-hidden pointer-events-auto"
+        style={{
+          height: 'clamp(200px, 50vh, 500px)',
+          perspective: '1000px',
+        }}
       >
-        <div
-          className="relative w-full"
-          style={{
-            height: 'clamp(300px, 60vh, 650px)',
-          }}
-        >
-          <Image
-            src="/images/footer-signature.png"
-            alt="Stylia Signature"
-            fill
-            className="object-contain object-bottom opacity-100 brightness-0"
-            style={{
-              objectPosition: 'bottom center',
-              mixBlendMode: 'normal', // Prevent light blending
-              filter: 'brightness(0) saturate(100%)', // ensures solid black
-            }}
-            priority
-          />
+        <div className="flex items-center justify-center w-full h-full">
+          {styliaLetters.map((letter, index) => {
+            const isHovered = hoveredIndex === index
+            const isNeighbor =
+              hoveredIndex !== null && Math.abs(index - hoveredIndex) === 1
+            const isTrailing = leavingIndex === index
+
+            const baseColor = 'rgba(0,0,0)'
+
+            // Gradient (lighter charcoal)
+            const gradient =
+              'linear-gradient(135deg, #2a2a2a 0%, #3a3a3a 35%, #4a4a4a 65%, #6b6b6b 100%)'
+
+            const transition =
+              'color 0.9s cubic-bezier(0.4, 0, 0.2, 1), transform 0.5s ease-out, text-shadow 0.6s ease-out, background-position 1s ease-in-out'
+
+            // Determine visual intensity
+            const intensity = isHovered
+              ? 1
+              : isNeighbor
+                ? 0.5
+                : isTrailing
+                  ? 0.2
+                  : 0
+
+            const style: React.CSSProperties = {
+              fontSize: 'clamp(120px, 20vw, 280px)',
+              lineHeight: 0.9,
+              letterSpacing: '0.01em',
+              fontWeight: 900,
+              transformStyle: 'preserve-3d',
+              willChange: 'transform, color, text-shadow',
+              transition,
+              // Base appearance
+              color: intensity > 0 ? 'transparent' : baseColor,
+              // Gradient text when active
+              backgroundImage: intensity > 0 ? gradient : 'none',
+              backgroundSize: intensity > 0 ? '200% 200%' : undefined,
+              backgroundPosition: intensity > 0 ? '50% 50%' : undefined,
+              WebkitBackgroundClip: intensity > 0 ? 'text' : undefined,
+              backgroundClip: intensity > 0 ? 'text' : undefined,
+              WebkitTextFillColor: intensity > 0 ? 'transparent' : undefined,
+              textShadow:
+                intensity > 0
+                  ? `0 4px 20px rgba(0,0,0,${0.15 * intensity})`
+                  : 'none',
+              transform:
+                intensity > 0 ? `scale(${1 + 0.05 * intensity})` : undefined,
+            }
+
+            return (
+              <span
+                key={index}
+                ref={(el) => {
+                  lettersRef.current[index] = el
+                }}
+                className="inline-block cursor-pointer select-none"
+                style={style}
+                onMouseEnter={() => {
+                  if (leavingTimerRef.current) {
+                    clearTimeout(leavingTimerRef.current)
+                    leavingTimerRef.current = null
+                  }
+                  setLeavingIndex(null)
+                  setHoveredIndex(index)
+                }}
+                onMouseMove={(e) => {
+                  // Mouse-position driven gradient movement (premium feel)
+                  const target = e.currentTarget as HTMLSpanElement
+                  const rect = target.getBoundingClientRect()
+                  const x = ((e.clientX - rect.left) / rect.width) * 100
+                  const y = ((e.clientY - rect.top) / rect.height) * 100
+                  // Animate background position towards cursor
+                  target.style.backgroundPosition = `${x}% ${y}%`
+                }}
+                onMouseLeave={() => {
+                  setHoveredIndex(null)
+                  // Persistent glow trail (0.5s)
+                  setLeavingIndex(index)
+                  leavingTimerRef.current = setTimeout(() => {
+                    setLeavingIndex(null)
+                  }, 500)
+                }}
+              >
+                {letter}
+              </span>
+            )
+          })}
         </div>
       </div>
+
+      {/* Subtle Gradient Overlay */}
+      <div className="absolute inset-0 bg-gradient-to-t from-transparent via-transparent to-white/50 pointer-events-none" />
     </footer>
   )
 }
-
-export default Footer

@@ -415,7 +415,7 @@ export const LookbookSection = () => {
       <div className="h-full container mx-auto">
         <div className="grid grid-cols-12 h-full">
           {/* Column 1: Number Navigation */}
-          <div className="col-span-1 flex flex-col items-center justify-center gap-8 sm:gap-12 py-8">
+          <div className="col-span-1 flex flex-col items-center justify-center gap-8 sm:gap-12 py-16 sm:py-24">
             {lookbookItems.map((item, index) => (
               <motion.button
                 key={item.id}
@@ -435,7 +435,7 @@ export const LookbookSection = () => {
           </div>
 
           {/* Column 2-5: Active Image with Particle Overlay */}
-          <div className="col-span-4 relative flex items-center justify-center bg-white">
+          <div className="col-span-3 relative flex items-center justify-center bg-white">
             {/* Base Image */}
             <motion.div
               key={`base-${activeIndex}`}
@@ -447,7 +447,7 @@ export const LookbookSection = () => {
               <img
                 src={lookbookItems[activeIndex].image}
                 alt={lookbookItems[activeIndex].title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover "
               />
             </motion.div>
 
@@ -460,7 +460,10 @@ export const LookbookSection = () => {
           </div>
 
           {/* Column 6-9: Center Content */}
-          <div className="col-span-4 relative flex flex-col items-start justify-center px-6 lg:px-10">
+          <div className="col-span-5 relative  pl-6 lg:pl-10 py-16 sm:py-24">
+            <div className='flex flex-col items-start justify-between h-[60%]'>
+
+            
             <AnimatePresence mode="wait">
               <motion.p
                 key={`desc-${activeIndex}`}
@@ -474,7 +477,7 @@ export const LookbookSection = () => {
               </motion.p>
             </AnimatePresence>
 
-            <h2 className="text-5xl lg:text-6xl xl:text-[80px] font-semibold text-black mb-10 leading-tight">
+            <h2 className="text-5xl lg:text-6xl xl:text-[80px] font-semibold text-black leading-tight">
               Explore
               <br />
               <span className="font-normal">Curated</span>
@@ -482,7 +485,9 @@ export const LookbookSection = () => {
               <span className="font-normal">Lookbook</span>
             </h2>
 
-            <div className="flex items-center gap-6 mb-10">
+            </div>
+
+            <div className="flex items-center gap-6 my-10">
               <motion.button
                 onClick={handlePrevious}
                 disabled={isTransitioning}
@@ -525,7 +530,7 @@ export const LookbookSection = () => {
           </div>
 
           {/* Column 10-12: Next Preview */}
-          <div className="col-span-3 relative flex items-center justify-center px-4 py-8">
+          <div className="col-span-3 relative flex items-center justify-center">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`next-${nextIndex}`}
@@ -538,7 +543,7 @@ export const LookbookSection = () => {
                 <img
                   src={lookbookItems[nextIndex].image}
                   alt={lookbookItems[nextIndex].title}
-                  className="w-full h-full object-contain"
+                  className="w-full object-contain"
                 />
                 <p className="text-black text-sm mt-0 leading-[195%]">
                   {lookbookItems[nextIndex].description}

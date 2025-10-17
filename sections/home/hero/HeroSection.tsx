@@ -48,7 +48,7 @@ export const HeroSection: React.FC = () => {
                 <button
                   type="button"
                   className="relative z-10 flex justify-center gap-2 items-center 
-                    text-base sm:text-lg xl:text-[30px] font-kumbh-sans font-semibold uppercase 
+                    text-base sm:text-lg xl:text-[30px] font-kumbh-sans font-medium 
                     px-6 sm:px-8 py-3 sm:py-4 overflow-hidden rounded-full border-2 border-transparent hover:border-2
                     text-white cursor-pointer isolation-auto transition-all duration-500 
                     before:absolute before:inset-0 before:bg-gradient-to-r before:from-gray-50 before:via-white before:to-gray-50 

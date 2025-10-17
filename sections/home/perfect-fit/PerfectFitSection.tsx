@@ -243,10 +243,10 @@ export const PerfectFitSection: React.FC = () => {
               onClick={handlePrevImage}
               whileHover={{ scale: 1.1, x: -5 }}
               whileTap={{ scale: 0.95 }}
-              className="absolute cursor-pointer left-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full  hover:bg-white transition-all duration-300 group"
+              className="absolute cursor-pointer left-4 top-1/2 -translate-y-1/2 z-10 group"
               aria-label="Previous image"
             >
-              <ArrowLeft className="w-10 h-10 text-white group-hover:text-black transition-colors" />
+              <ArrowLeft className="w-10 h-10 text-white scale-105 transition-all duration-300" />
             </motion.button>
 
             {/* Right Navigation Arrow */}
@@ -254,10 +254,10 @@ export const PerfectFitSection: React.FC = () => {
               onClick={handleNextImage}
               whileHover={{ scale: 1.1, x: 5 }}
               whileTap={{ scale: 0.95 }}
-              className="absolute cursor-pointer right-4 top-1/2 -translate-y-1/2 z-10 p-3 rounded-full  hover:bg-white transition-all duration-300 group"
+              className="absolute cursor-pointer right-4 top-1/2 -translate-y-1/2 z-10 group"
               aria-label="Next image"
             >
-              <ArrowRight className="w-10 h-10 text-white group-hover:text-black transition-colors" />
+              <ArrowRight className="w-10 h-10 text-white  scale-105 transition-all duration-300" />
             </motion.button>
 
             {/* Image Counter Indicator */}
