@@ -30,12 +30,61 @@ const imageData = {
     'https://images.unsplash.com/photo-1517423440428-a5a00ad493e8',
   ],
 }
+
+interface AnimatedTextProps {
+  text: string
+  delay?: number
+  className?: string
+  isVisible: boolean
+}
+
+// Animated text component that splits text into characters
+const AnimatedText: React.FC<AnimatedTextProps> = ({ 
+  text, 
+  delay = 0, 
+  className = '', 
+  isVisible 
+}) => {
+  const words = text.split(' ')
+  let charIndex = 0
+  
+  return (
+    <span className={className}>
+      {words.map((word, wordIndex) => (
+        <span key={wordIndex} className="inline-block">
+          {word.split('').map((char, idx) => {
+            const currentCharIndex = charIndex++
+            return (
+              <span
+                key={idx}
+                className="inline-block"
+                style={{
+                  transform: isVisible ? 'translateY(0)' : 'translateY(120%)',
+                  opacity: isVisible ? 1 : 0,
+                  transition: `all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)`,
+                  transitionDelay: `${delay + currentCharIndex * 30}ms`,
+                }}
+              >
+                {char}
+              </span>
+            )
+          })}
+          {wordIndex < words.length - 1 && <span className="inline-block">&nbsp;</span>}
+        </span>
+      ))}
+    </span>
+  )
+}
+
 export const PerfectFitSection: React.FC = () => {
   const [activeOption, setActiveOption] = useState<string>('skin-tone')
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
   const [direction, setDirection] = useState<'left' | 'right'>('right')
+  const [isHeadingVisible, setIsHeadingVisible] = useState<boolean>(false)
+  
   const imageContainerRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLDivElement>(null)
+  const headingRef = useRef<HTMLDivElement>(null)
 
   const shopOptions = [
     {
@@ -58,6 +107,33 @@ export const PerfectFitSection: React.FC = () => {
     },
   ]
 
+  // Intersection Observer for heading animation
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsHeadingVisible(true)
+          }
+        })
+      },
+      {
+        threshold: 0.3,
+        rootMargin: '0px',
+      }
+    )
+    
+    if (headingRef.current) {
+      observer.observe(headingRef.current)
+    }
+    
+    return () => {
+      if (headingRef.current) {
+        observer.unobserve(headingRef.current)
+      }
+    }
+  }, [])
+
   // Get current images based on active option
   const currentImages = imageData[activeOption as keyof typeof imageData]
   const currentImage = currentImages[currentImageIndex]
@@ -74,26 +150,26 @@ export const PerfectFitSection: React.FC = () => {
 
     // Phase 1: Exit animation - current image moves out
     tl.to(container, {
-      x: isLeftTransition ? '-50%' : '50%', // exit to left if going left, exit to right if going right
-      y: -80, // stronger upward curve
+      x: isLeftTransition ? '-50%' : '50%',
+      y: -80,
       opacity: 0,
-      rotateY: isLeftTransition ? -25 : 25, // deeper 3D spin
+      rotateY: isLeftTransition ? -25 : 25,
       scale: 0.9,
       duration: 0.3,
       ease: 'power3.inOut',
       transformOrigin: 'center center',
     })
 
-    // Phase 2: Reset position for new image - position it on the opposite side
+    // Phase 2: Reset position for new image
     tl.set(container, {
-      x: isLeftTransition ? '50%' : '-50%', // position on opposite side for entry
+      x: isLeftTransition ? '50%' : '-50%',
       y: 80,
       opacity: 0,
       rotateY: isLeftTransition ? 25 : -25,
       scale: 0.9,
     })
 
-    // Phase 3: Enter animation with curved path - new image comes in
+    // Phase 3: Enter animation with curved path
     tl.to(container, {
       x: 0,
       y: 0,
@@ -101,7 +177,7 @@ export const PerfectFitSection: React.FC = () => {
       rotateY: 0,
       scale: 1,
       duration: 1,
-      ease: 'back.out(1.7)', // gives a gentle settle motion
+      ease: 'back.out(1.7)',
     })
 
     tl.to(
@@ -122,7 +198,7 @@ export const PerfectFitSection: React.FC = () => {
     setCurrentImageIndex((prev) =>
       prev === 0 ? currentImages.length - 1 : prev - 1
     )
-    animateImageTransition('left') // Going to previous image (left direction)
+    animateImageTransition('left')
   }
 
   const handleNextImage = () => {
@@ -130,7 +206,7 @@ export const PerfectFitSection: React.FC = () => {
     setCurrentImageIndex((prev) =>
       prev === currentImages.length - 1 ? 0 : prev + 1
     )
-    animateImageTransition('right') // Going to next image (right direction)
+    animateImageTransition('right')
   }
 
   // Handle category change
@@ -150,23 +226,30 @@ export const PerfectFitSection: React.FC = () => {
           {/* Left Content Side */}
           <div className="flex flex-col justify-between py-14">
             {/* Top Content */}
-            <div>
-              <motion.h2
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6 }}
-                viewport={{ once: true }}
-                className="text-5xl sm:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-black mb-6 leading-tight font-kumbh-sans"
-              >
-                Find Your
-                <br />
-                <span className='font-normal'>Perfect Fit</span>
-              </motion.h2>
+            <div ref={headingRef}>
+              <h2 className="text-5xl sm:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-black mb-6 leading-tight font-kumbh-sans overflow-hidden">
+                <span className="block">
+                  <AnimatedText 
+                    text="Find Your"
+                    isVisible={isHeadingVisible}
+                    delay={0}
+                    className="font-semibold"
+                  />
+                </span>
+                <span className="block">
+                  <AnimatedText 
+                    text="Perfect Fit"
+                    isVisible={isHeadingVisible}
+                    delay={300}
+                    className="font-normal"
+                  />
+                </span>
+              </h2>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
+                transition={{ duration: 0.6, delay: 0.8 }}
                 viewport={{ once: true }}
                 className="sm:text-lg lg:text-xl text-black font-kumbh-sans font-normal text-lg leading-[180%] max-w-full lg:max-w-[90%]"
               >
@@ -259,111 +342,9 @@ export const PerfectFitSection: React.FC = () => {
             >
               <ArrowRight className="w-10 h-10 text-white  scale-105 transition-all duration-300" />
             </motion.button>
-
-            {/* Image Counter Indicator */}
-            {/* <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex gap-2"
-            >
-              {currentImages.map((_, idx) => (
-                <motion.button
-                  key={idx}
-                  onClick={() => {
-                    const direction = idx > currentImageIndex ? 'right' : 'left'
-                    setDirection(direction)
-                    setCurrentImageIndex(idx)
-                    animateImageTransition(direction)
-                  }}
-                  whileHover={{ scale: 1.2 }}
-                  whileTap={{ scale: 0.9 }}
-                  className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                    idx === currentImageIndex
-                      ? 'bg-white w-8'
-                      : 'bg-white/50 hover:bg-white/75'
-                  }`}
-                  aria-label={`Go to image ${idx + 1}`}
-                />
-              ))}
-            </motion.div> */}
           </div>
         </div>
       </div>
     </section>
   )
 }
-
-/* 
-===========================================
-INSTALLATION INSTRUCTIONS:
-===========================================
-
-1. Install GSAP:
-   npm install gsap
-
-2. Install Framer Motion (if not already installed):
-   npm install framer-motion
-
-3. Optional - For Lottie animations:
-   npm install lottie-react
-   
-   Then add to button hover states:
-   import Lottie from 'lottie-react'
-   import arrowAnimation from './arrow-hover.json'
-
-===========================================
-ANIMATION BREAKDOWN:
-===========================================
-
-1. **GSAP Timeline** (animateImageTransition):
-   - Phase 1: Exit with curved path (x, y, rotateY, scale, opacity)
-   - Phase 2: Reset position off-screen on opposite side
-   - Phase 3: Enter with curved path and settling motion
-   - Uses power2 easing for natural, organic motion
-
-2. **3D Transforms**:
-   - rotateY creates depth perception
-   - Perspective wrapper on container enhances 3D effect
-   - Scale changes add visual weight to transitions
-
-3. **Framer Motion**:
-   - Handles button interactions and hover states
-   - Arrow button scale and position animations
-   - Smooth dot indicator transitions
-
-4. **Performance Optimizations**:
-   - GSAP uses GPU-accelerated transforms
-   - Image preloading with Next.js Image component
-   - RequestAnimationFrame timing for smooth 60fps
-   - Will-change applied via transform properties
-
-===========================================
-CUSTOMIZATION OPTIONS:
-===========================================
-
-Adjust timing:
-- duration: 0.5 → slower/faster exit
-- duration: 0.6 → slower/faster entry
-
-Adjust curve intensity:
-- y: -50 → higher/lower arc
-- rotateY: 15 → more/less 3D rotation
-
-Adjust easing:
-- power2 → power3, power4, elastic, back
-- See: https://gsap.com/docs/v3/Eases/
-
-===========================================
-OPTIONAL LOTTIE ENHANCEMENTS:
-===========================================
-
-For arrow buttons:
-<Lottie 
-  animationData={arrowHoverAnimation}
-  loop={false}
-  className="w-6 h-6"
-/>
-
-For category buttons:
-Add ripple effect or glow animation on click
-*/

@@ -1,11 +1,101 @@
-import React from 'react'
-import { MotionWrapper } from '@/components/animations/motion-wrapper'
+"use client"
+
+import React, { useEffect, useState, useRef } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 
+interface MotionWrapperProps {
+  children: React.ReactNode
+  className?: string
+}
+
+// Motion wrapper component (simplified version)
+const MotionWrapper: React.FC<MotionWrapperProps> = ({ children, className }) => {
+  return <div className={className}>{children}</div>
+}
+
+interface AnimatedTextProps {
+  text: string
+  delay?: number
+  className?: string
+  isVisible: boolean
+}
+
+// Animated text component that splits text into characters
+const AnimatedText: React.FC<AnimatedTextProps> = ({ 
+  text, 
+  delay = 0, 
+  className = '', 
+  isVisible 
+}) => {
+  // Split text into words and characters, preserving spaces
+  const words = text.split(' ')
+  let charIndex = 0
+  
+  return (
+    <span className={className}>
+      {words.map((word, wordIndex) => (
+        <span key={wordIndex} className="inline-block">
+          {word.split('').map((char, idx) => {
+            const currentCharIndex = charIndex++
+            return (
+              <span
+                key={idx}
+                className="inline-block"
+                style={{
+                  transform: isVisible ? 'translateY(0)' : 'translateY(120%)',
+                  opacity: isVisible ? 1 : 0,
+                  transition: `all 0.6s cubic-bezier(0.34, 1.56, 0.64, 1)`,
+                  transitionDelay: `${delay + currentCharIndex * 30}ms`,
+                }}
+              >
+                {char}
+              </span>
+            )
+          })}
+          {wordIndex < words.length - 1 && <span className="inline-block">&nbsp;</span>}
+        </span>
+      ))}
+    </span>
+  )
+}
+
 export const HeroSection: React.FC = () => {
+  const [isVisible, setIsVisible] = useState<boolean>(false)
+  const [buttonVisible, setButtonVisible] = useState<boolean>(false)
+  const sectionRef = useRef<HTMLDivElement>(null)
+  
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setIsVisible(true)
+            // Show button after text animation completes
+            setTimeout(() => setButtonVisible(true), 2000)
+          }
+        })
+      },
+      {
+        threshold: 0.2, // Trigger when 20% of the section is visible
+        rootMargin: '0px',
+      }
+    )
+    
+    if (sectionRef.current) {
+      observer.observe(sectionRef.current)
+    }
+    
+    return () => {
+      if (sectionRef.current) {
+        observer.unobserve(sectionRef.current)
+      }
+    }
+  }, [])
+  
   return (
     <MotionWrapper className="hero-section">
       <div
+        ref={sectionRef}
         className="relative flex items-center justify-center overflow-hidden"
         style={{
           height: '1141px',
@@ -33,24 +123,40 @@ export const HeroSection: React.FC = () => {
             style={{ maxWidth: '1440px', margin: '0 auto' }}
           >
             <div className="flex flex-col items-center justify-end">
-              {/* Main Heading */}
-              <h1 className="text-white mb-8 sm:mb-10 lg:mb-12 font-kumbh-sans leading-tight">
-                <span className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[100px] font-normal mb-2">
-                  Discover the{' '}
-                  <span className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[100px] font-semibold">
-                    Art of Fashion
-                  </span>
+              {/* Main Heading with Letter Animation */}
+              <h1 className="text-white mb-8 sm:mb-10 lg:mb-12 font-sans leading-tight overflow-hidden">
+                <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[100px] font-normal mb-2">
+                  <AnimatedText 
+                    text="Discover the" 
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[100px] font-normal"
+                    isVisible={isVisible}
+                    delay={0}
+                  />
+                  {' '}
+                  <AnimatedText 
+                    text="Art of Fashion" 
+                    className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[100px] font-semibold"
+                    isVisible={isVisible}
+                    delay={400}
+                  />
                 </span>
               </h1>
 
               {/* Animated Circle Expand CTA Button */}
-              <div className="flex gap-4 justify-center items-center group">
+              <div 
+                className="flex gap-4 justify-center items-center group"
+                style={{
+                  opacity: buttonVisible ? 1 : 0,
+                  transform: buttonVisible ? 'translateY(0)' : 'translateY(20px)',
+                  transition: 'all 0.8s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                }}
+              >
                 <button
                   type="button"
                   className="relative z-10 flex justify-center gap-2 items-center 
-                    text-base sm:text-lg xl:text-[30px] font-kumbh-sans font-medium 
+                    text-base sm:text-lg xl:text-[30px] font-sans font-medium 
                     px-6 sm:px-8 py-3 sm:py-4 overflow-hidden rounded-full border-2 border-transparent hover:border-2
-                    text-white cursor-pointer isolation-auto transition-all duration-500 
+                    text-white cursor-pointer transition-all duration-500 
                     before:absolute before:inset-0 before:bg-gradient-to-r before:from-gray-50 before:via-white before:to-gray-50 
                     before:-left-full before:w-0 before:transition-all before:duration-700 before:ease-in-out 
                     hover:before:left-0 hover:before:w-full hover:text-black hover:border-white"

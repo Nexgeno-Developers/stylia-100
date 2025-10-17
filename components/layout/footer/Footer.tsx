@@ -9,6 +9,7 @@ import {
   Twitter,
   ArrowDown,
   Check,
+  MessageCircle,
 } from 'lucide-react'
 import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
@@ -234,6 +235,7 @@ export default function Footer() {
   ]
 
   const socialLinks = [
+    { icon: MessageCircle, href: '#', label: 'WhatsApp' },
     { icon: Instagram, href: '#', label: 'Instagram' },
     { icon: Facebook, href: '#', label: 'Facebook' },
     { icon: Twitter, href: '#', label: 'Twitter' },
@@ -353,17 +355,17 @@ export default function Footer() {
               </ul>
             </AccordionSection>
 
-            {/* Follow Us Accordion */}
-            <AccordionSection
-              title="Follow Us"
-              isOpen={openSections.social}
-              onToggle={() => toggleSection('social')}
-              index={2}
-            >
+            {/* Be Part of Our Story Section */}
+            {/* Be Part of Our Story Section */}
+            <div className="flex flex-col">
+              <h2 className="font-kumbh-sans font-semibold text-[35px] leading-[142%] capitalize text-black mb-6">
+                Be part of our Story
+              </h2>
+
               <motion.div
                 className="flex gap-4"
                 initial={{ opacity: 0 }}
-                animate={openSections.social ? { opacity: 1 } : { opacity: 0 }}
+                animate={{ opacity: 1 }}
                 transition={{ delay: 0.2 }}
               >
                 {socialLinks.map((social, idx) => (
@@ -371,20 +373,16 @@ export default function Footer() {
                     key={idx}
                     href={social.href}
                     initial={{ scale: 0, rotate: -180 }}
-                    animate={
-                      openSections.social
-                        ? {
-                            scale: 1,
-                            rotate: 0,
-                            transition: {
-                              delay: idx * 0.1,
-                              type: 'spring',
-                              stiffness: 260,
-                              damping: 20,
-                            },
-                          }
-                        : { scale: 0, rotate: -180 }
-                    }
+                    animate={{
+                      scale: 1,
+                      rotate: 0,
+                      transition: {
+                        delay: idx * 0.1,
+                        type: 'spring',
+                        stiffness: 260,
+                        damping: 20,
+                      },
+                    }}
                     whileHover={{
                       scale: 1.15,
                       y: -5,
@@ -395,9 +393,7 @@ export default function Footer() {
                         damping: 10,
                       },
                     }}
-                    whileTap={{ scale: 0.9 }}
-                    className="w-11 h-11 flex items-center justify-center bg-black text-white rounded-full hover:bg-black/80 transition-colors shadow-md relative overflow-hidden group text-[35px] font-semibold"
-                    aria-label={social.label}
+                    className="w-11 h-11 flex items-center justify-center text-black transition-colors relative overflow-hidden group text-[35px] font-semibold"
                   >
                     <motion.div
                       className="absolute inset-0 bg-gradient-to-br from-white/20 to-transparent"
@@ -405,11 +401,11 @@ export default function Footer() {
                       whileHover={{ scale: 2, opacity: 1 }}
                       transition={{ duration: 0.4 }}
                     />
-                    <social.icon className="w-5 h-5 relative z-10" />
+                    <social.icon className="w-8 h-8 relative z-10" />
                   </motion.a>
                 ))}
               </motion.div>
-            </AccordionSection>
+            </div>
 
             {/* Copyright */}
             <motion.div
