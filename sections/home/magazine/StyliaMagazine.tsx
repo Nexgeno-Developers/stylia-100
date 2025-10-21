@@ -456,7 +456,10 @@ export const StyliaMagazineSection: React.FC = () => {
           transition={{ duration: 0.8, ease: 'easeOut' }}
           className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 sm:mb-12 gap-4"
         >
-          <h2 ref={headingRef} className="text-4xl sm:text-5xl lg:text-6xl font-normal text-black leading-tight font-kumbh-sans">
+          <h2
+            ref={headingRef}
+            className="text-4xl sm:text-5xl lg:text-6xl font-normal text-black leading-tight font-kumbh-sans"
+          >
             <AnimatedText text="Stylia" isVisible={isInView} />
             <span className="font-bold">
               {' '}
@@ -464,9 +467,19 @@ export const StyliaMagazineSection: React.FC = () => {
             </span>
           </h2>
 
-          <p className="text-xs sm:text-sm text-neutral-500 font-medium tracking-wide font-kumbh-sans capitalize">
+          <motion.p
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1,
+              delay: 0.2,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
+            viewport={{ once: true }}
+            className="text-xs sm:text-sm text-neutral-500 font-medium tracking-wide font-kumbh-sans capitalize"
+          >
             Your Front Row Seat To Fashion, Trends & Culture
-          </p>
+          </motion.p>
         </motion.div>
 
         {/* Grid Layout */}
@@ -638,8 +651,14 @@ const HoverRevealCard: React.FC<HoverRevealCardProps> = ({
           className="absolute bottom-0 left-0 right-0 p-6 sm:p-8 z-30 pointer-events-none"
         >
           <motion.h3
-            initial={{ y: 10, opacity: 1 }}
-            transition={{ duration: 0.3, ease: 'easeOut' }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1,
+              delay: 0.2,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
+            viewport={{ once: true }}
             className="text-lg sm:text-2xl lg:text-[35px] font-semibold text-white drop-shadow-lg tracking-wide font-kumbh-sans capitalize text-center"
           >
             {card.title}
@@ -653,12 +672,32 @@ const HoverRevealCard: React.FC<HoverRevealCardProps> = ({
         className="absolute bottom-0 left-0 w-full h-[40%] bg-white opacity-0 translate-y-6 flex flex-col justify-between p-6 sm:p-8"
       >
         <div className="flex justify-between items-start">
-          <p className="text-neutral-700 text-sm sm:text-base font-medium max-w-[50%] font-kumbh-sans">
+          <motion.p
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1,
+              delay: 0.2,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
+            viewport={{ once: true }}
+            className="text-neutral-700 text-sm sm:text-base font-medium max-w-[50%] font-kumbh-sans"
+          >
             {card.description}
-          </p>
-          <h3 className="text-lg sm:text-xl font-bold text-black font-kumbh-sans">
+          </motion.p>
+          <motion.h3
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1,
+              delay: 0.2,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
+            viewport={{ once: true }}
+            className="text-lg sm:text-xl font-bold text-black font-kumbh-sans"
+          >
             {card.title}
-          </h3>
+          </motion.h3>
         </div>
         <p className="text-xs sm:text-sm text-neutral-400 font-semibold text-right font-kumbh-sans">
           {card.subtitle}

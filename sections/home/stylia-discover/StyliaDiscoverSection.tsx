@@ -21,8 +21,6 @@ interface Product {
   liked: boolean
 }
 
-const LOOP_SETS = 3 // Number of virtual copies for infinite scroll
-
 export const StyliaDiscoverSection: React.FC = () => {
   // Refs
   const sectionRef = useRef<HTMLDivElement>(null)
@@ -130,8 +128,8 @@ export const StyliaDiscoverSection: React.FC = () => {
 
   // Wrap index for circular navigation
   const wrapIndex = (i: number) => {
-    const n = products.length
-    return ((i % n) + n) % n
+    // Clamp instead of wrap
+    return Math.max(0, Math.min(products.length - 1, i))
   }
 
   // Get indices for 3 visible slots with consistent mapping
@@ -141,9 +139,14 @@ export const StyliaDiscoverSection: React.FC = () => {
   // Left slot = Upcoming (two positions after featured)
   const getSlotIndices = (idx: number) => {
     return {
-      right: wrapIndex(idx), // active product (featured) - RIGHTMOST
-      mid: wrapIndex(idx + 1), // one AFTER active (next) - CENTER
-      left: wrapIndex(idx + 2), // two AFTER active (upcoming) - LEFTMOST
+      right: idx, // active product (featured) - RIGHTMOST
+      mid: idx + 1 < products.length ? idx + 1 : idx, // one AFTER active (next) - CENTER
+      left:
+        idx + 2 < products.length
+          ? idx + 2
+          : idx + 1 < products.length
+            ? idx + 1
+            : idx, // two AFTER active (upcoming) - LEFTMOST
     }
   }
 
@@ -155,21 +158,268 @@ export const StyliaDiscoverSection: React.FC = () => {
     direction: number
   ) => {
     if (direction === 1) {
-      // Moving forward: next becomes featured (right), next+1 becomes next (center), current becomes upcoming (left)
       return {
-        right: wrapIndex(nextIdx), // next becomes featured (rightmost)
-        mid: wrapIndex(nextIdx + 1), // next+1 becomes next (center)
-        left: wrapIndex(currentIdx), // current becomes upcoming (leftmost)
+        right: nextIdx,
+        mid: Math.min(nextIdx + 1, products.length - 1),
+        left: currentIdx,
       }
     } else {
-      // Moving backward: next becomes featured (right), current becomes next (center), next-1 becomes upcoming (left)
       return {
-        right: wrapIndex(nextIdx), // next becomes featured (rightmost)
-        mid: wrapIndex(currentIdx), // current becomes next (center)
-        left: wrapIndex(nextIdx - 1), // next-1 becomes upcoming (leftmost)
+        right: nextIdx,
+        mid: currentIdx,
+        left: Math.max(nextIdx - 1, 0),
       }
     }
   }
+
+  // Optimized GSAP transforms with responsive calculations and better performance
+  // const applySlotTransforms = (progress = 0) => {
+  //   const leftEl = slotLeftRef.current
+  //   const midEl = slotMidRef.current
+  //   const rightEl = slotRightRef.current
+  //   if (!leftEl || !midEl || !rightEl) return
+
+  //   const p = Math.max(-1, Math.min(1, progress))
+  //   const direction = lastDirectionRef.current
+
+  //   // Get viewport width for responsive calculations
+  //   const viewportWidth = window.innerWidth
+  //   const isSmallScreen = viewportWidth < 640 // sm breakpoint
+  //   const isMediumScreen = viewportWidth < 1024 // lg breakpoint
+  //   const isLargeScreen = viewportWidth < 1536 // 2xl breakpoint
+  //   const isUltraWideScreen = viewportWidth >= 1920 // Ultra-wide displays
+
+  //   // Pre-calculate common values for better performance
+  //   const isForward = direction === 1
+  //   const isPositive = p >= 0
+  //   const absP = Math.abs(p)
+
+  //   // ========================================
+  //   // RESPONSIVE POSITION CALCULATIONS
+  //   // ========================================
+  //   // ADJUSTMENT GUIDE:
+  //   // - First number: Base position when not dragging (e.g., -30 = 30vw left of center)
+  //   // - Second number: Movement multiplier during drag (e.g., p * 15 = moves 15vw per drag unit)
+  //   // - Third number: Movement when dragging opposite direction (e.g., absP * 20 = moves 20vw)
+  //   //
+  //   // TO ADJUST IMAGE POSITIONS:
+  //   // - Increase first number to move images more to the LEFT
+  //   // - Decrease first number to move images more to the RIGHT
+  //   // - Increase second number to make images move MORE during drag
+  //   // - Decrease second number to make images move LESS during drag
+  //   // - Increase third number to make images move MORE when dragging opposite direction
+  //   // ========================================
+
+  //   let leftX, midX, rightX
+
+  //   if (isSmallScreen) {
+  //     // 📱 SMALL SCREENS (mobile < 640px)
+  //     // Left image: Base -30vw, moves 15vw per drag unit
+  //     leftX = isForward
+  //       ? isPositive
+  //         ? -30 + p * 15 // ← ADJUST: -30 (base pos), 15 (drag multiplier)
+  //         : -30 - absP * 20 // ← ADJUST: 20 (opposite drag)
+  //       : isPositive
+  //         ? -30 + p * 15
+  //         : -30 - absP * 20
+
+  //     // Middle image: Base -15vw, moves 15vw per drag unit
+  //     midX = isForward
+  //       ? isPositive
+  //         ? -15 + p * 15 // ← ADJUST: -15 (base pos), 15 (drag multiplier)
+  //         : -15 - absP * 15 // ← ADJUST: 15 (opposite drag)
+  //       : isPositive
+  //         ? -15 + p * 15
+  //         : -15 - absP * 15
+
+  //     // Right image: Base 0vw, moves 50vw per drag unit
+  //     rightX = isForward
+  //       ? isPositive
+  //         ? 0 + p * 50 // ← ADJUST: 0 (base pos), 50 (drag multiplier)
+  //         : 0 - absP * 15 // ← ADJUST: 15 (opposite drag)
+  //       : isPositive
+  //         ? 0 + p * 50
+  //         : 0 - absP * 15
+  //   } else if (isMediumScreen) {
+  //     // 📱 MEDIUM SCREENS (tablet 640px-1023px)
+  //     // Left image: Base -35vw, moves 18vw per drag unit
+  //     leftX = isForward
+  //       ? isPositive
+  //         ? -35 + p * 18 // ← ADJUST: -35 (base pos), 18 (drag multiplier)
+  //         : -35 - absP * 22 // ← ADJUST: 22 (opposite drag)
+  //       : isPositive
+  //         ? -35 + p * 18
+  //         : -35 - absP * 22
+
+  //     // Middle image: Base -20vw, moves 18vw per drag unit
+  //     midX = isForward
+  //       ? isPositive
+  //         ? -20 + p * 18 // ← ADJUST: -20 (base pos), 18 (drag multiplier)
+  //         : -20 - absP * 18 // ← ADJUST: 18 (opposite drag)
+  //       : isPositive
+  //         ? -20 + p * 18
+  //         : -20 - absP * 18
+
+  //     // Right image: Base -3vw, moves 60vw per drag unit
+  //     rightX = isForward
+  //       ? isPositive
+  //         ? -3 + p * 60 // ← ADJUST: -3 (base pos), 60 (drag multiplier)
+  //         : -3 - absP * 18 // ← ADJUST: 18 (opposite drag)
+  //       : isPositive
+  //         ? -3 + p * 60
+  //         : -3 - absP * 18
+  //   } else if (isLargeScreen) {
+  //     // 💻 LARGE SCREENS (desktop 1024px-1535px)
+  //     // Left image: Base -40vw, moves 20vw per drag unit
+  //     leftX = isForward
+  //       ? isPositive
+  //         ? -40 + p * 20 // ← ADJUST: -40 (base pos), 20 (drag multiplier)
+  //         : -40 - absP * 25 // ← ADJUST: 25 (opposite drag)
+  //       : isPositive
+  //         ? -40 + p * 20
+  //         : -40 - absP * 25
+
+  //     // Middle image: Base -25vw, moves 20vw per drag unit
+  //     midX = isForward
+  //       ? isPositive
+  //         ? -25 + p * 20 // ← ADJUST: -25 (base pos), 20 (drag multiplier)
+  //         : -25 - absP * 20 // ← ADJUST: 20 (opposite drag)
+  //       : isPositive
+  //         ? -25 + p * 20
+  //         : -25 - absP * 20
+
+  //     // Right image: Base -5vw, moves 75vw per drag unit
+  //     rightX = isForward
+  //       ? isPositive
+  //         ? -5 + p * 75 // ← ADJUST: -5 (base pos), 75 (drag multiplier)
+  //         : -5 - absP * 20 // ← ADJUST: 20 (opposite drag)
+  //       : isPositive
+  //         ? -5 + p * 75
+  //         : -5 - absP * 20
+  //   } else if (isUltraWideScreen) {
+  //     // 🖥️ ULTRA-WIDE SCREENS (1920px+)
+  //     // Left image: Base -45vw, moves 25vw per drag unit
+  //     leftX = isForward
+  //       ? isPositive
+  //         ? -10 + p * 25 // ← ADJUST: -45 (base pos), 25 (drag multiplier)
+  //         : -10 - absP * 30 // ← ADJUST: 30 (opposite drag)
+  //       : isPositive
+  //         ? -10 + p * 25
+  //         : -10 - absP * 30
+
+  //     // Middle image: Base -30vw, moves 25vw per drag unit
+  //     midX = isForward
+  //       ? isPositive
+  //         ? -6 + p * 25 // ← ADJUST: -30 (base pos), 25 (drag multiplier)
+  //         : -6 - absP * 25 // ← ADJUST: 25 (opposite drag)
+  //       : isPositive
+  //         ? -6 + p * 25
+  //         : -6 - absP * 25
+
+  //     // Right image: Base -8vw, moves 85vw per drag unit
+  //     rightX = isForward
+  //       ? isPositive
+  //         ? -2 + p * 85 // ← ADJUST: -8 (base pos), 85 (drag multiplier)
+  //         : -2 - absP * 25 // ← ADJUST: 25 (opposite drag)
+  //       : isPositive
+  //         ? -2 + p * 85
+  //         : -2 - absP * 25
+  //   } else {
+  //     // 🖥️ 2XL SCREENS (1536px-1919px) - CURRENTLY ACTIVE FOR YOUR SCREEN
+  //     // Left image: Base -30vw, moves 22vw per drag unit
+  //     leftX = isForward
+  //       ? isPositive
+  //         ? -30 + p * 22 // ← ADJUST: -30 (base pos), 22 (drag multiplier)
+  //         : -30 - absP * 27 // ← ADJUST: 27 (opposite drag)
+  //       : isPositive
+  //         ? -30 + p * 22
+  //         : -30 - absP * 27
+
+  //     // Middle image: Base -27vw, moves 22vw per drag unit
+  //     midX = isForward
+  //       ? isPositive
+  //         ? -20 + p * 22 // ← ADJUST: -27 (base pos), 22 (drag multiplier)
+  //         : -20 - absP * 22 // ← ADJUST: 22 (opposite drag)
+  //       : isPositive
+  //         ? -20 + p * 22
+  //         : -20 - absP * 22
+
+  //     // Right image: Base -20vw, moves 80vw per drag unit
+  //     rightX = isForward
+  //       ? isPositive
+  //         ? -8 + p * 80 // ← ADJUST: -20 (base pos), 80 (drag multiplier)
+  //         : -8 - absP * 22 // ← ADJUST: 22 (opposite drag)
+  //       : isPositive
+  //         ? -8 + p * 80
+  //         : -8 - absP * 22
+  //   }
+
+  //   // Batch GSAP updates for better performance
+  //   gsap.set([leftEl, midEl, rightEl], {
+  //     force3D: true,
+  //     willChange: 'transform, opacity, filter',
+  //     transformOrigin: 'center center',
+  //   })
+
+  //   // Responsive scale and opacity calculations
+  //   let leftScale, midScale, rightScale
+
+  //   if (isSmallScreen) {
+  //     leftScale = isPositive ? 0.8 + p * 0.1 : 0.8 - absP * 0.15
+  //     midScale = isPositive ? 0.9 + p * 0.2 : 0.9 - absP * 0.1
+  //     rightScale = isPositive ? 1.0 - p * 0.05 : 1.0 - absP * 0.2
+  //   } else if (isMediumScreen) {
+  //     leftScale = isPositive ? 0.75 + p * 0.12 : 0.75 - absP * 0.18
+  //     midScale = isPositive ? 0.88 + p * 0.22 : 0.88 - absP * 0.12
+  //     rightScale = isPositive ? 1.05 - p * 0.08 : 1.05 - absP * 0.22
+  //   } else if (isLargeScreen) {
+  //     leftScale = isPositive ? 0.7 + p * 0.15 : 0.7 - absP * 0.2
+  //     midScale = isPositive ? 0.85 + p * 0.25 : 0.85 - absP * 0.15
+  //     rightScale = isPositive ? 1.1 - p * 0.1 : 1.1 - absP * 0.25
+  //   } else if (isUltraWideScreen) {
+  //     leftScale = isPositive ? 0.65 + p * 0.18 : 0.65 - absP * 0.22
+  //     midScale = isPositive ? 0.82 + p * 0.28 : 0.82 - absP * 0.18
+  //     rightScale = isPositive ? 1.15 - p * 0.12 : 1.15 - absP * 0.28
+  //   } else {
+  //     // 2xl screens (1536px-1919px)
+  //     leftScale = isPositive ? 0.68 + p * 0.16 : 0.68 - absP * 0.21
+  //     midScale = isPositive ? 0.84 + p * 0.26 : 0.84 - absP * 0.16
+  //     rightScale = isPositive ? 1.12 - p * 0.11 : 1.12 - absP * 0.26
+  //   }
+
+  //   // Left slot - optimized calculations
+  //   gsap.set(leftEl, {
+  //     x: `${leftX}vw`,
+  //     y: '-50%',
+  //     scale: leftScale,
+  //     opacity: isPositive ? 0.6 + p * 0.4 : 0.6 - absP * 0.6,
+  //     filter: `blur(${isPositive ? 4 - p * 2 : 4 + absP * 4}px)`,
+  //     rotationY: isPositive ? -8 + p * 8 : -8 - absP * 8,
+  //     zIndex: 10,
+  //   })
+
+  //   // Middle slot - optimized calculations
+  //   gsap.set(midEl, {
+  //     x: `${midX}vw`,
+  //     y: '-50%',
+  //     scale: midScale,
+  //     opacity: isPositive ? 1 : 1 - absP * 0.4,
+  //     filter: `blur(${isPositive ? 2 - p * 2 : 2 + absP * 2}px)`,
+  //     rotationY: isPositive ? p * 4 : -absP * 8,
+  //     zIndex: 20,
+  //   })
+
+  //   // Right slot - optimized calculations
+  //   gsap.set(rightEl, {
+  //     x: `${rightX}vw`,
+  //     y: '-50%',
+  //     scale: rightScale,
+  //     opacity: isPositive ? 1 - p : 1,
+  //     filter: `blur(${isPositive ? p * 6 : absP * 2}px)`,
+  //     rotationY: isPositive ? 4 + p * 8 : 4 - absP * 4,
+  //     zIndex: 30,
+  //   })
+  // }
 
   // Optimized GSAP transforms with responsive calculations and better performance
   const applySlotTransforms = (progress = 0) => {
@@ -183,9 +433,14 @@ export const StyliaDiscoverSection: React.FC = () => {
 
     // Get viewport width for responsive calculations
     const viewportWidth = window.innerWidth
+
+    // More granular breakpoints to handle zoom levels better
     const isSmallScreen = viewportWidth < 640 // sm breakpoint
-    const isMediumScreen = viewportWidth < 1024 // lg breakpoint
-    const isLargeScreen = viewportWidth < 1536 // 2xl breakpoint
+    const isMediumScreen = viewportWidth >= 640 && viewportWidth < 768 // md start
+    const isMediumLargeScreen = viewportWidth >= 768 && viewportWidth < 1024 // md-lg transition
+    const isLargeScreen = viewportWidth >= 1024 && viewportWidth < 1280 // lg breakpoint
+    const isXLScreen = viewportWidth >= 1280 && viewportWidth < 1536 // xl breakpoint
+    const is2XLScreen = viewportWidth >= 1536 && viewportWidth < 1920 // 2xl breakpoint
     const isUltraWideScreen = viewportWidth >= 1920 // Ultra-wide displays
 
     // Pre-calculate common values for better performance
@@ -193,164 +448,183 @@ export const StyliaDiscoverSection: React.FC = () => {
     const isPositive = p >= 0
     const absP = Math.abs(p)
 
-    // ========================================
-    // RESPONSIVE POSITION CALCULATIONS
-    // ========================================
-    // ADJUSTMENT GUIDE:
-    // - First number: Base position when not dragging (e.g., -30 = 30vw left of center)
-    // - Second number: Movement multiplier during drag (e.g., p * 15 = moves 15vw per drag unit)
-    // - Third number: Movement when dragging opposite direction (e.g., absP * 20 = moves 20vw)
-    //
-    // TO ADJUST IMAGE POSITIONS:
-    // - Increase first number to move images more to the LEFT
-    // - Decrease first number to move images more to the RIGHT
-    // - Increase second number to make images move MORE during drag
-    // - Decrease second number to make images move LESS during drag
-    // - Increase third number to make images move MORE when dragging opposite direction
-    // ========================================
-
     let leftX, midX, rightX
 
     if (isSmallScreen) {
       // 📱 SMALL SCREENS (mobile < 640px)
-      // Left image: Base -30vw, moves 15vw per drag unit
       leftX = isForward
         ? isPositive
-          ? -30 + p * 15 // ← ADJUST: -30 (base pos), 15 (drag multiplier)
-          : -30 - absP * 20 // ← ADJUST: 20 (opposite drag)
+          ? -30 + p * 15
+          : -30 - absP * 20
         : isPositive
           ? -30 + p * 15
           : -30 - absP * 20
 
-      // Middle image: Base -15vw, moves 15vw per drag unit
       midX = isForward
         ? isPositive
-          ? -15 + p * 15 // ← ADJUST: -15 (base pos), 15 (drag multiplier)
-          : -15 - absP * 15 // ← ADJUST: 15 (opposite drag)
+          ? -15 + p * 15
+          : -15 - absP * 15
         : isPositive
           ? -15 + p * 15
           : -15 - absP * 15
 
-      // Right image: Base 0vw, moves 50vw per drag unit
       rightX = isForward
         ? isPositive
-          ? 0 + p * 50 // ← ADJUST: 0 (base pos), 50 (drag multiplier)
-          : 0 - absP * 15 // ← ADJUST: 15 (opposite drag)
+          ? 0 + p * 50
+          : 0 - absP * 15
         : isPositive
           ? 0 + p * 50
           : 0 - absP * 15
     } else if (isMediumScreen) {
-      // 📱 MEDIUM SCREENS (tablet 640px-1023px)
-      // Left image: Base -35vw, moves 18vw per drag unit
+      // 📱 MEDIUM SCREENS (640px-767px)
       leftX = isForward
         ? isPositive
-          ? -35 + p * 18 // ← ADJUST: -35 (base pos), 18 (drag multiplier)
-          : -35 - absP * 22 // ← ADJUST: 22 (opposite drag)
+          ? -32 + p * 16
+          : -32 - absP * 21
         : isPositive
-          ? -35 + p * 18
-          : -35 - absP * 22
+          ? -32 + p * 16
+          : -32 - absP * 21
 
-      // Middle image: Base -20vw, moves 18vw per drag unit
       midX = isForward
         ? isPositive
-          ? -20 + p * 18 // ← ADJUST: -20 (base pos), 18 (drag multiplier)
-          : -20 - absP * 18 // ← ADJUST: 18 (opposite drag)
+          ? -18 + p * 16
+          : -18 - absP * 16
         : isPositive
-          ? -20 + p * 18
+          ? -18 + p * 16
+          : -18 - absP * 16
+
+      rightX = isForward
+        ? isPositive
+          ? -2 + p * 55
+          : -2 - absP * 16
+        : isPositive
+          ? -2 + p * 55
+          : -2 - absP * 16
+    } else if (isMediumLargeScreen) {
+      // 📱 MEDIUM-LARGE SCREENS (768px-1023px)
+      leftX = isForward
+        ? isPositive
+          ? -100 + p * 18
+          : -100 - absP * 22
+        : isPositive
+          ? -100 + p * 18
+          : -100 - absP * 22
+
+      midX = isForward
+        ? isPositive
+          ? -55 + p * 18
+          : -55 - absP * 18
+        : isPositive
+          ? -55 + p * 18
+          : -55 - absP * 18
+
+      rightX = isForward
+        ? isPositive
+          ? -20 + p * 60
           : -20 - absP * 18
-
-      // Right image: Base -3vw, moves 60vw per drag unit
-      rightX = isForward
-        ? isPositive
-          ? -3 + p * 60 // ← ADJUST: -3 (base pos), 60 (drag multiplier)
-          : -3 - absP * 18 // ← ADJUST: 18 (opposite drag)
         : isPositive
-          ? -3 + p * 60
-          : -3 - absP * 18
+          ? -20 + p * 60
+          : -20 - absP * 18
     } else if (isLargeScreen) {
-      // 💻 LARGE SCREENS (desktop 1024px-1535px)
-      // Left image: Base -40vw, moves 20vw per drag unit
+      // 💻 LARGE SCREENS (1024px-1279px)
       leftX = isForward
         ? isPositive
-          ? -40 + p * 20 // ← ADJUST: -40 (base pos), 20 (drag multiplier)
-          : -40 - absP * 25 // ← ADJUST: 25 (opposite drag)
+          ? -120 + p * 19
+          : -120 - absP * 24
         : isPositive
-          ? -40 + p * 20
-          : -40 - absP * 25
+          ? -120 + p * 19
+          : -120 - absP * 24
 
-      // Middle image: Base -25vw, moves 20vw per drag unit
       midX = isForward
         ? isPositive
-          ? -25 + p * 20 // ← ADJUST: -25 (base pos), 20 (drag multiplier)
-          : -25 - absP * 20 // ← ADJUST: 20 (opposite drag)
+          ? -60 + p * 19
+          : -60 - absP * 19
         : isPositive
-          ? -25 + p * 20
-          : -25 - absP * 20
+          ? -60 + p * 19
+          : -60 - absP * 19
 
-      // Right image: Base -5vw, moves 75vw per drag unit
       rightX = isForward
         ? isPositive
-          ? -5 + p * 75 // ← ADJUST: -5 (base pos), 75 (drag multiplier)
-          : -5 - absP * 20 // ← ADJUST: 20 (opposite drag)
+          ? -20 + p * 70
+          : -20 - absP * 19
         : isPositive
-          ? -5 + p * 75
-          : -5 - absP * 20
-    } else if (isUltraWideScreen) {
-      // 🖥️ ULTRA-WIDE SCREENS (1920px+)
-      // Left image: Base -45vw, moves 25vw per drag unit
+          ? -20 + p * 70
+          : -20 - absP * 19
+    } else if (isXLScreen) {
+      // 💻 XL SCREENS (1280px-1535px)
       leftX = isForward
         ? isPositive
-          ? -45 + p * 25 // ← ADJUST: -45 (base pos), 25 (drag multiplier)
-          : -45 - absP * 30 // ← ADJUST: 30 (opposite drag)
+          ? -130 + p * 20
+          : -120 - absP * 25
         : isPositive
-          ? -45 + p * 25
-          : -45 - absP * 30
+          ? -130 + p * 20
+          : -130 - absP * 25
 
-      // Middle image: Base -30vw, moves 25vw per drag unit
       midX = isForward
         ? isPositive
-          ? -30 + p * 25 // ← ADJUST: -30 (base pos), 25 (drag multiplier)
-          : -30 - absP * 25 // ← ADJUST: 25 (opposite drag)
+          ? -70 + p * 20
+          : -70 - absP * 20
         : isPositive
-          ? -30 + p * 25
-          : -30 - absP * 25
+          ? -70 + p * 20
+          : -70 - absP * 20
 
-      // Right image: Base -8vw, moves 85vw per drag unit
       rightX = isForward
         ? isPositive
-          ? -8 + p * 85 // ← ADJUST: -8 (base pos), 85 (drag multiplier)
-          : -8 - absP * 25 // ← ADJUST: 25 (opposite drag)
+          ? -20 + p * 75
+          : -20 - absP * 20
         : isPositive
-          ? -8 + p * 85
-          : -8 - absP * 25
+          ? -20 + p * 75
+          : -20 - absP * 20
+    } else if (is2XLScreen) {
+      // 🖥️ 2XL SCREENS (1536px-1919px)
+      leftX = isForward
+        ? isPositive
+          ? -130 + p * 22
+          : -130 - absP * 27
+        : isPositive
+          ? -130 + p * 22
+          : -130 - absP * 27
+
+      midX = isForward
+        ? isPositive
+          ? -70 + p * 22
+          : -70 - absP * 22
+        : isPositive
+          ? -70 + p * 22
+          : -70 - absP * 22
+
+      rightX = isForward
+        ? isPositive
+          ? -20 + p * 80
+          : -20 - absP * 22
+        : isPositive
+          ? -20 + p * 80
+          : -20 - absP * 22
     } else {
-      // 🖥️ 2XL SCREENS (1536px-1919px) - CURRENTLY ACTIVE FOR YOUR SCREEN
-      // Left image: Base -30vw, moves 22vw per drag unit
+      // 🖥️ ULTRA-WIDE SCREENS (1920px+)
       leftX = isForward
         ? isPositive
-          ? -30 + p * 22 // ← ADJUST: -30 (base pos), 22 (drag multiplier)
-          : -30 - absP * 27 // ← ADJUST: 27 (opposite drag)
+          ? -130 + p * 25
+          : -130 - absP * 30
         : isPositive
-          ? -30 + p * 22
-          : -30 - absP * 27
+          ? -130 + p * 25
+          : -130 - absP * 30
 
-      // Middle image: Base -27vw, moves 22vw per drag unit
       midX = isForward
         ? isPositive
-          ? -27 + p * 22 // ← ADJUST: -27 (base pos), 22 (drag multiplier)
-          : -27 - absP * 22 // ← ADJUST: 22 (opposite drag)
+          ? -70 + p * 25
+          : -70 - absP * 25
         : isPositive
-          ? -27 + p * 22
-          : -27 - absP * 22
+          ? -70 + p * 25
+          : -70 - absP * 25
 
-      // Right image: Base -20vw, moves 80vw per drag unit
       rightX = isForward
         ? isPositive
-          ? -20 + p * 80 // ← ADJUST: -20 (base pos), 80 (drag multiplier)
-          : -30 - absP * 22 // ← ADJUST: 22 (opposite drag)
+          ? -20 + p * 85
+          : -20 - absP * 25
         : isPositive
-          ? -30 + p * 80
-          : -30 - absP * 22
+          ? -20 + p * 85
+          : -20 - absP * 25
     }
 
     // Batch GSAP updates for better performance
@@ -368,27 +642,35 @@ export const StyliaDiscoverSection: React.FC = () => {
       midScale = isPositive ? 0.9 + p * 0.2 : 0.9 - absP * 0.1
       rightScale = isPositive ? 1.0 - p * 0.05 : 1.0 - absP * 0.2
     } else if (isMediumScreen) {
-      leftScale = isPositive ? 0.75 + p * 0.12 : 0.75 - absP * 0.18
-      midScale = isPositive ? 0.88 + p * 0.22 : 0.88 - absP * 0.12
-      rightScale = isPositive ? 1.05 - p * 0.08 : 1.05 - absP * 0.22
+      leftScale = isPositive ? 0.78 + p * 0.11 : 0.78 - absP * 0.17
+      midScale = isPositive ? 0.89 + p * 0.21 : 0.89 - absP * 0.11
+      rightScale = isPositive ? 1.02 - p * 0.06 : 1.02 - absP * 0.21
+    } else if (isMediumLargeScreen) {
+      leftScale = isPositive ? 0.5 + p * 0.12 : 0.5 - absP * 0.18
+      midScale = isPositive ? 0.7 + p * 0.22 : 0.7 - absP * 0.12
+      rightScale = isPositive ? 1 - p * 0.08 : 1 - absP * 0.22
     } else if (isLargeScreen) {
+      leftScale = isPositive ? 0.72 + p * 0.14 : 0.72 - absP * 0.19
+      midScale = isPositive ? 0.86 + p * 0.24 : 0.86 - absP * 0.14
+      rightScale = isPositive ? 1.08 - p * 0.09 : 1.08 - absP * 0.24
+    } else if (isXLScreen) {
       leftScale = isPositive ? 0.7 + p * 0.15 : 0.7 - absP * 0.2
       midScale = isPositive ? 0.85 + p * 0.25 : 0.85 - absP * 0.15
       rightScale = isPositive ? 1.1 - p * 0.1 : 1.1 - absP * 0.25
-    } else if (isUltraWideScreen) {
-      leftScale = isPositive ? 0.65 + p * 0.18 : 0.65 - absP * 0.22
-      midScale = isPositive ? 0.82 + p * 0.28 : 0.82 - absP * 0.18
-      rightScale = isPositive ? 1.15 - p * 0.12 : 1.15 - absP * 0.28
-    } else {
-      // 2xl screens (1536px-1919px)
+    } else if (is2XLScreen) {
       leftScale = isPositive ? 0.68 + p * 0.16 : 0.68 - absP * 0.21
       midScale = isPositive ? 0.84 + p * 0.26 : 0.84 - absP * 0.16
       rightScale = isPositive ? 1.12 - p * 0.11 : 1.12 - absP * 0.26
+    } else {
+      // Ultra-wide
+      leftScale = isPositive ? 0.65 + p * 0.18 : 0.65 - absP * 0.22
+      midScale = isPositive ? 0.82 + p * 0.28 : 0.82 - absP * 0.18
+      rightScale = isPositive ? 1.15 - p * 0.12 : 1.15 - absP * 0.28
     }
 
     // Left slot - optimized calculations
     gsap.set(leftEl, {
-      x: `${leftX}vw`,
+      x: `${leftX}%`,
       y: '-50%',
       scale: leftScale,
       opacity: isPositive ? 0.6 + p * 0.4 : 0.6 - absP * 0.6,
@@ -399,7 +681,7 @@ export const StyliaDiscoverSection: React.FC = () => {
 
     // Middle slot - optimized calculations
     gsap.set(midEl, {
-      x: `${midX}vw`,
+      x: `${midX}%`,
       y: '-50%',
       scale: midScale,
       opacity: isPositive ? 1 : 1 - absP * 0.4,
@@ -410,7 +692,7 @@ export const StyliaDiscoverSection: React.FC = () => {
 
     // Right slot - optimized calculations
     gsap.set(rightEl, {
-      x: `${rightX}vw`,
+      x: `${rightX}%`,
       y: '-50%',
       scale: rightScale,
       opacity: isPositive ? 1 - p : 1,
@@ -420,21 +702,54 @@ export const StyliaDiscoverSection: React.FC = () => {
     })
   }
 
+  function useOverlayWidth() {
+    const [width, setWidth] = useState('100%')
+
+    useEffect(() => {
+      const updateWidth = () => {
+        const w = window.innerWidth
+        if (w >= 2560) setWidth('54%')
+        else if (w >= 1920) setWidth('60%')
+        else if (w >= 1536) setWidth('60%')
+        else if (w >= 1280) setWidth('70%')
+        else if (w >= 1024) setWidth('72%')
+        else if (w >= 768) setWidth('70%')
+        else if (w >= 640) setWidth('100%')
+        else setWidth('100%')
+      }
+      updateWidth()
+      window.addEventListener('resize', updateWidth)
+      return () => window.removeEventListener('resize', updateWidth)
+    }, [])
+
+    return width
+  }
+
   // Smooth transition animation with GSAP, cooldown protection, and velocity-based duration
   const transitionToIndex = (
     nextIndex: number,
     direction: 1 | -1,
-    fromSidebar = false,
-    velocity = 0
+    fromSidebar = false
   ) => {
+    console.log('🎬 TRANSITION START:', {
+      from: activeIndex,
+      to: nextIndex,
+      direction: direction === 1 ? 'forward' : 'backward',
+      fromSidebar,
+    })
+
     // Cancel any existing animation
     if (currentAnimationRef.current) {
+      console.log('⚠️ Canceling existing animation')
       currentAnimationRef.current.kill()
       currentAnimationRef.current = null
     }
 
     // Prevent rapid transitions
-    if (cooldownRef.current) return
+    if (cooldownRef.current) {
+      console.log('❌ Blocked by cooldown')
+      return
+    }
 
     animatingRef.current = true
     cooldownRef.current = true
@@ -451,94 +766,108 @@ export const StyliaDiscoverSection: React.FC = () => {
       return
     }
 
-    // Calculate dynamic duration based on velocity
-    // Higher velocity = shorter duration (faster animation)
-    // Lower velocity = longer duration (slower animation)
-    const baseDuration = 0.5 // Further reduced for smoother transitions
-    const speedFactor = 0.15 // Reduced speed factor
-    const minDuration = 0.2 // Reduced minimum duration
-    const maxDuration = 0.6 // Reduced maximum duration
+    // Fixed duration
+    const duration = 0.6
 
-    const dynamicDuration = Math.max(
-      minDuration,
-      Math.min(maxDuration, baseDuration - velocity * speedFactor)
-    )
+    console.log('🖼️ Current images BEFORE transition:', {
+      left: products[getSlotIndices(activeIndex).left].name,
+      mid: products[getSlotIndices(activeIndex).mid].name,
+      right: products[getSlotIndices(activeIndex).right].name,
+    })
 
-    // Get transition slot indices to prevent double appearance
-    const transitionIndices = getTransitionSlotIndices(
-      activeIndex,
-      nextIndex,
-      direction
-    )
+    // Animate the transition with proper sequencing
+    const targetProgress = direction
+    let frameCount = 0
 
-    // Create a timeline for smooth animation
-    const tl = gsap.timeline({
-      onStart: () => {
-        // Update images immediately for manual drag to prevent double appearance
-        // But only for manual drag, not sidebar scroll
-        if (!fromSidebar) {
+    gsap.to(
+      {},
+      {
+        duration: duration,
+        ease: 'power2.inOut',
+        onStart: () => {
+          console.log('▶️ Animation STARTED')
+        },
+        onUpdate: function () {
+          const progress = this.progress() * targetProgress
+          frameCount++
+          if (frameCount % 10 === 0) {
+            // Log every 10th frame to avoid spam
+            console.log(
+              '📊 Progress:',
+              (this.progress() * 100).toFixed(1) + '%'
+            )
+          }
+          applySlotTransforms(progress)
+        },
+        onComplete: 
+        () => {
+          console.log('✅ Animation COMPLETED after', frameCount, 'frames')
+
+          // Update images AFTER animation completes
           const leftImg = leftEl.querySelector('img')
           const midImg = midEl.querySelector('img')
           const rightImg = rightEl.querySelector('img')
 
-          if (leftImg)
-            leftImg.src = products[transitionIndices.left].bannerImage
-          if (midImg) midImg.src = products[transitionIndices.mid].bannerImage
-          if (rightImg)
-            rightImg.src = products[transitionIndices.right].bannerImage
-        }
-      },
-      onComplete: () => {
-        animatingRef.current = false
-        setActiveIndex(nextIndex)
-        applySlotTransforms(0)
-        currentAnimationRef.current = null
+          // Get the new slot indices for the new active index
+          const newSlotIndices = getSlotIndices(nextIndex)
 
-        // Sync sidebar scroll after image transition
-        if (!fromSidebar) {
-          syncSidebarScroll(nextIndex)
-        }
+          console.log('🖼️ New images AFTER transition:', {
+            left: products[newSlotIndices.left].name,
+            mid: products[newSlotIndices.mid].name,
+            right: products[newSlotIndices.right].name,
+          })
 
-        // Add cooldown period to prevent rapid transitions
-        setTimeout(
-          () => {
+          if (leftImg) {
+            console.log(
+              '🔄 Updating LEFT image to:',
+              products[newSlotIndices.left].name
+            )
+            leftImg.src = products[newSlotIndices.left].bannerImage
+          }
+          if (midImg) {
+            console.log(
+              '🔄 Updating MID image to:',
+              products[newSlotIndices.mid].name
+            )
+            midImg.src = products[newSlotIndices.mid].bannerImage
+          }
+          if (rightImg) {
+            console.log(
+              '🔄 Updating RIGHT image to:',
+              products[newSlotIndices.right].name
+            )
+            rightImg.src = products[newSlotIndices.right].bannerImage
+          }
+
+          animatingRef.current = false
+          setActiveIndex(nextIndex)
+          applySlotTransforms(0)
+          currentAnimationRef.current = null
+
+          // Sync sidebar scroll after image transition
+          if (!fromSidebar) {
+            syncSidebarScroll(nextIndex)
+          }
+
+          // Add cooldown period
+          setTimeout(() => {
             cooldownRef.current = false
-          },
-          Math.max(50, dynamicDuration * 100) // Further reduced cooldown
-        )
-      },
-    })
+            console.log('🔓 Cooldown released')
+          }, 100)
+        },
+      }
+    )
 
-    // Store reference to current animation
-    currentAnimationRef.current = tl
-
-    // Optimized animation using GSAP's efficient methods
-    // Pre-calculate target values for better performance
-    const isForward = direction === 1
-    const targetProgress = direction
-
-    // Use GSAP's efficient animation methods with smoother easing
-    tl.to([leftEl, midEl, rightEl], {
-      duration: dynamicDuration,
-      ease: 'power1.out', // Smoother easing
-      force3D: true,
-      onUpdate: function () {
-        const progress = this.progress() * targetProgress
-        applySlotTransforms(progress)
-      },
-    })
+    console.log('─────────────────────────────')
   }
-
   // Sync sidebar scroll position
   const syncSidebarScroll = (index: number) => {
     const scroller = rightScrollRef.current
     if (!scroller) return
 
     isScrollingProgrammaticallyRef.current = true
-    const totalItems = products.length * LOOP_SETS
-    const itemH = scroller.scrollHeight / totalItems
-    const middleSetStart = products.length
-    const targetTop = (middleSetStart + index) * itemH
+    const itemH = scroller.scrollHeight / products.length // Remove LOOP_SETS
+    const targetTop = index * itemH // Remove middleSetStart calculation
 
     scroller.scrollTo({ top: targetTop, behavior: 'smooth' })
 
@@ -653,7 +982,15 @@ export const StyliaDiscoverSection: React.FC = () => {
       if (!dragging || animatingRef.current || cooldownRef.current) return
 
       currentX = e.clientX - startX
-      const p = currentX / dragThreshold
+      let p = currentX / dragThreshold
+
+      // Reduce drag effect at boundaries
+      if (
+        (activeIndex === 0 && p < 0) ||
+        (activeIndex === products.length - 1 && p > 0)
+      ) {
+        p = p * 0.2 // Make it harder to drag at boundaries
+      }
 
       // Calculate drag velocity (throttled for performance)
       const currentTime = Date.now()
@@ -675,10 +1012,6 @@ export const StyliaDiscoverSection: React.FC = () => {
       const cappedProgress = Math.max(-1, Math.min(1, p))
       dragProgressRef.current = cappedProgress
 
-      // DISABLE mid-drag transitions - only allow transitions on mouse up
-      // This prevents double appearance during drag, matching sidebar behavior
-      // Just apply visual transforms without changing images
-
       applySlotTransforms(cappedProgress)
     }
 
@@ -692,24 +1025,24 @@ export const StyliaDiscoverSection: React.FC = () => {
 
       const p = dragProgressRef.current
 
-      // Only allow single image transition per drag gesture
-      // Use higher threshold to match sidebar behavior - only transition on significant drag
       if (p > 0.5) {
-        lastDirectionRef.current = 1
-        const nextIndex = wrapIndex(activeIndex + 1)
-
-        // Use same transition logic as sidebar scroll for consistency
-        transitionToIndex(nextIndex, 1, false, 0) // No velocity for manual drag
+        if (activeIndex < products.length - 1) {
+          lastDirectionRef.current = 1
+          const nextIndex = activeIndex + 1
+          transitionToIndex(nextIndex, 1, false) // Removed velocity parameter
+        } else {
+          applySlotTransforms(0)
+          dragProgressRef.current = 0
+        }
       } else if (p < -0.5) {
-        lastDirectionRef.current = -1
-        const nextIndex = wrapIndex(activeIndex - 1)
-
-        // Use same transition logic as sidebar scroll for consistency
-        transitionToIndex(nextIndex, -1, false, 0) // No velocity for manual drag
-      } else {
-        // Snap back to original position if drag wasn't significant enough
-        applySlotTransforms(0)
-        dragProgressRef.current = 0
+        if (activeIndex > 0) {
+          lastDirectionRef.current = -1
+          const nextIndex = activeIndex - 1
+          transitionToIndex(nextIndex, -1, false) // Removed velocity parameter
+        } else {
+          applySlotTransforms(0)
+          dragProgressRef.current = 0
+        }
       }
 
       startX = 0
@@ -735,7 +1068,6 @@ export const StyliaDiscoverSection: React.FC = () => {
     let ticking = false
     let lastScrollTop = scroller.scrollTop
     let lastLogicalIndex = activeIndex
-    let boundaryJustCorrected = false
 
     const onScroll = () => {
       if (
@@ -749,16 +1081,7 @@ export const StyliaDiscoverSection: React.FC = () => {
 
       requestAnimationFrame(() => {
         const { scrollTop, scrollHeight, clientHeight } = scroller
-        const totalItems = products.length * LOOP_SETS
-        const itemH = scrollHeight / totalItems
-
-        // Skip this frame if we just corrected boundary
-        if (boundaryJustCorrected) {
-          boundaryJustCorrected = false
-          lastScrollTop = scrollTop
-          ticking = false
-          return
-        }
+        const itemH = scrollHeight / products.length
 
         // Calculate scroll direction BEFORE any modifications
         const rawScrollDelta = scrollTop - lastScrollTop
@@ -767,29 +1090,10 @@ export const StyliaDiscoverSection: React.FC = () => {
         const scrollDelta = Math.abs(rawScrollDelta)
 
         const currentScrollIndex = Math.round(scrollTop / itemH)
-        const logicalIndex = currentScrollIndex % products.length
+        const logicalIndex = currentScrollIndex // No modulo needed
 
-        // Handle infinite loop boundaries
-        const firstSetEnd = products.length * 0.8
-        const lastSetStart = products.length * (LOOP_SETS - 0.8)
-        let needsBoundaryCorrection = false
-
-        if (currentScrollIndex < firstSetEnd) {
-          const newScrollTop = scrollTop + products.length * itemH
-          scroller.scrollTop = newScrollTop
-          lastScrollTop = newScrollTop
-          needsBoundaryCorrection = true
-          boundaryJustCorrected = true
-        } else if (currentScrollIndex > lastSetStart) {
-          const newScrollTop = scrollTop - products.length * itemH
-          scroller.scrollTop = newScrollTop
-          lastScrollTop = newScrollTop
-          needsBoundaryCorrection = true
-          boundaryJustCorrected = true
-        }
-
-        // If boundary was corrected, exit early
-        if (needsBoundaryCorrection) {
+        // Prevent scrolling beyond boundaries
+        if (logicalIndex < 0 || logicalIndex >= products.length) {
           ticking = false
           return
         }
@@ -798,7 +1102,7 @@ export const StyliaDiscoverSection: React.FC = () => {
         const currentTime = Date.now()
         const timeDelta = currentTime - lastScrollTimeRef.current
 
-        // Only calculate velocity every 16ms (60fps) for better performance
+        // Only calculate velocity every 32ms for better performance
         if (timeDelta >= 32 && scrollDelta > 0) {
           const scrollVelocity = scrollDelta / timeDelta
 
@@ -822,12 +1126,7 @@ export const StyliaDiscoverSection: React.FC = () => {
             cooldownRef.current = false
           }
 
-          transitionToIndex(
-            logicalIndex,
-            scrollDirection as 1 | -1,
-            true,
-            velocityRef.current
-          )
+          transitionToIndex(logicalIndex, scrollDirection as 1 | -1, true)
         }
 
         // Update lastScrollTop for next comparison
@@ -858,18 +1157,17 @@ export const StyliaDiscoverSection: React.FC = () => {
     return () => window.removeEventListener('resize', handleResize)
   }, [])
 
-  // Initialize sidebar position
   useLayoutEffect(() => {
     const scroller = rightScrollRef.current
     if (!scroller) return
 
     requestAnimationFrame(() => {
-      const totalItems = products.length * LOOP_SETS
-      const itemH = scroller.scrollHeight / totalItems
-      const middleSetStart = products.length
-      scroller.scrollTop = (middleSetStart + activeIndex) * itemH
+      const itemH = scroller.scrollHeight / products.length
+      scroller.scrollTop = activeIndex * itemH // Remove middleSetStart
     })
   }, [])
+
+  const width = useOverlayWidth()
 
   return (
     <section
@@ -879,11 +1177,12 @@ export const StyliaDiscoverSection: React.FC = () => {
       {/* Background layer: fills full width on small, left 9/12 on lg+; right stays white */}
       <div
         aria-hidden
-        className="pointer-events-none absolute top-0 left-0 h-full w-full lg:w-[72%] 2xl:w-[65%] bg-[#00000012]"
+        className="pointer-events-none absolute top-0 left-0 h-full bg-[#00000012]"
+        style={{ width, transition: 'width 0.3s ease' }}
       />
 
       <div className="h-full container mx-auto relative z-10">
-        <div className="grid grid-cols-1 lg:grid-cols-12 h-full py-16 sm:py-24">
+        <div className="grid grid-cols-1 md:grid-cols-12 h-full py-16 sm:py-24">
           {/* Left: Draggable Area */}
           <div
             ref={leftAreaRef}
@@ -921,11 +1220,11 @@ export const StyliaDiscoverSection: React.FC = () => {
               </motion.h2>
 
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 40 }}
                 animate={
-                  isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 20 }
+                  isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 40 }
                 }
-                transition={{ duration: 0.6, delay: 0.1 }}
+                transition={{ duration: 1, delay: 0.3 }}
                 className="text-lg text-black font-normal leading-[1.8]"
               >
                 Stylia is more than fashion—it's a lifestyle. We create
@@ -936,7 +1235,7 @@ export const StyliaDiscoverSection: React.FC = () => {
             {/* Image Track */}
             <div
               ref={trackRef}
-              className="absolute inset-0 z-10 bg-transparent"
+              className="hidden md:block absolute inset-0 z-10 bg-transparent"
               style={{ transformStyle: 'preserve-3d' }}
             >
               {(() => {
@@ -1052,86 +1351,84 @@ export const StyliaDiscoverSection: React.FC = () => {
             {(() => {
               const { left, mid, right } = getSlotIndices(activeIndex)
 
-              return Array.from({ length: products.length * LOOP_SETS }).map(
-                (_, idx) => {
-                  const productIndex = idx % products.length
-                  const p = products[productIndex]
+              return Array.from({ length: products.length }).map((_, idx) => {
+                const productIndex = idx % products.length
+                const p = products[productIndex]
 
-                  // Check which slot this product belongs to
-                  const isFeatured = productIndex === right
-                  const isNext = productIndex === mid
-                  const isUpcoming = productIndex === left
+                // Check which slot this product belongs to
+                const isFeatured = productIndex === right
+                const isNext = productIndex === mid
+                const isUpcoming = productIndex === left
 
-                  return (
-                    <div
-                      key={`sidebar-${idx}`}
-                      style={{ minHeight: `${100 / products.length}vh` }}
-                      className="flex items-center"
-                    >
-                      <motion.div className="w-full">
-                        <div className="relative h-105 rounded-xl overflow-hidden">
-                          <img
-                            src={p.image}
-                            alt={p.name}
-                            className="w-full h-full object-contain"
-                          />
-                          {isFeatured && (
-                            <motion.div
-                              initial={{ scale: 0.8, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              transition={{
-                                duration: 0.15,
-                                ease: 'easeOut',
-                              }}
-                              className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full"
-                            >
-                              <HeartIcon className="w-10 h-10 text-black"></HeartIcon>
-                            </motion.div>
-                          )}
-                          {isNext && (
-                            <motion.div
-                              initial={{ scale: 0.8, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              transition={{
-                                duration: 0.15,
-                                ease: 'easeOut',
-                              }}
-                              className="absolute top-3 left-3  text-xs px-3 py-1 rounded-full font-medium"
-                            >
-                              <HeartIcon className="w-10 h-10 text-black"></HeartIcon>
-                            </motion.div>
-                          )}
-                          {isUpcoming && (
-                            <motion.div
-                              initial={{ scale: 0.8, opacity: 0 }}
-                              animate={{ scale: 1, opacity: 1 }}
-                              transition={{
-                                duration: 0.15,
-                                ease: 'easeOut',
-                              }}
-                              className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full font-medium"
-                            >
-                              <HeartIcon className="w-10 h-10 text-black"></HeartIcon>
-                            </motion.div>
-                          )}
-                        </div>
-                        <div className="pl-6">
-                          <h3
-                            className={`text-xl font-semibold ${isFeatured ? 'text-black' : 'text-gray-700'}`}
+                return (
+                  <div
+                    key={`sidebar-${idx}`}
+                    style={{ minHeight: `${100 / products.length}vh` }}
+                    className="flex items-center"
+                  >
+                    <motion.div className="w-full">
+                      <div className="relative h-105 rounded-xl overflow-hidden">
+                        <img
+                          src={p.image}
+                          alt={p.name}
+                          className="w-full h-full object-contain"
+                        />
+                        {isFeatured && (
+                          <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{
+                              duration: 0.15,
+                              ease: 'easeOut',
+                            }}
+                            className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full"
                           >
-                            {p.name}
-                          </h3>
-                          <p
-                            className={`text-2xl font-bold mt-1 ${isFeatured ? 'text-black' : 'text-gray-600'}`}
+                            <HeartIcon className="w-10 h-10 text-black"></HeartIcon>
+                          </motion.div>
+                        )}
+                        {isNext && (
+                          <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{
+                              duration: 0.15,
+                              ease: 'easeOut',
+                            }}
+                            className="absolute top-3 left-3  text-xs px-3 py-1 rounded-full font-medium"
                           >
-                            ₹ {p.price.toLocaleString('en-IN')}
-                          </p>
-                        </div>
-                      </motion.div>
-                    </div>
-                  )
-                }
-              )
+                            <HeartIcon className="w-10 h-10 text-black"></HeartIcon>
+                          </motion.div>
+                        )}
+                        {isUpcoming && (
+                          <motion.div
+                            initial={{ scale: 0.8, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            transition={{
+                              duration: 0.15,
+                              ease: 'easeOut',
+                            }}
+                            className="absolute top-3 left-3 text-xs px-3 py-1 rounded-full font-medium"
+                          >
+                            <HeartIcon className="w-10 h-10 text-black"></HeartIcon>
+                          </motion.div>
+                        )}
+                      </div>
+                      <div className="pl-6">
+                        <h3
+                          className={`text-xl font-semibold ${isFeatured ? 'text-black' : 'text-gray-700'}`}
+                        >
+                          {p.name}
+                        </h3>
+                        <p
+                          className={`text-2xl font-bold mt-1 ${isFeatured ? 'text-black' : 'text-gray-600'}`}
+                        >
+                          ₹ {p.price.toLocaleString('en-IN')}
+                        </p>
+                      </div>
+                    </motion.div>
+                  </div>
+                )
+              })
             })()}
           </div>
         </div>

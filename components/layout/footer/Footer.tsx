@@ -414,10 +414,10 @@ export default function Footer() {
             {/* Copyright */}
             <motion.div
               className="pt-12 lg:pt-16"
-              initial={{ opacity: 0, y: 10 }}
+              initial={{ opacity: 0, y: 40 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              transition={{ delay: 0.4, duration: 0.5 }}
+              transition={{ delay: 0.4, duration: 1 }}
             >
               <p className="text-sm xl:text-[20px] leading-[1.4] text-black font-normal font-kumbh-sans">
                 Copyright © Stylia | Designed By{' '}
@@ -454,10 +454,10 @@ export default function Footer() {
 
               <motion.p
                 className="text-[20px] text-black mb-8 leading-relaxed"
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ delay: 0.4, duration: 0.5 }}
+                transition={{ delay: 0.4, duration: 1 }}
               >
                 Subscribe To Our Newsletter And Enjoy 10% Off Your First
                 Purchase.

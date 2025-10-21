@@ -652,7 +652,7 @@ export const ProductShowcase: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-screen xl:h-[1100px] 2xl:h-[1267px] overflow-hidden"
+      className="relative w-full xl:h-[1100px] 2xl:h-[1267px] overflow-hidden"
     >
       {/* Circular White Smoke Effect - Middle Only */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -681,32 +681,51 @@ export const ProductShowcase: React.FC = () => {
         </motion.div>
       </div>
 
-      <div className="relative h-full container mx-auto" style={{ zIndex: 2 }}>
-        <div className="grid grid-cols-1 lg:grid-cols-12 h-full">
+      <div
+        className="relative h-full container mx-auto"
+        style={{ zIndex: 2 }}
+      >
+        <div className="grid grid-cols-1 md:grid-cols-12 h-full gap-6 lg:gap-0">
           {/* Left Section - Product Info */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.2 }}
-            className="lg:col-span-3 flex flex-col justify-between h-full py-12 lg:py-20 pb-12 lg:pb-20"
+            className="md:col-span-3 flex flex-col justify-between h-full py-8 sm:py-10 lg:py-20"
           >
             {/* Title Block - Stays at Top */}
-            <div className="space-y-4">
-              <h1 ref={headingRef} className="text-3xl sm:text-4xl lg:text-[43px] text-white font-kumbh-sans leading-tight font-semibold leading-142% letter-spacing-0% leading-trim-none">
-                <AnimatedText text={productData[currentProduct].title} isVisible={isInView} />
+            <div className="space-y-3 sm:space-y-4 text-center sm:text-left">
+              <h1
+                ref={headingRef}
+                className="text-2xl sm:text-3xl md:text-4xl lg:text-[43px] text-white font-kumbh-sans leading-tight font-semibold"
+              >
+                <AnimatedText
+                  text={productData[currentProduct].title}
+                  isVisible={isInView}
+                />
               </h1>
-              <p className="text-base sm:text-lg overflow-x-auto text-white font-kumbh-sans leading-tight font-normal capitalize leading-195% letter-spacing-0% leading-trim-none">
+              <p className="text-sm sm:text-base lg:text-lg overflow-x-auto text-white font-kumbh-sans leading-tight font-normal capitalize">
                 {productData[currentProduct].subtitle}
               </p>
-              <p className="text-sm text-white max-w-lg font-kumbh-sans leading-tight font-normal capitalize leading-195% letter-spacing-0% leading-trim-none">
+              <motion.p
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{
+                  duration: 1,
+                  delay: 0.2,
+                  ease: [0.43, 0.13, 0.23, 0.96],
+                }}
+                viewport={{ once: true }}
+                className="text-xs sm:text-sm text-white max-w-lg font-kumbh-sans leading-tight font-normal capitalize"
+              >
                 {productData[currentProduct].description}
-              </p>
+              </motion.p>
             </div>
 
             {/* Navigation & Rating - Stays at Bottom */}
-            <div className="space-y-6">
+            <div className="space-y-4 sm:space-y-6 mt-8 lg:mt-0">
               {/* Navigation Arrows */}
-              <div className="flex items-center gap-4">
+              <div className="flex items-center gap-3 sm:gap-4">
                 <motion.button
                   onClick={handlePrevious}
                   whileHover={{ scale: 1.1, x: -5 }}
@@ -714,7 +733,7 @@ export const ProductShowcase: React.FC = () => {
                   disabled={isTransitioning}
                   className="cursor-pointer disabled:opacity-50"
                 >
-                  <ArrowLeft className="w-10 h-10 text-white" />
+                  <ArrowLeft className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 text-white" />
                 </motion.button>
                 <motion.button
                   onClick={handleNext}
@@ -723,7 +742,7 @@ export const ProductShowcase: React.FC = () => {
                   disabled={isTransitioning}
                   className="cursor-pointer disabled:opacity-50"
                 >
-                  <ArrowRight className="w-10 h-10 text-white" />
+                  <ArrowRight className="w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 text-white" />
                 </motion.button>
               </div>
 
@@ -733,15 +752,15 @@ export const ProductShowcase: React.FC = () => {
                   {[...Array(5)].map((_, i) => (
                     <Star
                       key={i}
-                      className={`w-8 h-8 ${
+                      className={`w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 ${
                         i < Math.floor(productData[currentProduct].rating)
-                          ? 'fill-[#FFD117] text-[#FFD117]   '
+                          ? 'fill-[#FFD117] text-[#FFD117]'
                           : 'text-white/30'
                       }`}
                     />
                   ))}
                 </div>
-                <p className="text-white/90 text-sm lg:text-lg font-kumbh-sans leading-tight font-normal capitalize leading-195% letter-spacing-0% leading-trim-none pt-2">
+                <p className="text-white/90 text-xs sm:text-sm lg:text-lg font-kumbh-sans leading-tight font-normal capitalize pt-2">
                   ({productData[currentProduct].rating} From{' '}
                   {productData[currentProduct].reviewCount} Reviews)
                 </p>
@@ -749,34 +768,13 @@ export const ProductShowcase: React.FC = () => {
             </div>
           </motion.div>
 
-          {/* Center Section - Product Image (Full Height, No Padding) */}
+          {/* Center Section - Product Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
-            className="lg:col-span-5 relative flex items-end justify-center h-full"
+            className="md:col-span-5 relative flex items-end justify-center h-[400px] sm:h-[500px] md:h-[600px] lg:h-full"
           >
-            {/* Current Image */}
-            {/* <div
-              ref={currentImageRef}
-              className="absolute w-full h-full flex items-end justify-center"
-              style={{ zIndex: isTransitioning ? 1 : 2 }}
-            >
-              <div
-                ref={imageRef}
-                onMouseEnter={() => !isTransitioning && setIsHovering(true)}
-                onMouseLeave={() => setIsHovering(false)}
-                className="relative w-full max-w-md lg:max-w-lg h-full"
-              >
-                <Image
-                  src={getCurrentImage()}
-                  alt={productData[currentProduct].title}
-                  fill
-                  className="object-contain object-bottom"
-                  priority
-                />
-              </div>
-            </div> */}
             {/* Current Image */}
             <div
               ref={currentImageRef}
@@ -785,7 +783,7 @@ export const ProductShowcase: React.FC = () => {
               className="absolute w-full h-full flex items-end justify-center"
               style={{ zIndex: isTransitioning ? 1 : 2 }}
             >
-              <div className="relative w-full max-w-md lg:max-w-lg xl:h-[999px]">
+              <div className="relative w-full h-[350px] sm:h-[450px] md:h-[550px] lg:h-[600px] xl:h-[999px]">
                 <Image
                   src={getCurrentImage()}
                   alt={productData[currentProduct].title}
@@ -803,7 +801,7 @@ export const ProductShowcase: React.FC = () => {
                 className="absolute w-full h-full flex items-end justify-center"
                 style={{ zIndex: 3 }}
               >
-                <div className="relative w-full max-w-md lg:max-w-lg h-full">
+                <div className="relative w-full h-[350px] sm:h-[450px] md:h-[550px] lg:h-[600px] xl:h-[999px]">
                   <Image
                     src={getNextImage()}
                     alt="Next Product"
@@ -821,17 +819,17 @@ export const ProductShowcase: React.FC = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.8, delay: 0.6 }}
-            className="lg:col-span-4 flex flex-col justify-between h-full py-12 lg:py-20 pb-12 lg:pb-20"
+            className="md:col-span-4 flex flex-col justify-between h-full py-8 sm:py-10 lg:py-20"
           >
             {/* Price - Fixed at Top Right */}
-            <div className="flex items-center justify-start gap-4 pt-20">
-              <span className="text-4xl sm:text-5xl text-white font-kumbh-sans leading-tight font-bold capitalize leading-142% letter-spacing-0% leading-trim-none">
+            <div className="flex items-center justify-start gap-3 sm:gap-4 lg:pt-20">
+              <span className="text-3xl sm:text-4xl lg:text-5xl text-white font-kumbh-sans leading-tight font-bold capitalize">
                 ₹{' '}
                 {productData[currentProduct].discountedPrice.toLocaleString(
                   'en-IN'
                 )}
               </span>
-              <span className=" text-xl sm:text-2xl lg:text-3xl text-[#FFFFFF4D] line-through font-kumbh-sans leading-tight font-normal capitalize leading-142% letter-spacing-0% leading-trim-none">
+              <span className="text-lg sm:text-xl lg:text-2xl xl:text-3xl text-[#FFFFFF4D] line-through font-kumbh-sans leading-tight font-normal capitalize">
                 ₹{' '}
                 {productData[currentProduct].originalPrice.toLocaleString(
                   'en-IN'
@@ -840,13 +838,13 @@ export const ProductShowcase: React.FC = () => {
             </div>
 
             {/* Bottom Section - Colors, Quantity, Sizes, Buttons */}
-            <div className="space-y-8">
+            <div className="space-y-6 sm:space-y-8 mt-8 lg:mt-0">
               {/* Available Colors */}
               <div>
-                <h3 className="text-white text-[23px] font-medium font-kumbh-sans leading-tight capitalize leading-195% letter-spacing-0% leading-trim-none mb-4">
+                <h3 className="text-white text-lg sm:text-xl lg:text-[23px] font-medium font-kumbh-sans leading-tight capitalize mb-3 sm:mb-4">
                   Available Color
                 </h3>
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2 sm:gap-3">
                   {productData[currentProduct].colors.map((color, index) => (
                     <motion.button
                       key={color.id}
@@ -854,7 +852,7 @@ export const ProductShowcase: React.FC = () => {
                       whileHover={{ scale: 1.1 }}
                       whileTap={{ scale: 0.95 }}
                       disabled={isTransitioning}
-                      className={`w-10 h-10 cursor-pointer rounded-full border-2 transition-all duration-300 disabled:opacity-50 ${
+                      className={`w-8 h-8 sm:w-9 sm:h-9 lg:w-10 lg:h-10 cursor-pointer rounded-full border-2 transition-all duration-300 disabled:opacity-50 ${
                         selectedColor === index
                           ? 'border-white scale-110'
                           : 'border-white/40'
@@ -867,50 +865,49 @@ export const ProductShowcase: React.FC = () => {
 
               {/* Quantity */}
               <div>
-                <h3 className="text-white text-lg font-medium font-kumbh-sans leading-tight capitalize leading-195% letter-spacing-0% leading-trim-none mb-4">
+                <h3 className="text-white text-base sm:text-lg font-medium font-kumbh-sans leading-tight capitalize mb-3 sm:mb-4">
                   Quantity
                 </h3>
-                <div className="flex items-center gap-4">
+                <div className="flex items-center gap-3 sm:gap-4">
                   <motion.button
                     onClick={decrementQuantity}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className="hover:bg-white/10 w-10 h-10 hover:text-white hover:rounded-lg  flex items-center justify-center text-xl font-bold transition-all duration-300 cursor-pointer"
+                    className="hover:bg-white/10 w-9 h-9 sm:w-10 sm:h-10 hover:text-white hover:rounded-lg flex items-center justify-center text-xl font-bold transition-all duration-300 cursor-pointer"
                   >
-                    <Minus className="w-8 h-10 text-white" />
+                    <Minus className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-10 text-white" />
                   </motion.button>
-                  <span className="text-white text-2xl font-medium min-w-[40px] text-center font-kumbh-sans leading-tight capitalize leading-142% letter-spacing-0% leading-trim-none">
+                  <span className="text-white text-xl sm:text-2xl font-medium min-w-[40px] text-center font-kumbh-sans leading-tight capitalize">
                     {quantity}
                   </span>
                   <motion.button
                     onClick={incrementQuantity}
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
-                    className="hover:bg-white/10 w-10 h-10 hover:text-white hover:rounded-lg flex items-center justify-center text-xl font-bold transition-all duration-300 cursor-pointer"
+                    className="hover:bg-white/10 w-9 h-9 sm:w-10 sm:h-10 hover:text-white hover:rounded-lg flex items-center justify-center text-xl font-bold transition-all duration-300 cursor-pointer"
                   >
-                    <Plus className="w-8 h-8 text-white" />
+                    <Plus className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8 text-white" />
                   </motion.button>
                 </div>
               </div>
 
               {/* Available Sizes */}
               <div>
-                <h3 className="text-white text-lg font-semibold mb-4">
+                <h3 className="text-white text-base sm:text-lg font-semibold mb-3 sm:mb-4">
                   Available Size
                 </h3>
-                <div className="flex items-center gap-3 flex-wrap">
+                <div className="flex items-center gap-2 sm:gap-3 flex-wrap">
                   {productData[currentProduct].sizes.map((size) => (
                     <motion.button
                       key={size}
                       onClick={() => setSelectedSize(size)}
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
-                      className={`px-4 py-2 font-semibold text-white transition-all duration-300 relative
-                        ${selectedSize === size ? 'after:w-full' : 'after:w-0'}
-                        after:content-[''] after:absolute after:left-0 after:bottom-0 
-                        after:h-[2px] after:bg-white after:transition-all after:duration-300
-                        hover:after:w-full cursor-pointer
-                        `}
+                      className={`px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base font-semibold text-white transition-all duration-300 relative
+                  ${selectedSize === size ? 'after:w-full' : 'after:w-0'}
+                  after:content-[''] after:absolute after:left-0 after:bottom-0 
+                  after:h-[2px] after:bg-white after:transition-all after:duration-300
+                  hover:after:w-full cursor-pointer`}
                     >
                       {size}
                     </motion.button>
@@ -923,10 +920,10 @@ export const ProductShowcase: React.FC = () => {
                 {/* 🛍️ Buy It Now */}
                 <motion.button
                   whileTap={{ scale: 0.98 }}
-                  className="relative w-full overflow-hidden flex justify-center items-center gap-2 px-6 py-4 
-  text-lg font-semibold font-kumbh-sans text-white capitalize 
-  backdrop-blur-sm border-2 border-transparent bg-[#FFFFFF1A] 
-  transition-all duration-500 cursor-pointer"
+                  className="relative w-full overflow-hidden flex justify-center items-center gap-2 px-4 py-3 sm:px-6 sm:py-4 
+              text-base sm:text-lg font-semibold font-kumbh-sans text-white capitalize 
+              backdrop-blur-sm border-2 border-transparent bg-[#FFFFFF1A] 
+              transition-all duration-500 cursor-pointer"
                 >
                   {/* Hover background sweep (left → right) */}
                   <span
@@ -935,13 +932,13 @@ export const ProductShowcase: React.FC = () => {
                   />
 
                   {/* Text container (handles text swap) */}
-                  <span className="relative z-10 overflow-hidden flex items-center justify-center w-full h-7">
+                  <span className="relative z-10 overflow-hidden flex items-center justify-center w-full h-6 sm:h-7">
                     <span
                       ref={buyButtonTextRef}
                       className="flex items-center justify-center gap-2 absolute w-full"
                     >
                       Buy it Now
-                      <ArrowRight className="w-5 h-5" />
+                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                     </span>
 
                     <span
@@ -949,28 +946,29 @@ export const ProductShowcase: React.FC = () => {
                       className="flex items-center justify-center gap-2 absolute w-full"
                     >
                       Only 2 Left
-                      <ArrowRight className="w-5 h-5" />
+                      <ArrowRight className="w-4 h-4 sm:w-5 sm:h-5" />
                     </span>
                   </span>
                 </motion.button>
+
                 {/* 🛒 Add to Cart */}
                 <motion.button
                   whileHover={{ scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className="relative w-full overflow-hidden flex justify-center items-center gap-2 px-4 py-4 
-               text-lg font-semibold font-kumbh-sans text-white capitalize 
-               border-2 border-white/40 bg-black hover:text-white 
-               transition-all duration-500 backdrop-blur-sm group"
+                  className="relative w-full overflow-hidden flex justify-center items-center gap-2 px-4 py-3 sm:px-6 sm:py-4 
+              text-base sm:text-lg font-semibold font-kumbh-sans text-white capitalize 
+              border-2 border-white/40 bg-black hover:text-white 
+              transition-all duration-500 backdrop-blur-sm group"
                 >
                   {/* Hover overlay (slides left → right) */}
                   <span
                     className="absolute inset-0 bg-white/10 translate-x-[-100%] 
-                     group-hover:translate-x-0 transition-transform duration-700 ease-out z-0"
+                group-hover:translate-x-0 transition-transform duration-700 ease-out z-0"
                   />
 
                   {/* Content */}
                   <span className="relative z-10 flex items-center gap-2">
-                    <ShoppingBag className="w-5 h-5" />
+                    <ShoppingBag className="w-4 h-4 sm:w-5 sm:h-5" />
                     Add to Cart
                   </span>
                 </motion.button>

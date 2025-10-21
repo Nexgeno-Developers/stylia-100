@@ -475,23 +475,29 @@ export const LookbookSection = () => {
               <AnimatePresence mode="wait">
                 <motion.p
                   key={`desc-${activeIndex}`}
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 40 }}
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
-                  transition={{ duration: 0.5 }}
+                  transition={{ duration: 1, delay: 0.3 }}
                   className="text-sm xl:text-lg text-black leading-[195%] mb-4 max-w-md"
                 >
                   {lookbookItems[activeIndex].description}
                 </motion.p>
               </AnimatePresence>
 
-              <h2 ref={headingRef} className="text-5xl lg:text-6xl xl:text-[80px] font-semibold text-black leading-tight">
-                <AnimatedText text='Explore' isVisible={isInView}  />
+              <h2
+                ref={headingRef}
+                className="text-5xl lg:text-6xl xl:text-[80px] font-semibold text-black leading-tight"
+              >
+                <AnimatedText text="Explore" isVisible={isInView} />
                 <span className="font-normal">
-                   <AnimatedText text='Curated' isVisible={isInView}  />
+                  <AnimatedText text="Curated" isVisible={isInView} />
                 </span>
                 <br />
-                <span className="font-normal"> <AnimatedText text='Lookbook' isVisible={isInView}  /></span>
+                <span className="font-normal">
+                  {' '}
+                  <AnimatedText text="Lookbook" isVisible={isInView} />
+                </span>
               </h2>
             </div>
 
@@ -553,9 +559,19 @@ export const LookbookSection = () => {
                   alt={lookbookItems[nextIndex].title}
                   className="w-full object-contain"
                 />
-                <p className="text-black text-sm mt-0 leading-[195%]">
+                <motion.p
+                  initial={{ opacity: 0, y: 40 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{
+                    duration: 1,
+                    delay: 0.2,
+                    ease: [0.43, 0.13, 0.23, 0.96],
+                  }}
+                  viewport={{ once: true }}
+                  className="text-black text-sm mt-0 leading-[195%]"
+                >
                   {lookbookItems[nextIndex].description}
-                </p>
+                </motion.p>
                 <div className="absolute -top-3 -left-3 text-black font-bold text-5xl">
                   {lookbookItems[nextIndex].number}
                 </div>

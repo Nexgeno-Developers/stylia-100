@@ -88,9 +88,13 @@ export const TrendingNowSection: React.FC = () => {
 
           {/* Right: Description */}
           <motion.p
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{
+              duration: 1,
+              delay: 0.2,
+              ease: [0.43, 0.13, 0.23, 0.96],
+            }}
             viewport={{ once: true }}
             className="font-kumbh-sans font-normal text-black capitalize max-w-lg"
             style={{

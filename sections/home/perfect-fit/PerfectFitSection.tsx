@@ -39,15 +39,15 @@ interface AnimatedTextProps {
 }
 
 // Animated text component that splits text into characters
-const AnimatedText: React.FC<AnimatedTextProps> = ({ 
-  text, 
-  delay = 0, 
-  className = '', 
-  isVisible 
+const AnimatedText: React.FC<AnimatedTextProps> = ({
+  text,
+  delay = 0,
+  className = '',
+  isVisible,
 }) => {
   const words = text.split(' ')
   let charIndex = 0
-  
+
   return (
     <span className={className}>
       {words.map((word, wordIndex) => (
@@ -69,7 +69,9 @@ const AnimatedText: React.FC<AnimatedTextProps> = ({
               </span>
             )
           })}
-          {wordIndex < words.length - 1 && <span className="inline-block">&nbsp;</span>}
+          {wordIndex < words.length - 1 && (
+            <span className="inline-block">&nbsp;</span>
+          )}
         </span>
       ))}
     </span>
@@ -81,7 +83,7 @@ export const PerfectFitSection: React.FC = () => {
   const [currentImageIndex, setCurrentImageIndex] = useState<number>(0)
   const [direction, setDirection] = useState<'left' | 'right'>('right')
   const [isHeadingVisible, setIsHeadingVisible] = useState<boolean>(false)
-  
+
   const imageContainerRef = useRef<HTMLDivElement>(null)
   const imageRef = useRef<HTMLDivElement>(null)
   const headingRef = useRef<HTMLDivElement>(null)
@@ -122,11 +124,11 @@ export const PerfectFitSection: React.FC = () => {
         rootMargin: '0px',
       }
     )
-    
+
     if (headingRef.current) {
       observer.observe(headingRef.current)
     }
-    
+
     return () => {
       if (headingRef.current) {
         observer.unobserve(headingRef.current)
@@ -229,7 +231,7 @@ export const PerfectFitSection: React.FC = () => {
             <div ref={headingRef}>
               <h2 className="text-5xl sm:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-black mb-6 leading-tight font-kumbh-sans overflow-hidden">
                 <span className="block">
-                  <AnimatedText 
+                  <AnimatedText
                     text="Find Your"
                     isVisible={isHeadingVisible}
                     delay={0}
@@ -237,7 +239,7 @@ export const PerfectFitSection: React.FC = () => {
                   />
                 </span>
                 <span className="block">
-                  <AnimatedText 
+                  <AnimatedText
                     text="Perfect Fit"
                     isVisible={isHeadingVisible}
                     delay={300}
@@ -247,9 +249,13 @@ export const PerfectFitSection: React.FC = () => {
               </h2>
 
               <motion.p
-                initial={{ opacity: 0, y: 20 }}
+                initial={{ opacity: 0, y: 40 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.6, delay: 0.8 }}
+                transition={{
+                  duration: 1,
+                  delay: 0.2,
+                  ease: [0.43, 0.13, 0.23, 0.96],
+                }}
                 viewport={{ once: true }}
                 className="sm:text-lg lg:text-xl text-black font-kumbh-sans font-normal text-lg leading-[180%] max-w-full lg:max-w-[90%]"
               >
