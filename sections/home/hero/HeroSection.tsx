@@ -4,6 +4,7 @@ import React, { useEffect, useState, useRef } from 'react'
 import { ArrowUpRight } from 'lucide-react'
 import AnimatedText from '@/components/ui/AnimatedText'
 import { useInView } from 'motion/react'
+import { useHeader } from '@/lib/contexts/HeaderContext'
 
 interface MotionWrapperProps {
   children: React.ReactNode
@@ -70,6 +71,12 @@ export const HeroSection: React.FC = () => {
   const headingRef = useRef<HTMLDivElement>(null)
   const isInView = useInView(headingRef, { once: true, amount: 0.5 })
   const isButtonInView = useInView(buttonRef, { once: true, amount: 0.5 })
+  const { setTextColor } = useHeader()
+
+  // Set header text color to white when component mounts
+  useEffect(() => {
+    setTextColor('white')
+  }, [setTextColor])
 
   return (
     <MotionWrapper className="hero-section">

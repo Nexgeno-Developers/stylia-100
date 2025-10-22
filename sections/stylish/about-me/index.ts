@@ -1,0 +1,1 @@
+export {StyliaAbout} from './StyliaAbout'

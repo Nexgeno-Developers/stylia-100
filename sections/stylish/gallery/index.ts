@@ -1,0 +1,1 @@
+export {LuxuryGallery} from './LuxuryGallery'
