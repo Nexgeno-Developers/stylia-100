@@ -1,1 +1,1 @@
-export {StyliaAbout} from './StyliaAbout'
+export { StyliaAbout } from './StyliaAbout'

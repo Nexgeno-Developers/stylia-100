@@ -681,10 +681,7 @@ export const ProductShowcase: React.FC = () => {
         </motion.div>
       </div>
 
-      <div
-        className="relative h-full container mx-auto"
-        style={{ zIndex: 2 }}
-      >
+      <div className="relative h-full container mx-auto" style={{ zIndex: 2 }}>
         <div className="grid grid-cols-1 md:grid-cols-12 h-full gap-6 lg:gap-0">
           {/* Left Section - Product Info */}
           <motion.div

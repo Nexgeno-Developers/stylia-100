@@ -131,28 +131,27 @@
   }
 }
 
-
 /* Add to globals.css or a CSS module */
 .stylia-cursor {
   position: absolute;
   width: 48px;
   height: 48px;
   border-radius: 9999px;
-  background: rgba(0,0,0,0.95);
+  background: rgba(0, 0, 0, 0.95);
   transform: translate(-50%, -50%) scale(1);
   pointer-events: none;
   z-index: 60;
   will-change: transform, width, height, border-radius, opacity;
   transition: opacity 180ms linear;
   opacity: 0;
-  box-shadow: 0 6px 20px rgba(0,0,0,0.4);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
 }
 
 .stylia-cursor.dragging {
-  width: 160px;            /* morph to rectangular look */
+  width: 160px; /* morph to rectangular look */
   height: 40px;
   border-radius: 12px;
   background: transparent;
-  border: 2px solid rgba(0,0,0,0.85);
+  border: 2px solid rgba(0, 0, 0, 0.85);
   box-shadow: none;
 }

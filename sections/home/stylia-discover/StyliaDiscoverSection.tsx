@@ -799,8 +799,7 @@ export const StyliaDiscoverSection: React.FC = () => {
           }
           applySlotTransforms(progress)
         },
-        onComplete: 
-        () => {
+        onComplete: () => {
           console.log('✅ Animation COMPLETED after', frameCount, 'frames')
 
           // Update images AFTER animation completes

@@ -1,1 +1,1 @@
-export {LuxuryGallery} from './LuxuryGallery'
+export { LuxuryGallery } from './LuxuryGallery'

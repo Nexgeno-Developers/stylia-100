@@ -105,7 +105,10 @@ export const StyliaAbout = () => {
     { number: 20, label: 'Collaborations' },
   ]
 
-  const AnimatedNumber = ({ target, inView }) => {
+  const AnimatedNumber = ({ target , inView } : {
+    target : any,
+    inView : any
+  }) => {
     const [count, setCount] = useState(0)
 
     useEffect(() => {
@@ -241,7 +244,7 @@ export const StyliaAbout = () => {
                   alt="Stylia Model 1"
                   className="w-[316px] h-[520px] object-cover"
                   whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.8,  ease: [0.22, 1, 0.36, 1], }}
+                  transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
                 />
               </motion.div>
 
