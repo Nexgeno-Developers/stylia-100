@@ -41,8 +41,7 @@ export default function Home() {
       <section className="h-screen w-full">
         <ProductShowcase />
       </section>
-     
-        <StyliaMagazineSection />
+      <StyliaMagazineSection />
       {/* <section className="h-screen w-full">
         <CallToActionSection />
       </section> */}
