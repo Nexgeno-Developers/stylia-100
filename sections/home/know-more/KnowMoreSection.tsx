@@ -198,14 +198,14 @@ export const KnowMoreSection: React.FC = () => {
   }
 
   return (
-    <section className="relative w-full overflow-hidden bg-white py-16 lg:pt-0 lg:pb-24">
-      <div className="container mx-auto">
+    <section className="relative w-full overflow-hidden bg-white h-full flex items-center">
+      <div className="container mx-auto h-full flex items-center">
         <motion.div
           initial={{ opacity: 0, scale: 0.95 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="relative h-[647px] overflow-hidden shadow-2xl"
+          className="relative h-[80vh] max-h-[800px] w-full overflow-hidden shadow-2xl"
           ref={containerRef}
           onMouseEnter={() => {
             setIsScratching(true)

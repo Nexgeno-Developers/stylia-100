@@ -50,10 +50,11 @@ export const TrendingNowSection: React.FC = () => {
   ]
 
   return (
-    <section className="relative w-full bg-white py-16 sm:py-16 lg:py-24">
-      <div className="container mx-auto">
-        {/* Header Section */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-12 lg:mb-16 gap-6">
+    <section className="relative w-full h-full bg-white flex items-center">
+      <div className="container mx-auto h-full flex items-center">
+        <div className="w-full h-full flex flex-col justify-center">
+          {/* Header Section */}
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 lg:mb-12 gap-6">
           {/* Left: Title */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}
@@ -199,6 +200,7 @@ text-transform: capitalize;
               </div>
             </motion.div>
           ))}
+          </div>
         </div>
       </div>
     </section>

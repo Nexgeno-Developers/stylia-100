@@ -447,15 +447,16 @@ export const StyliaMagazineSection: React.FC = () => {
   }
 
   return (
-    <section className="relative w-full bg-[#00000012] overflow-hidden py-16 sm:py-24">
-      <div className="container mx-auto">
-        {/* Header */}
-        <motion.div
-          initial={{ opacity: 0, y: -20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: 'easeOut' }}
-          className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-10 sm:mb-12 gap-4"
-        >
+    <section className="relative w-full h-full bg-[#00000012] overflow-hidden flex items-center">
+      <div className="container mx-auto h-full flex items-center">
+        <div className="w-full h-full flex flex-col justify-center">
+          {/* Header */}
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.8, ease: 'easeOut' }}
+            className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 sm:mb-10 gap-4"
+          >
           <h2
             ref={headingRef}
             className="text-4xl sm:text-5xl lg:text-6xl font-normal text-black leading-tight font-kumbh-sans"
@@ -519,7 +520,8 @@ export const StyliaMagazineSection: React.FC = () => {
                 />
               ))}
           </div>
-        </motion.div>
+          </motion.div>
+        </div>
       </div>
     </section>
   )

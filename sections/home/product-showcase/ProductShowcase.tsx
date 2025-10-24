@@ -652,7 +652,7 @@ export const ProductShowcase: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full xl:h-[1100px] 2xl:h-[1267px] overflow-hidden"
+      className="relative w-full h-full overflow-hidden flex items-center"
     >
       {/* Circular White Smoke Effect - Middle Only */}
       <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
@@ -681,8 +681,8 @@ export const ProductShowcase: React.FC = () => {
         </motion.div>
       </div>
 
-      <div className="relative h-full container mx-auto" style={{ zIndex: 2 }}>
-        <div className="grid grid-cols-1 md:grid-cols-12 h-full gap-6 lg:gap-0">
+      <div className="relative h-full container mx-auto flex items-center" style={{ zIndex: 2 }}>
+        <div className="grid grid-cols-1 md:grid-cols-12 h-full w-full gap-6 lg:gap-0">
           {/* Left Section - Product Info */}
           <motion.div
             initial={{ opacity: 0, x: -50 }}

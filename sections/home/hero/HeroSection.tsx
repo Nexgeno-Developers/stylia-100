@@ -79,12 +79,9 @@ export const HeroSection: React.FC = () => {
   }, [setTextColor])
 
   return (
-    <MotionWrapper className="hero-section">
+    <MotionWrapper className="hero-section h-full w-full">
       <div
-        className="relative flex items-center justify-center overflow-hidden"
-        style={{
-          height: '1141px',
-        }}
+        className="relative flex items-center justify-center overflow-hidden h-full w-full"
       >
         <div className="container mx-auto">
           {/* GIF Background with specific dimensions */}
@@ -104,10 +101,10 @@ export const HeroSection: React.FC = () => {
 
           {/* Content Container */}
           <div
-            className="absolute bottom-0 left-0 right-0 z-20 text-center w-full pb-12 sm:pb-16 lg:pb-20"
+            className="absolute inset-0 z-20 text-center w-full flex items-center justify-center"
             style={{ maxWidth: '1440px', margin: '0 auto' }}
           >
-            <div className="flex flex-col items-center justify-end">
+            <div className="flex flex-col items-center justify-center">
               {/* Main Heading with Letter Animation */}
               <h1
                 ref={headingRef}

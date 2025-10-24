@@ -222,11 +222,11 @@ export const PerfectFitSection: React.FC = () => {
   }
 
   return (
-    <section className="relative bg-white overflow-hidden py-16 lg:py-24">
-      <div className="container mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 min-h-[600px] lg:min-h-[900px] gap-8">
+    <section className="relative bg-white overflow-hidden h-full w-full flex items-center">
+      <div className="container mx-auto h-full flex items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 h-full gap-8 w-full">
           {/* Left Content Side */}
-          <div className="flex flex-col justify-between py-14">
+          <div className="flex flex-col justify-center py-8 lg:py-14">
             {/* Top Content */}
             <div ref={headingRef}>
               <h2 className="text-5xl sm:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-black mb-6 leading-tight font-kumbh-sans overflow-hidden">
@@ -304,7 +304,7 @@ export const PerfectFitSection: React.FC = () => {
           </div>
 
           {/* Right Image Side with Navigation */}
-          <div className="relative" ref={imageContainerRef}>
+          <div className="relative h-full" ref={imageContainerRef}>
             {/* Image Container with GSAP Animation */}
             <motion.div
               ref={imageRef}

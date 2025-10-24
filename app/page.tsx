@@ -14,17 +14,37 @@ import {
 
 export default function Home() {
   return (
-    <main>
-      <HeroSection />
-      <PerfectFitSection />
-      <KnowMoreSection />
-      <StyliaDiscoverSection />
-      <RedefiningFashionSection />
-      <LookbookSection />
-      <TrendingNowSection />
-      <ProductShowcase />
-      <StyliaMagazineSection />
-      {/* <CallToActionSection /> */}
+    <main className="overflow-x-hidden scroll-smooth">
+      <section className="h-screen w-full">
+        <HeroSection />
+      </section>
+      <section className="h-screen w-full">
+        <PerfectFitSection />
+      </section>
+      <section className="h-screen w-full">
+        <KnowMoreSection />
+      </section>
+      <section className="h-screen w-full">
+        <StyliaDiscoverSection />
+      </section>
+      <section className="h-screen w-full">
+        <RedefiningFashionSection />
+      </section>
+      <section className="h-screen w-full">
+        <LookbookSection />
+      </section>
+      <section className="h-screen w-full">
+        <TrendingNowSection />
+      </section>
+      <section className="h-screen w-full">
+        <ProductShowcase />
+      </section>
+      <section className="h-screen w-full">
+        <StyliaMagazineSection />
+      </section>
+      {/* <section className="h-screen w-full">
+        <CallToActionSection />
+      </section> */}
     </main>
   )
 }

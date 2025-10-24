@@ -420,10 +420,10 @@ export const LookbookSection = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative w-full h-[993px] bg-[#00000012] overflow-hidden"
+      className="relative w-full h-full bg-[#00000012] overflow-hidden flex items-center"
     >
-      <div className="h-full container mx-auto">
-        <div className="grid grid-cols-12 h-full">
+      <div className="h-full container mx-auto flex items-center">
+        <div className="grid grid-cols-12 h-full w-full">
           {/* Column 1: Number Navigation */}
           <div className="col-span-1 flex flex-col items-center justify-center gap-8 sm:gap-12 py-16 sm:py-24">
             {lookbookItems.map((item, index) => (

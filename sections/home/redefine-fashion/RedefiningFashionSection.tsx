@@ -18,7 +18,7 @@ export const RedefiningFashionSection: React.FC = () => {
     // top: 4173px;
 
     <section
-      className="relative h-[1140px] 2xl:h-[1292px] overflow-hidden "
+      className="relative h-full w-full overflow-hidden flex items-center"
       style={{
         backgroundImage: "url('/images/redefining-fashion-bg.png')",
         backgroundSize: 'cover',
@@ -26,9 +26,9 @@ export const RedefiningFashionSection: React.FC = () => {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <div className="container mx-auto">
-        {/* Content Container - left side at ~40% height */}
-        <div className="absolute text-left top-[40%] -translate-y-1/2 ">
+      <div className="container mx-auto h-full flex items-center">
+        {/* Content Container - centered */}
+        <div className="text-left">
           {/* Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}

@@ -1171,7 +1171,7 @@ export const StyliaDiscoverSection: React.FC = () => {
   return (
     <section
       ref={sectionRef}
-      className="relative h-[1170px] overflow-hidden bg-white"
+      className="relative h-full w-full overflow-hidden bg-white flex items-center"
     >
       {/* Background layer: fills full width on small, left 9/12 on lg+; right stays white */}
       <div
@@ -1180,8 +1180,8 @@ export const StyliaDiscoverSection: React.FC = () => {
         style={{ width, transition: 'width 0.3s ease' }}
       />
 
-      <div className="h-full container mx-auto relative z-10">
-        <div className="grid grid-cols-1 md:grid-cols-12 h-full py-16 sm:py-24">
+      <div className="h-full container mx-auto relative z-10 flex items-center">
+        <div className="grid grid-cols-1 md:grid-cols-12 h-full w-full py-8 sm:py-16">
           {/* Left: Draggable Area */}
           <div
             ref={leftAreaRef}
