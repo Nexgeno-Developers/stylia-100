@@ -81,9 +81,9 @@ export const HeroSection: React.FC = () => {
   return (
     <MotionWrapper className="hero-section h-full w-full">
       <div
-        className="relative flex items-center justify-center overflow-hidden h-full w-full"
+        className="relative flex items-center justify-center overflow-hidden h-full w-full "
       >
-        <div className="container mx-auto">
+        <div className="">
           {/* GIF Background with specific dimensions */}
           <div
             className="absolute inset-0 w-full h-full"
@@ -101,8 +101,8 @@ export const HeroSection: React.FC = () => {
 
           {/* Content Container */}
           <div
-            className="absolute inset-0 z-20 text-center w-full flex items-center justify-center"
-            style={{ maxWidth: '1440px', margin: '0 auto' }}
+            className="absolute inset-0 z-20 text-center w-full flex items-end justify-center pb-[3vw]"
+            
           >
             <div className="flex flex-col items-center justify-center">
               {/* Main Heading with Letter Animation */}
@@ -110,11 +110,11 @@ export const HeroSection: React.FC = () => {
                 ref={headingRef}
                 className="text-white mb-8 sm:mb-10 lg:mb-12 font-sans leading-tight overflow-hidden"
               >
-                <span className="block text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[100px] font-normal mb-2">
+                <span className="block text-[7vw] font-normal mb-2">
                   <AnimatedText text="Discover the" isVisible={isInView} />{' '}
                   <AnimatedText
                     text="Art of Fashion"
-                    className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl xl:text-[100px] font-semibold"
+                    className="text-[7vw] font-semibold"
                     isVisible={isInView}
                     delay={400}
                   />
@@ -136,8 +136,8 @@ export const HeroSection: React.FC = () => {
                 <button
                   type="button"
                   className="relative z-10 flex justify-center gap-2 items-center 
-                    text-base sm:text-lg xl:text-[30px] font-sans font-medium 
-                    px-6 sm:px-8 py-3 sm:py-4 overflow-hidden rounded-full border-2 border-transparent hover:border-2
+                    text-[1.8vw] font-sans font-medium 
+                    px-[2.5vw] py-[0.8vw] overflow-hidden rounded-full border-2 border-transparent hover:border-2
                     text-white cursor-pointer transition-all duration-500 
                     before:absolute before:inset-0 before:bg-gradient-to-r before:from-gray-50 before:via-white before:to-gray-50 
                     before:-left-full before:w-0 before:transition-all before:duration-700 before:ease-in-out 
@@ -145,7 +145,7 @@ export const HeroSection: React.FC = () => {
                 >
                   <span className="relative z-10 flex items-center gap-2">
                     Shop Now
-                    <ArrowUpRight className="w-8 h-8 sm:w-10 sm:h-10 transition-transform duration-300 group-hover:rotate-45 group-hover:scale-110" />
+                    <ArrowUpRight className="w-[2vw] h-[2vw] transition-transform duration-300 group-hover:rotate-45 group-hover:scale-110" />
                   </span>
                 </button>
               </div>

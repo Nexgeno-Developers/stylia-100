@@ -422,7 +422,7 @@ export const LookbookSection = () => {
       ref={sectionRef}
       className="relative w-full h-full bg-[#00000012] overflow-hidden flex items-center"
     >
-      <div className="h-full container mx-auto flex items-center">
+      <div className="px-[4vw] h-full flex items-center">
         <div className="grid grid-cols-12 h-full w-full">
           {/* Column 1: Number Navigation */}
           <div className="col-span-1 flex flex-col items-center justify-center gap-8 sm:gap-12 py-16 sm:py-24">
@@ -479,7 +479,7 @@ export const LookbookSection = () => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -20 }}
                   transition={{ duration: 1, delay: 0.3 }}
-                  className="text-sm xl:text-lg text-black leading-[195%] mb-4 max-w-md"
+                  className="text-[1.3vw] text-black leading-[195%] mb-4 max-w-md"
                 >
                   {lookbookItems[activeIndex].description}
                 </motion.p>
@@ -487,7 +487,7 @@ export const LookbookSection = () => {
 
               <h2
                 ref={headingRef}
-                className="text-5xl lg:text-6xl xl:text-[80px] font-semibold text-black leading-tight"
+                className="text-[5.5vw] font-semibold text-black leading-tight"
               >
                 <AnimatedText text="Explore" isVisible={isInView} />
                 <span className="font-normal">
@@ -568,7 +568,7 @@ export const LookbookSection = () => {
                     ease: [0.43, 0.13, 0.23, 0.96],
                   }}
                   viewport={{ once: true }}
-                  className="text-black text-sm mt-0 leading-[195%]"
+                  className="text-black text-[1.3vw] mt-0 leading-[195%]"
                 >
                   {lookbookItems[nextIndex].description}
                 </motion.p>

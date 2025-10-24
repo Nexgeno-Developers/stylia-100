@@ -18,9 +18,11 @@ export default function Home() {
       <section className="h-screen w-full">
         <HeroSection />
       </section>
+      <div className="h-[120px]"></div>
       <section className="h-screen w-full">
         <PerfectFitSection />
       </section>
+      <div className="h-[60px]"></div>
       <section className="h-screen w-full">
         <KnowMoreSection />
       </section>
@@ -39,9 +41,8 @@ export default function Home() {
       <section className="h-screen w-full">
         <ProductShowcase />
       </section>
-      <section className="h-screen w-full">
+     
         <StyliaMagazineSection />
-      </section>
       {/* <section className="h-screen w-full">
         <CallToActionSection />
       </section> */}

@@ -222,14 +222,16 @@ export const PerfectFitSection: React.FC = () => {
   }
 
   return (
+    <>   
+    
     <section className="relative bg-white overflow-hidden h-full w-full flex items-center">
-      <div className="container mx-auto h-full flex items-center">
+      <div className="px-[4vw] h-full items-center">
         <div className="grid grid-cols-1 lg:grid-cols-2 h-full gap-8 w-full">
           {/* Left Content Side */}
-          <div className="flex flex-col justify-center py-8 lg:py-14">
+          <div className="flex flex-col justify-center">
             {/* Top Content */}
             <div ref={headingRef}>
-              <h2 className="text-5xl sm:text-6xl lg:text-7xl xl:text-[80px] font-semibold text-black mb-6 leading-tight font-kumbh-sans overflow-hidden">
+              <h2 className="text-[5.5vw] font-semibold text-black mb-6 leading-tight font-kumbh-sans overflow-hidden">
                 <span className="block">
                   <AnimatedText
                     text="Find Your"
@@ -257,7 +259,7 @@ export const PerfectFitSection: React.FC = () => {
                   ease: [0.43, 0.13, 0.23, 0.96],
                 }}
                 viewport={{ once: true }}
-                className="sm:text-lg lg:text-xl text-black font-kumbh-sans font-normal text-lg leading-[180%] max-w-full lg:max-w-[90%]"
+                className="text-[1.3vw] pb-[7vw] text-black font-kumbh-sans font-normal text-lg leading-[180%] max-w-full lg:max-w-[90%]"
               >
                 Explore Styles Curated To Complement Your Body Type, Skin Tone,
                 And Height — So You Look And Feel Your Best Every Day.
@@ -282,13 +284,13 @@ export const PerfectFitSection: React.FC = () => {
                   viewport={{ once: true }}
                   whileHover={{ x: 10, scale: 1.02 }}
                   whileTap={{ scale: 0.98 }}
-                  className={`group flex items-center justify-between w-full sm:w-[90%] text-left py-4 cursor-pointer transition-all duration-300 ${
+                  className={`group flex items-center justify-between w-full sm:w-[90%] text-left py-[0.8vw] cursor-pointer transition-all duration-300 ${
                     activeOption === option.id
                       ? 'text-gray-900 font-semibold'
                       : `${option.color} ${option.hoverColor}`
                   }`}
                 >
-                  <span className="text-xl sm:text-2xl lg:text-3xl font-medium">
+                  <span className="text-[1.8vw] font-medium">
                     {option.title}
                   </span>
 
@@ -296,7 +298,7 @@ export const PerfectFitSection: React.FC = () => {
                     whileHover={{ rotate: 45, scale: 1.2 }}
                     transition={{ duration: 0.3 }}
                   >
-                    <ArrowUpRight className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
+                    <ArrowUpRight className="w-[2vw] h-[2vw]" />
                   </motion.div>
                 </motion.button>
               ))}
@@ -352,5 +354,6 @@ export const PerfectFitSection: React.FC = () => {
         </div>
       </div>
     </section>
+    </> 
   )
 }
