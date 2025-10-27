@@ -267,7 +267,7 @@ export default function Footer() {
       className="relative bg-gradient-to-b from-white via-gray-50 to-gray-100 overflow-hidden py-16 lg:py-24"
     >
       {/* Main Footer Content */}
-      <div className="relative z-10 container mx-auto">
+      <div className="relative z-10 ">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 mb-[200px] 2xl:mb-[250px]">
           {/* Left Column - Accordion Links */}
           <motion.div

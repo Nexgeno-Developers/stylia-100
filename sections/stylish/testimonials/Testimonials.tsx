@@ -193,7 +193,7 @@ export const TestimonialsSection: React.FC = () => {
       className="relative w-full bg-white py-16 sm:py-24 overflow-hidden"
       style={{ fontFamily: 'system-ui, -apple-system, sans-serif' }}
     >
-      <div className="container mx-auto px-4">
+      <div className=" px-4">
         {/* Header Grid */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mb-16 sm:mb-20 md:mb-24">
           {/* Title - Left */}

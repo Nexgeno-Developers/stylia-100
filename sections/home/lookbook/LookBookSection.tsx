@@ -44,7 +44,7 @@ export const LookbookSection = () => {
       number: '01',
       title: 'Explore Curated Lookbook',
       description:
-        "Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been Industry's",
+        "Is Simply Dummy Text Of The Printing And Typesetting Industry1",
       image: '/images/lookbook-1.png',
     },
     {
@@ -52,7 +52,7 @@ export const LookbookSection = () => {
       number: '02',
       title: 'Explore Curated Lookbook',
       description:
-        "Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been Industry's",
+        "Is Simply Dummy Text Of The Printing And Typesetting Industry2",
       image: '/images/lookbook-2.png',
     },
     {
@@ -60,7 +60,7 @@ export const LookbookSection = () => {
       number: '03',
       title: 'Explore Curated Lookbook',
       description:
-        'Is Simply Dummy Text Of The Printing And Typesetting Industry.',
+        'Is Simply Dummy Text Of The Printing And Typesetting Industry3',
       image: '/images/lookbook-1.png',
     },
     {
@@ -68,7 +68,7 @@ export const LookbookSection = () => {
       number: '04',
       title: 'Explore Curated Lookbook',
       description:
-        "Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been Industry's",
+        "Is Simply Dummy Text Of The Printing And Typesetting Industry4",
       image: '/images/lookbook-2.png',
     },
     {
@@ -76,7 +76,7 @@ export const LookbookSection = () => {
       number: '05',
       title: 'Explore Curated Lookbook',
       description:
-        'Is Simply Dummy Text Of The Printing And Typesetting Industry.',
+        'Is Simply Dummy Text Of The Printing And Typesetting Industry5',
       image: '/images/lookbook-1.png',
     },
     {
@@ -84,7 +84,7 @@ export const LookbookSection = () => {
       number: '06',
       title: 'Explore Curated Lookbook',
       description:
-        "Is Simply Dummy Text Of The Printing And Typesetting Industry. Lorem Ipsum Has Been Industry's",
+        "Is Simply Dummy Text Of The Printing And Typesetting Industry6",
       image: '/images/lookbook-2.png',
     },
   ]
@@ -425,13 +425,13 @@ export const LookbookSection = () => {
       <div className="px-[4vw] h-full flex items-center">
         <div className="grid grid-cols-12 h-full w-full">
           {/* Column 1: Number Navigation */}
-          <div className="col-span-1 flex flex-col items-center justify-center gap-8 sm:gap-12 py-16 sm:py-24">
+          <div className="col-span-1 flex flex-col items-center pt-[5vw]">
             {lookbookItems.map((item, index) => (
               <motion.button
                 key={item.id}
                 onClick={() => handleNumberClick(index)}
                 disabled={isTransitioning}
-                className={`font-bold text-2xl sm:text-3xl lg:text-4xl transition-all duration-300 ${
+                className={`font-bold text-[2.3vw] py-[1.1vw] transition-all duration-300 ${
                   index === activeIndex
                     ? 'text-black scale-150'
                     : 'text-[#0000004D] scale-90'
@@ -470,8 +470,8 @@ export const LookbookSection = () => {
           </div>
 
           {/* Column 6-9: Center Content */}
-          <div className="col-span-5 relative  pl-6 lg:pl-10 py-16 sm:py-24">
-            <div className="flex flex-col items-start justify-between h-[60%]">
+          <div className="col-span-5 relative pl-[3vw] pt-[3vw]">
+            <div className="flex flex-col items-start justify-between">
               <AnimatePresence mode="wait">
                 <motion.p
                   key={`desc-${activeIndex}`}
@@ -487,7 +487,7 @@ export const LookbookSection = () => {
 
               <h2
                 ref={headingRef}
-                className="text-[5.5vw] font-semibold text-black leading-tight"
+                className="text-[5vw] font-semibold text-black leading-[5.9vw] pt-[1.5vw]"
               >
                 <AnimatedText text="Explore" isVisible={isInView} />
                 <span className="font-normal">
@@ -513,7 +513,7 @@ export const LookbookSection = () => {
                     : 'cursor-pointer'
                 }
               >
-                <ArrowLeft className="w-10 h-10 lg:w-12 lg:h-12 text-black" />
+                <ArrowLeft className="w-[3.2vw] h-[3.2vw] text-black" />
               </motion.button>
               <motion.button
                 onClick={handleNext}
@@ -526,25 +526,25 @@ export const LookbookSection = () => {
                     : 'cursor-pointer'
                 }
               >
-                <ArrowRight className="w-10 h-10 lg:w-12 lg:h-12 text-black" />
+                <ArrowRight className="w-[3.2vw] h-[3.2vw] text-black" />
               </motion.button>
             </div>
 
             <motion.button
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
-              className="group inline-flex items-center gap-3 text-black font-medium cursor-pointer text-xl lg:text-3xl"
+              className="group inline-flex items-center gap-3 text-black font-medium cursor-pointer text-[1.8vw]"
             >
               <span className="relative">
                 Shop Now
                 <span className="absolute bottom-0 left-0 w-0 h-0.5 bg-black group-hover:w-full transition-all duration-300" />
               </span>
-              <ArrowUpRight className="w-6 h-6 lg:w-8 lg:h-8" />
+              <ArrowUpRight className="w-[2vw] h-[2vw]" />
             </motion.button>
           </div>
 
           {/* Column 10-12: Next Preview */}
-          <div className="col-span-3 relative flex items-center justify-center">
+          <div className="col-span-3 relative pt-[5vw]">
             <AnimatePresence mode="wait">
               <motion.div
                 key={`next-${nextIndex}`}
@@ -557,7 +557,7 @@ export const LookbookSection = () => {
                 <img
                   src={lookbookItems[nextIndex].image}
                   alt={lookbookItems[nextIndex].title}
-                  className="w-full object-contain"
+                  className="w-full object-contain h-[30vw]"
                 />
                 <motion.p
                   initial={{ opacity: 0, y: 40 }}
@@ -572,7 +572,7 @@ export const LookbookSection = () => {
                 >
                   {lookbookItems[nextIndex].description}
                 </motion.p>
-                <div className="absolute -top-3 -left-3 text-black font-bold text-5xl">
+                <div className="absolute -top-3 -left-3 text-black font-bold text-[2.5vw]">
                   {lookbookItems[nextIndex].number}
                 </div>
               </motion.div>

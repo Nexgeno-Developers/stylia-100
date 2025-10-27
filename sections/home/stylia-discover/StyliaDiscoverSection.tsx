@@ -1180,7 +1180,7 @@ export const StyliaDiscoverSection: React.FC = () => {
         style={{ width, transition: 'width 0.3s ease' }}
       />
 
-      <div className="h-full container mx-auto relative z-10 flex items-center">
+      <div className="h-full  mx-auto relative z-10 flex items-center">
         <div className="grid grid-cols-1 md:grid-cols-12 h-full w-full py-8 sm:py-16">
           {/* Left: Draggable Area */}
           <div
@@ -1210,7 +1210,7 @@ export const StyliaDiscoverSection: React.FC = () => {
                   isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }
                 }
                 transition={{ duration: 0.6 }}
-                className="text-3xl lg:text-[35px] text-black mb-4 font-semibold leading-[1.142]"
+                className="text-[5.5vw] text-black mb-4 font-semibold leading-[1.142]"
               >
                 <AnimatedText
                   text="Where Style Meets Identity"

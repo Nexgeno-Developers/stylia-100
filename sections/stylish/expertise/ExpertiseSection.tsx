@@ -109,7 +109,7 @@ export const ExpertiseSection: React.FC = () => {
         ref={sectionRef}
         className="relative bg-white py-24 px-6 md:px-12 lg:px-24 overflow-hidden"
       >
-        <div ref={ref} className="container mx-auto">
+        <div ref={ref} className="">
           {/* ✅ Animated Heading */}
           <h1 className="expertise-heading text-black font-bold text-[clamp(48px,10vw,152.35px)] leading-[96%] tracking-tight mb-24">
             <AnimatedText

@@ -50,8 +50,8 @@ export const TrendingNowSection: React.FC = () => {
   ]
 
   return (
-    <section className="relative w-full h-full bg-white flex items-center">
-      <div className="container mx-auto h-full flex items-center">
+    <section className="relative w-full h-full bg-white">
+      <div className="px-[4vw] mx-auto h-full">
         <div className="w-full h-full flex flex-col justify-center">
           {/* Header Section */}
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-8 lg:mb-12 gap-6">
@@ -64,22 +64,12 @@ export const TrendingNowSection: React.FC = () => {
           >
             <h2 ref={headingRef} className="font-kumbh-sans text-black">
               <span
-                className="font-normal"
-                style={{
-                  fontSize: 'clamp(3rem, 6vw, 80px)',
-                  lineHeight: '100%',
-                  letterSpacing: '0%',
-                }}
+                className="font-normal text-[5.5vw]"
               >
                 <AnimatedText text="Trending" isVisible={isInView} />
               </span>
               <span
-                className="font-semibold"
-                style={{
-                  fontSize: 'clamp(3rem, 6vw, 80px)',
-                  lineHeight: '100%',
-                  letterSpacing: '0%',
-                }}
+                className="font-semibold text-[5.5vw]"
               >
                 {' '}
                 <AnimatedText text="Now" isVisible={isInView} />
@@ -97,12 +87,7 @@ export const TrendingNowSection: React.FC = () => {
               ease: [0.43, 0.13, 0.23, 0.96],
             }}
             viewport={{ once: true }}
-            className="font-kumbh-sans font-normal text-black capitalize max-w-lg"
-            style={{
-              fontSize: 'clamp(0.875rem, 1.5vw, 18px)',
-              lineHeight: '195%',
-              letterSpacing: '0%',
-            }}
+            className="font-kumbh-sans font-normal text-black capitalize max-w-lg text-[1.3vw]"
           >
             Handpicked Styles Loved By Our Fashion Community.
           </motion.p>
@@ -141,7 +126,7 @@ export const TrendingNowSection: React.FC = () => {
                     className="absolute inset-0 flex items-center justify-center z-10"
                   >
                     <div className="bg-white px-6 py-3 rounded-full shadow-lg text-center pointer-events-none">
-                      <p className="font-kumbh-sans font-bold text-lg text-black">
+                      <p className="font-kumbh-sans font-bold text-[1.4vw] text-black">
                         Quick View
                       </p>
                     </div>
@@ -181,19 +166,11 @@ export const TrendingNowSection: React.FC = () => {
                   viewport={{ once: true }}
                   className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/50 to-transparent p-6 text-white"
                 >
-                  <h3 className="font-kumbh-sans font-medium text-lg sm:text-xl mb-1 capitalize leading-142% letter-spacing-0% leading-trim-none text-center text-transform-capitalize">
+                  <h3 className="font-kumbh-sans font-medium mb-1 capitalize text-[1.4vw] text-center text-transform-capitalize">
                     {product.name}
                   </h3>
-                  <p className="font-kumbh-sans font-bold text-lg sm:text-xl leading-142% letter-spacing-0% leading-trim-none text-transform-capitalize text-center">
-                    {/* font-family: Kumbh Sans;
-font-weight: 700;
-font-style: Bold;
-font-size: 20px;
-leading-trim: NONE;
-line-height: 142%;
-letter-spacing: 0%;
-text-transform: capitalize;
- */}
+                  <p className="font-kumbh-sans font-bold text-[1.6vw] text-transform-capitalize text-center">
+                  
                     ₹ {product.price.toLocaleString('en-IN')}
                   </p>
                 </motion.div>

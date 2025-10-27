@@ -205,7 +205,7 @@ export const KnowMoreSection: React.FC = () => {
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
-          className="relative h-[80vh] max-h-[800px] w-full overflow-hidden shadow-2xl"
+          className="relative h-[100vh] w-full overflow-hidden shadow-2xl"
           ref={containerRef}
           onMouseEnter={() => {
             setIsScratching(true)

@@ -32,7 +32,7 @@ export const ClienteleSection: React.FC = () => {
         className="relative w-full bg-white py-16 sm:py-20 md:py-24 overflow-hidden"
       >
         {/* Content Container */}
-        <div className="container mx-auto bg-white">
+        <div className=" bg-white">
           {/* Title - Animated */}
           <h1 className="text-center mb-12 sm:mb-16 md:mb-20">
             <AnimatedText

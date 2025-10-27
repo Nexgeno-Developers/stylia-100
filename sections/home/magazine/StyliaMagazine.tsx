@@ -448,7 +448,7 @@ export const StyliaMagazineSection: React.FC = () => {
 
   return (
     <section className="relative w-full bg-[#00000012] overflow-hidden py-16 sm:py-24">
-      <div className="container mx-auto">
+      <div className="px-[4vw]">
         {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
@@ -458,7 +458,7 @@ export const StyliaMagazineSection: React.FC = () => {
         >
           <h2
             ref={headingRef}
-            className="text-4xl sm:text-5xl lg:text-6xl font-normal text-black leading-tight font-kumbh-sans"
+            className="text-[5.5vw] font-normal text-black leading-tight font-kumbh-sans"
           >
             <AnimatedText text="Stylia" isVisible={isInView} />
             <span className="font-bold">
@@ -476,7 +476,7 @@ export const StyliaMagazineSection: React.FC = () => {
               ease: [0.43, 0.13, 0.23, 0.96],
             }}
             viewport={{ once: true }}
-            className="text-xs sm:text-sm text-neutral-500 font-medium tracking-wide font-kumbh-sans capitalize"
+            className="text-[1.3vw] text-neutral-500 font-medium tracking-wide font-kumbh-sans capitalize"
           >
             Your Front Row Seat To Fashion, Trends & Culture
           </motion.p>
@@ -659,7 +659,7 @@ const HoverRevealCard: React.FC<HoverRevealCardProps> = ({
               ease: [0.43, 0.13, 0.23, 0.96],
             }}
             viewport={{ once: true }}
-            className="text-lg sm:text-2xl lg:text-[35px] font-semibold text-white drop-shadow-lg tracking-wide font-kumbh-sans capitalize text-center"
+            className="text-[2.1vw] font-semibold text-white drop-shadow-lg tracking-wide font-kumbh-sans capitalize text-center"
           >
             {card.title}
           </motion.h3>
@@ -694,12 +694,12 @@ const HoverRevealCard: React.FC<HoverRevealCardProps> = ({
               ease: [0.43, 0.13, 0.23, 0.96],
             }}
             viewport={{ once: true }}
-            className="text-lg sm:text-xl font-bold text-black font-kumbh-sans"
+            className="text-[2vw]  font-bold text-black font-kumbh-sans"
           >
             {card.title}
           </motion.h3>
         </div>
-        <p className="text-xs sm:text-sm text-neutral-400 font-semibold text-right font-kumbh-sans">
+        <p className="text-[1.3vw] text-neutral-400 font-semibold text-right font-kumbh-sans">
           {card.subtitle}
         </p>
       </div>

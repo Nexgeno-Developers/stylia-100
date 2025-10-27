@@ -26,9 +26,9 @@ export const RedefiningFashionSection: React.FC = () => {
         backgroundRepeat: 'no-repeat',
       }}
     >
-      <div className="container mx-auto h-full flex items-center">
+      <div className="h-full flex items-center">
         {/* Content Container - centered */}
-        <div className="text-left">
+        <div className="px-[4vw] text-left">
           {/* Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 40 }}
@@ -36,13 +36,7 @@ export const RedefiningFashionSection: React.FC = () => {
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.43, 0.13, 0.23, 0.96] }}
             viewport={{ once: true }}
-            className="text-black mb-6 sm:mb-8 font-kumbh-sans font-normal"
-            style={{
-              fontSize: 'clamp(2rem, 5vw, 63.73px)',
-              lineHeight: '105%',
-              letterSpacing: '0%',
-            }}
-          >
+            className="text-[4.2vw]  text-black mb-6 sm:mb-8 font-kumbh-sans font-normal leading-[5.5vw]">
             <span className="block">
               <AnimatedText text="Redefining" isVisible={isInView} />
             </span>
@@ -61,12 +55,7 @@ export const RedefiningFashionSection: React.FC = () => {
               ease: [0.43, 0.13, 0.23, 0.96],
             }}
             viewport={{ once: true }}
-            className="text-black mb-8 sm:mb-12 font-kumbh-sans font-normal capitalize max-w-xl"
-            style={{
-              fontSize: 'clamp(0.875rem, 1.5vw, 18px)',
-              lineHeight: '162%',
-              letterSpacing: '0%',
-            }}
+            className="text-[1.3vw] text-black mb-8 sm:mb-12 font-kumbh-sans font-normal capitalize max-w-xl"
           >
             Stylia Is Where Elegance Meets Attitude. Each Design Is Crafted To
             Celebrate Individuality, Confidence,
@@ -80,7 +69,7 @@ export const RedefiningFashionSection: React.FC = () => {
             viewport={{ once: true }}
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
-            className="group flex items-center gap-3 text-black font-kumbh-sans font-semibold text-xl sm:text-2xl lg:text-3xl cursor-pointer w-fit"
+            className="group flex items-center gap-3 text-black font-kumbh-sans font-semibold text-[1.9vw] cursor-pointer w-fit"
           >
             <span className="relative">
               Shop Now
@@ -95,7 +84,7 @@ export const RedefiningFashionSection: React.FC = () => {
               whileHover={{ rotate: 45, scale: 1.2 }}
               transition={{ duration: 0.3 }}
             >
-              <ArrowUpRight className="w-6 h-6 sm:w-7 sm:h-7 lg:w-8 lg:h-8" />
+              <ArrowUpRight className="w-[2vw] h-[2vw]" />
             </motion.div>
           </motion.button>
         </div>

@@ -28,7 +28,7 @@ export const HeroSection: React.FC = () => {
       className="bg-transparent flex items-center justify-center relative 
   h-[600px] sm:h-[700px] md:h-[800px] lg:h-[850px] 2xl:h-[1000px]"
     >
-      <div className="container mx-auto">
+      <div className="">
         {/* Main Heading Container */}
         <div ref={headingRef} className="mb-8 sm:mb-10 lg:mb-12 text-center">
           {/* First Line - "Defining" */}
